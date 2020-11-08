@@ -9,7 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PlayerVillageBuilding
  *
- * @ORM\Table(name="player_village_building", indexes={@ORM\Index(name="player_village_building_building_id_fk", columns={"building_id"}), @ORM\Index(name="player_village_building_player_id_fk", columns={"player_id"}), @ORM\Index(name="player_village_building_player_village_id_fk", columns={"village_id"})})
+ * @ORM\Table(name="player_village_building", indexes={
+ *     @ORM\Index(name="player_village_building_building_id_fk", columns={"building_id"}),
+ *     @ORM\Index(name="player_village_building_player_id_fk", columns={"player_id"}),
+ *     @ORM\Index(name="player_village_building_player_village_id_fk", columns={"village_id"})
+ * })
+ *
  * @ORM\Entity
  */
 class PlayerVillageBuilding
@@ -33,7 +38,7 @@ class PlayerVillageBuilding
     /**
      * @var Building
      *
-     * @ORM\OneToOne(targetEntity="Building", inversedBy="id")
+     * @ORM\OneToOne(targetEntity="Building", mappedBy="id")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="building_id", referencedColumnName="id")
      * })
@@ -97,6 +102,18 @@ class PlayerVillageBuilding
     public function setVillage(?PlayerVillage $village): self
     {
         $this->village = $village;
+
+        return $this;
+    }
+
+    public function getBuilding(): ?Building
+    {
+        return $this->building;
+    }
+
+    public function setBuilding(?Building $building): self
+    {
+        $this->building = $building;
 
         return $this;
     }

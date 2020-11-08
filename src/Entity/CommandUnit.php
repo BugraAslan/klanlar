@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     @ORM\Index(name="command_unit_command_id_fk", columns={"command_id"}),
  *     @ORM\Index(name="command_unit_unit_id_fk", columns={"unit_id"})
  * })
+ *
  * @ORM\Entity
  */
 class CommandUnit

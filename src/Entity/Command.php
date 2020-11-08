@@ -17,6 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     @ORM\Index(name="command_player_village_id_fk_", columns={"source_player_id"}),
  *     @ORM\Index(name="command_player_village_id_fk_2", columns={"target_player_id"})
  * })
+ *
  * @ORM\Entity
  */
 class Command

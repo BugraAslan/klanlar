@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     @ORM\Index(name="player_village_unit_player_id_fk", columns={"player_id"}),
  *     @ORM\Index(name="player_village_unit_player_village_id_fk", columns={"village_id"})
  * })
+ *
  * @ORM\Entity
  */
 class PlayerVillageUnit
