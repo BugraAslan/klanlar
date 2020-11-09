@@ -29,17 +29,17 @@ class Authenticator extends AbstractLoginFormAuthenticator
 
     protected function getLoginUrl(Request $request): string
     {
-        return 'login';
+        return '';
     }
 
     public function supports(Request $request): ?bool
     {
-        return $request->headers->has('X-AUTH-TOKEN');
+        return $request->headers->has('Token');
     }
 
     public function authenticate(Request $request): PassportInterface
     {
-        $token = $request->headers->get('X-AUTH-TOKEN');
+        $token = $request->headers->get('Token');
         if (!$token) {
             throw new CustomUserMessageAuthenticationException('No API token provided');
         }

@@ -1,4 +1,4 @@
 login:
-  methods: GET
+  methods: POST
   path: /login
   controller: App\Controller\LoginController::loginAction
