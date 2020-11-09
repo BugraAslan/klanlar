@@ -1,0 +1,7 @@
+authenticate:
+  resource: "resources/auth.yaml"
+  prefix: /api/auth
+
+player:
+  resource: "resources/player.yaml"
+  prefix: /api/player

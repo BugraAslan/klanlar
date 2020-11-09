@@ -1,0 +1,4 @@
+login:
+  methods: GET
+  path: /login
+  controller: App\Controller\LoginController::loginAction
