@@ -1,17 +1,24 @@
 security:
     enable_authenticator_manager: true
     providers:
-        users_in_memory: { memory: null }
+        klanlar_provider:
+            entity:
+                class: App\Entity\Player
+                property: token
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: true
+            security: false
         main:
             anonymous: false
             lazy: true
-            provider: users_in_memory
+            provider: klanlar_provider
             custom_authenticators:
                 - App\Security\Authenticator
+            #remember_me:
+             #   secret: '%kernel.secret%'
+              #  lifetime: 3600
+               # path: ^/api
     access_control:
-        - { path: ^/auth, roles: PUBLIC_ACCESS }
+        - { path: ^/api/public, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: ROLE_USER }

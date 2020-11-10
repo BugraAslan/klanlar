@@ -1,6 +1,6 @@
-authenticate:
-  resource: "resources/auth.yaml"
-  prefix: /auth
+public:
+  resource: "resources/public.yaml"
+  prefix: /api/public
 
 player:
   resource: "resources/player.yaml"

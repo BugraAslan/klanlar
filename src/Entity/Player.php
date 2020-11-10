@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Player
  *
  * @ORM\Table(name="player")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\PlayerRepository")
  */
 class Player implements UserInterface
 {
@@ -107,6 +107,9 @@ class Player implements UserInterface
      * @ORM\OneToOne(targetEntity="App\Entity\PlayerActivation", mappedBy="player")
      */
     private $playerActivation;
+
+    /** @var string */
+    public $token;
 
     /**
      * Player constructor.
@@ -466,5 +469,21 @@ class Player implements UserInterface
     public function eraseCredentials()
     {
         return true;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken(): string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string $token
+     */
+    public function setToken(string $token): void
+    {
+        $this->token = $token;
     }
 }

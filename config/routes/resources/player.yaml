@@ -1,0 +1,4 @@
+info:
+  methods: GET
+  path: /info
+  controller: App\Controller\PlayerController::info
