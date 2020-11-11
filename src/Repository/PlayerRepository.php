@@ -18,4 +18,32 @@ class PlayerRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Player::class);
     }
+
+    /**
+     * @param string $username
+     * @return int
+     */
+    public function findPlayerCountByUsername(string $username)
+    {
+        return $this->createQueryBuilder('player')
+            ->select('COUNT(player.id)')
+            ->where('LOWER(player.username) = :username')
+            ->setParameter('username', strtolower($username))
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * @param string $email
+     * @return int
+     */
+    public function findPlayerCountByEmail(string $email)
+    {
+        return $this->createQueryBuilder('player')
+            ->select('COUNT(player.id)')
+            ->where('LOWER(player.email) = :email')
+            ->setParameter('email', strtolower($email))
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

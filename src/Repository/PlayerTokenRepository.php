@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\PlayerToken;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -20,22 +19,23 @@ class PlayerTokenRepository extends ServiceEntityRepository
         parent::__construct($registry, PlayerToken::class);
     }
 
+    /**
+     * @param string $accessToken
+     * @return PlayerToken|null
+     */
     public function findActivePlayerToken(string $accessToken)
     {
-        try {
-            return $this->createQueryBuilder('player_token')
-                ->select('player_token')
-                ->innerJoin('player_token.player', 'playerEntity')
-                ->where('player_token.accessToken = :accessToken')
-                ->andWhere('player_token.expireDate > :nowDate')
-                ->setParameters([
-                    'accessToken' => $accessToken,
-                    'nowDate' => new \DateTime()
-                ])
-                ->getQuery()
-                ->getOneOrNullResult();
-        } catch (NonUniqueResultException $e) {
-            return null;
-        }
+        return $this->createQueryBuilder('player_token')
+            ->select('player_token')
+            ->innerJoin('player_token.player', 'playerEntity')
+            ->where('player_token.accessToken = :accessToken')
+            ->andWhere('player_token.expireDate > :nowDate')
+            ->setParameters([
+                'accessToken' => $accessToken,
+                'nowDate' => new \DateTime()
+            ])
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getResult();
     }
 }

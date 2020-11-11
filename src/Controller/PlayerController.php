@@ -15,9 +15,4 @@ class PlayerController extends BaseController
             'role' => $player->getRoles()
         ]);
     }
-
-    public function register()
-    {
-        return new JsonResponse(['playerController::register']);
-    }
 }

@@ -71,7 +71,7 @@ class Authenticator extends AbstractAuthenticator
     {
         return new JsonResponse([
             'success' => false,
-            'message' => 'Authentication Failed'
+            'error' => 'Authentication Failed'
         ], Response::HTTP_UNAUTHORIZED);
     }
 }

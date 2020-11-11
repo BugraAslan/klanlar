@@ -6,6 +6,7 @@ use App\Model\Request\Login\LoginRequest;
 use App\Service\LoginService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationList;
 
 /**
@@ -27,14 +28,19 @@ class LoginController extends BaseController
     }
 
     /**
-     * @ParamConverter("loginRequest", converter="fos_rest.request_body")
      * @param LoginRequest $loginRequest
      * @param ConstraintViolationList $validationErrors
-     * @return JsonResponse
+     * @ParamConverter("loginRequest", converter="fos_rest.request_body")
+     * @return Response
      */
     public function login(LoginRequest $loginRequest, ConstraintViolationList $validationErrors)
     {
+        if ($validationErrors->count()){
+            return $this->validationErrorResponse($validationErrors);
+        }
+
         $playerToken = $this->loginService->login($loginRequest);
+
         return new JsonResponse([
             'message' => 'tebrikler giriş yaptınız!',
             'token' => $playerToken->getAccessToken(),

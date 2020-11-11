@@ -7,6 +7,8 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 
 class BaseController extends AbstractFOSRestController
 {
+    use ResponseTrait;
+
     /** @var EntityManagerInterface */
     public $entityManager;
 

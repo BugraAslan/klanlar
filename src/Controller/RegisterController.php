@@ -5,9 +5,13 @@ namespace App\Controller;
 use App\Model\Request\Register\RegisterRequest;
 use App\Service\RegisterService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationList;
 
+/**
+ * Class RegisterController
+ * @package App\Controller
+ */
 class RegisterController extends BaseController
 {
     /** @var RegisterService */
@@ -23,14 +27,18 @@ class RegisterController extends BaseController
     }
 
     /**
-     * @ParamConverter("registerRequest", converter="fos_rest.request_body")
      * @param RegisterRequest $registerRequest
      * @param ConstraintViolationList $validationErrors
-     * @return JsonResponse
+     * @ParamConverter("registerRequest", converter="fos_rest.request_body")
+     * @return Response
      */
     public function register(RegisterRequest $registerRequest, ConstraintViolationList $validationErrors)
     {
-        $this->registerService->register($registerRequest);
-        return new JsonResponse(['tebrikler üye oldunuz!']);
+        if ($validationErrors->count()){
+            return $this->validationErrorResponse($validationErrors);
+        }
+
+        //$this->registerService->register($registerRequest);
+        return $this->successResponse(['register endpoint']);
     }
 }

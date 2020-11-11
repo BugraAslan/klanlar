@@ -27,5 +27,18 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    ### EVENT LISTENERS ###
+    App\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+    ### EVENT LISTENERS ###
+
+    ### VALIDATORS ###
+    App\Validator\Constraints\UniqueUsernameValidator:
+        tags:
+            - { name: validator.constraint_validator, alias: 'unique_username_validator' }
+
+    App\Validator\Constraints\UniqueEmailValidator:
+        tags:
+            - { name: validator.constraint_validator, alias: 'unique_email_validator' }
+    ### VALIDATORS ###
