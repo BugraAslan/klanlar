@@ -1,0 +1,48 @@
+version: "3"
+services:
+  php:
+    image: klanlar:php-7.4
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: klanlar-php
+    volumes:
+      - .:/var/www
+    networks:
+      - symfony_dev
+
+  nginx:
+    image: klanlar:nginx-1.17
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    container_name: klanlar-nginx
+    ports:
+      - 81:80
+      - 443:443
+    volumes:
+      - .:/var/www
+    networks:
+      - symfony_dev
+
+  mysql:
+    image: mysql:8.0
+    container_name: klanlar-mysql
+    restart: always
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: bMM2020*!
+      MYSQL_DATABASE: klanlar
+      MYSQL_USER: root
+      MYSQL_PASSWORD: bMM2020*!
+    networks:
+      - symfony_dev
+
+networks:
+  symfony_dev:
+    driver: bridge

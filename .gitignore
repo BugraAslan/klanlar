@@ -7,4 +7,5 @@
 /vendor/
 .idea
 /.idea
-composer.phar
+/docker/mysql
+/migrations
