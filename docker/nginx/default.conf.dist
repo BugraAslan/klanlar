@@ -12,6 +12,11 @@ server {
         fastcgi_split_path_info ^(.+\.php)(/.*)$;
         include fastcgi_params;
 
+        #fastcgi_param PHP_VALUE "
+        #    blackfire.server_id=6f428b43-fd53-4ac0-9626-60c60af0244a
+        #    blackfire.server_token=e9778cbd73ebb051dba964bfe9d3de8cae17e31b1fd2a4cfd73e4cde349e545b
+        #";
+
         # optionally set the value of the environment variables used in the application
         # fastcgi_param APP_ENV prod;
         # fastcgi_param APP_SECRET <app-secret-id>;
@@ -58,5 +63,9 @@ server {
         fastcgi_pass  php:9000;
         fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        #fastcgi_param PHP_VALUE "
+        #    blackfire.server_id=6f428b43-fd53-4ac0-9626-60c60af0244a
+        #    blackfire.server_token=e9778cbd73ebb051dba964bfe9d3de8cae17e31b1fd2a4cfd73e4cde349e545b
+        #";
     }
 }

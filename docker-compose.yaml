@@ -9,7 +9,21 @@ services:
     volumes:
       - .:/var/www
     networks:
-      - symfony_dev
+      - klanlar_dev
+
+    #blackfire:
+    #image: blackfire/blackfire
+      #environment:
+      #BLACKFIRE_SERVER_ID: '%env(BLACKFIRE_SERVER_ID)%'
+      #BLACKFIRE_SERVER_TOKEN: '%env(BLACKFIRE_SERVER_TOKEN)%'
+      #BLACKFIRE_CLIENT_ID: '%env(BLACKFIRE_CLIENT_ID)%'
+      #BLACKFIRE_CLIENT_TOKEN: '%env(BLACKFIRE_CLIENT_TOKEN)%'
+    #ports: ["8707"]
+    #container_name: klanlar-blackfire
+      #volumes:
+      #- .:/var/www
+      #networks:
+      #- klanlar_dev
 
   nginx:
     image: klanlar:nginx-1.17
@@ -23,7 +37,7 @@ services:
     volumes:
       - .:/var/www
     networks:
-      - symfony_dev
+      - klanlar_dev
 
   mysql:
     image: mysql:8.0
@@ -34,13 +48,13 @@ services:
     volumes:
       - ./docker/mysql:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: bMM2020*!
-      MYSQL_DATABASE: klanlar
-      MYSQL_USER: root
-      MYSQL_PASSWORD: bMM2020*!
+      MYSQL_ROOT_PASSWORD: '%env(MYSQL_ROOT_PASSWORD)%'
+      MYSQL_DATABASE: '%env(MYSQL_DATABASE)%'
+      MYSQL_USER: '%env(MYSQL_USER)%'
+      MYSQL_PASSWORD: '%env(MYSQL_PASSWORD)%'
     networks:
-      - symfony_dev
+      - klanlar_dev
 
 networks:
-  symfony_dev:
+  klanlar_dev:
     driver: bridge
