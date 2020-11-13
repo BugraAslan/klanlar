@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Unit
  *
- * @ORM\Table(name="unit")
+ * @ORM\Table(name="unit", indexes={@ORM\Index(name="command_unit_unit_id_fk", columns={"unit_id"})})
  * @ORM\Entity
  */
 class Unit
@@ -97,6 +97,34 @@ class Unit
      * @ORM\Column(name="base_build_time", type="smallint", nullable=true)
      */
     private $baseBuildTime;
+
+    /**
+     * @var CommandUnit
+     *
+     * @ORM\OneToOne(targetEntity="App\Entity\CommandUnit", inversedBy="unit")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id", referencedColumnName="id")
+     * })
+     */
+    private $command;
+
+    /**
+     * @return CommandUnit
+     */
+    public function getCommand(): CommandUnit
+    {
+        return $this->command;
+    }
+
+    /**
+     * @param CommandUnit $command
+     * @return Unit
+     */
+    public function setCommand(CommandUnit $command): Unit
+    {
+        $this->command = $command;
+        return $this;
+    }
 
     public function getId(): ?int
     {

@@ -38,7 +38,7 @@ class BuildingRequirements
     /**
      * @var Building
      *
-     * @ORM\ManyToOne(targetEntity="Building", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="Building", inversedBy="buildingRequirements")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="building_id", referencedColumnName="id")
      * })

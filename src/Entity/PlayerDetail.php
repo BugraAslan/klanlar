@@ -46,7 +46,7 @@ class PlayerDetail
     /**
      * @var Player
      *
-     * @ORM\OneToOne(targetEntity="Player", inversedBy="id")
+     * @ORM\OneToOne(targetEntity="Player", inversedBy="playerDetail")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="player_id", referencedColumnName="id")
      * })

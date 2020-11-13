@@ -38,10 +38,8 @@ class PlayerNotification
     /**
      * @var Player
      *
-     * @ORM\OneToOne(targetEntity="Player", inversedBy="id")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="player_id", referencedColumnName="id")
-     * })
+     * @ORM\OneToOne(targetEntity="Player", inversedBy="playerNotification", fetch="EXTRA_LAZY")
+     * @ORM\JoinColumn(name="player_id", referencedColumnName="id")
      */
     private $player;
 

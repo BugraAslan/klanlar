@@ -34,7 +34,7 @@ class Command
     /**
      * @var PlayerVillage
      *
-     * @ORM\ManyToOne(targetEntity="PlayerVillage", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="PlayerVillage", inversedBy="commandSourceVillages")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="source_village_id", referencedColumnName="id")
      * })
@@ -44,7 +44,7 @@ class Command
     /**
      * @var PlayerVillage
      *
-     * @ORM\ManyToOne(targetEntity="PlayerVillage", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="PlayerVillage", inversedBy="commandTargetVillagesvi")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="target_village_id", referencedColumnName="id")
      * })
@@ -82,7 +82,7 @@ class Command
     /**
      * @var CommandType
      *
-     * @ORM\ManyToOne(targetEntity="CommandType", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="CommandType", inversedBy="commands")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="command_type_id", referencedColumnName="id")
      * })
@@ -92,7 +92,7 @@ class Command
     /**
      * @var Player
      *
-     * @ORM\ManyToOne(targetEntity="Player", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="Player", inversedBy="commandTargetPlayers")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="target_player_id", referencedColumnName="id")
      * })
@@ -102,7 +102,7 @@ class Command
     /**
      * @var Player
      *
-     * @ORM\ManyToOne(targetEntity="Player", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="Player", inversedBy="commandSourcePlayers")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="source_player_id", referencedColumnName="id")
      * })

@@ -7,11 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CommandUnit
  *
- * @ORM\Table(name="command_unit", indexes={
- *     @ORM\Index(name="command_unit_command_id_fk", columns={"command_id"}),
- *     @ORM\Index(name="command_unit_unit_id_fk", columns={"unit_id"})
- * })
- *
+ * @ORM\Table(name="command_unit", indexes={@ORM\Index(name="command_unit_command_id_fk", columns={"command_id"})})
  * @ORM\Entity
  */
 class CommandUnit
@@ -35,13 +31,14 @@ class CommandUnit
     /**
      * @var Command
      *
-     * @ORM\ManyToOne(targetEntity="Command", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="Command", inversedBy="commandUnits")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="command_id", referencedColumnName="id")
      * })
      */
     private $command;
 
+    // TODO oneToOne
     /**
      * @var Unit
      *

@@ -28,14 +28,14 @@ class Player implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="username", type="string", length=50, nullable=false)
+     * @ORM\Column(name="username", type="string", length=20, nullable=false)
      */
     private $username = '';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=50, nullable=false)
+     * @ORM\Column(name="password", type="string", length=20, nullable=false)
      */
     private $password = '';
 
@@ -92,19 +92,19 @@ class Player implements UserInterface
 
     /**
      * @var PlayerNotification|null
-     * @ORM\OneToOne(targetEntity="App\Entity\PlayerNotification", mappedBy="player")
+     * @ORM\OneToOne(targetEntity="App\Entity\PlayerNotification", mappedBy="player", fetch="EXTRA_LAZY")
      */
     private $playerNotification;
 
     /**
      * @var PlayerProfile|null
-     * @ORM\OneToOne(targetEntity="App\Entity\PlayerProfile", mappedBy="player")
+     * @ORM\OneToOne(targetEntity="App\Entity\PlayerProfile", mappedBy="player", fetch="EXTRA_LAZY")
      */
     private $playerProfile;
 
     /**
      * @var PlayerActivation|null
-     * @ORM\OneToOne(targetEntity="App\Entity\PlayerActivation", mappedBy="player")
+     * @ORM\OneToOne(targetEntity="App\Entity\PlayerActivation", mappedBy="player", fetch="EXTRA_LAZY")
      */
     private $playerActivation;
 

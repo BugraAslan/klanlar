@@ -53,10 +53,8 @@ class PlayerActivation
     /**
      * @var Player
      *
-     * @ORM\OneToOne(targetEntity="Player", inversedBy="id")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="player_id", referencedColumnName="id")
-     * })
+     * @ORM\OneToOne(targetEntity="Player", inversedBy="playerActivation")
+     * @ORM\JoinColumn(name="player_id", referencedColumnName="id")
      */
     private $player;
 

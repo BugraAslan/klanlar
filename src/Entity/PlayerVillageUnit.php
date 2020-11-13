@@ -42,7 +42,7 @@ class PlayerVillageUnit
     /**
      * @var Player
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Player", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Player", inversedBy="villageUnits")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="player_id", referencedColumnName="id")
      * })

@@ -30,6 +30,7 @@ class CommandType
      */
     private $name;
 
+    // TODO oneToOne
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Command", mappedBy="id")
      */
