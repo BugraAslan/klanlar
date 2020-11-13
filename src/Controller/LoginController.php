@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Manager\Response\LoginResponseManager;
 use App\Model\Request\Login\LoginRequest;
 use App\Service\LoginService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\Validator\ConstraintViolationList;
 
 /**
@@ -18,13 +20,18 @@ class LoginController extends BaseController
     /** @var LoginService */
     private $loginService;
 
+    /** @var LoginResponseManager */
+    private $loginResponseManager;
+
     /**
      * LoginController constructor.
      * @param LoginService $loginService
+     * @param LoginResponseManager $loginResponseManager
      */
-    public function __construct(LoginService $loginService)
+    public function __construct(LoginService $loginService, LoginResponseManager $loginResponseManager)
     {
         $this->loginService = $loginService;
+        $this->loginResponseManager = $loginResponseManager;
     }
 
     /**
@@ -40,11 +47,15 @@ class LoginController extends BaseController
         }
 
         $playerToken = $this->loginService->login($loginRequest);
+        if (!$playerToken){
+            return $this->customErrorResponse(
+                'Üye bulunamadı, şifrenizi mi unuttunuz ?',
+                Response::HTTP_NOT_ACCEPTABLE
+            );
+        }
 
-        return new JsonResponse([
-            'message' => 'tebrikler giriş yaptınız!',
-            'token' => $playerToken->getAccessToken(),
-            'expireDate' => $playerToken->getExpireDate()
-        ]);
+        return $this->successResponse(
+            $this->loginResponseManager->buildLoginResponse($playerToken)
+        );
     }
 }

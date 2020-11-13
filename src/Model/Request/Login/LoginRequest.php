@@ -2,7 +2,6 @@
 
 namespace App\Model\Request\Login;
 
-
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -11,7 +10,7 @@ class LoginRequest
     /**
      * @var string
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Kullanıcı adı boş bırakılamaz")
      * @Serializer\Type("string")
      */
     private $username;
@@ -19,7 +18,7 @@ class LoginRequest
     /**
      * @var string
      *
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Şifre boş bırakılamaz")
      * @Serializer\Type("string")
      */
     private $password;

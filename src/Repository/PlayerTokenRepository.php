@@ -26,8 +26,6 @@ class PlayerTokenRepository extends ServiceEntityRepository
     public function findActivePlayerToken(string $accessToken)
     {
         return $this->createQueryBuilder('player_token')
-            ->select('player_token')
-            ->innerJoin('player_token.player', 'playerEntity')
             ->where('player_token.accessToken = :accessToken')
             ->andWhere('player_token.expireDate > :nowDate')
             ->setParameters([
@@ -36,6 +34,6 @@ class PlayerTokenRepository extends ServiceEntityRepository
             ])
             ->getQuery()
             ->setMaxResults(1)
-            ->getResult();
+            ->getOneOrNullResult();
     }
 }

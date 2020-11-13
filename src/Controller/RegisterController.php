@@ -38,7 +38,14 @@ class RegisterController extends BaseController
             return $this->validationErrorResponse($validationErrors);
         }
 
-        //$this->registerService->register($registerRequest);
-        return $this->successResponse(['register endpoint']);
+        $registerResponse = $this->registerService->register($registerRequest);
+        if (!$registerResponse){
+            return $this->customErrorResponse(
+                'Üye kaydı oluşturulamadı',
+                Response::HTTP_NOT_ACCEPTABLE
+            );
+        }
+
+        return $this->successResponse($registerResponse, Response::HTTP_CREATED);
     }
 }

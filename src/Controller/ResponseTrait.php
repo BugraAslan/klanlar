@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Model\Response\BaseResponseModel;
+use Doctrine\Common\Collections\ArrayCollection;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -50,18 +51,21 @@ trait ResponseTrait
      */
     public function validationErrorResponse(ConstraintViolationListInterface $validationErrors)
     {
-        $errors = [];
+        $errorCollection = new ArrayCollection();
         if ($validationErrors->count()){
             foreach ($validationErrors as $validationError){
-                $errors[$validationError->getPropertyPath()][] = $validationError->getMessage();
+                $errorCollection->set(
+                    $validationError->getPropertyPath(),
+                    $validationError->getMessage()
+                );
             }
         }
 
         return $this->apiResponse(
             new BaseResponseModel(
                 false,
-                [],
-                $errors,
+                null,
+                $errorCollection->toArray(),
                 Response::HTTP_NOT_ACCEPTABLE
             )
         );
@@ -77,7 +81,7 @@ trait ResponseTrait
         return $this->apiResponse(
             new BaseResponseModel(
                 false,
-                [],
+                null,
                 $error,
                 $statusCode
             )

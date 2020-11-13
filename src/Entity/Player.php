@@ -92,19 +92,19 @@ class Player implements UserInterface
 
     /**
      * @var PlayerNotification|null
-     * @ORM\OneToOne(targetEntity="App\Entity\PlayerNotification", mappedBy="player", fetch="EXTRA_LAZY")
+     * @ORM\OneToOne(targetEntity="App\Entity\PlayerNotification", mappedBy="player")
      */
     private $playerNotification;
 
     /**
      * @var PlayerProfile|null
-     * @ORM\OneToOne(targetEntity="App\Entity\PlayerProfile", mappedBy="player", fetch="EXTRA_LAZY")
+     * @ORM\OneToOne(targetEntity="App\Entity\PlayerProfile", mappedBy="player")
      */
     private $playerProfile;
 
     /**
      * @var PlayerActivation|null
-     * @ORM\OneToOne(targetEntity="App\Entity\PlayerActivation", mappedBy="player", fetch="EXTRA_LAZY")
+     * @ORM\OneToOne(targetEntity="App\Entity\PlayerActivation", mappedBy="player")
      */
     private $playerActivation;
 

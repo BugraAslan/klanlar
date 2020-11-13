@@ -10,7 +10,7 @@ class BaseResponseModel
     /** @var object|array|null */
     protected $data;
 
-    /** @var object|array|null */
+    /** @var array|string|null */
     protected $errors;
 
     /** @var int */
@@ -20,7 +20,7 @@ class BaseResponseModel
      * BaseResponseModel constructor.
      * @param bool $success
      * @param array|object|null $data
-     * @param array|object|null $errors
+     * @param array|string|null $errors
      * @param int $statusCode
      */
     public function __construct(bool $success, $data, $errors, int $statusCode)
@@ -68,7 +68,7 @@ class BaseResponseModel
     }
 
     /**
-     * @return array|object|null
+     * @return array|string|null
      */
     public function getErrors()
     {
@@ -76,7 +76,7 @@ class BaseResponseModel
     }
 
     /**
-     * @param array|object|null $errors
+     * @param array|string|null $errors
      * @return BaseResponseModel
      */
     public function setErrors($errors)

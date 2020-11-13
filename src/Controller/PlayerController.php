@@ -2,17 +2,14 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Entity\Player;
 
 class PlayerController extends BaseController
 {
     public function info()
     {
+        /** @var Player $player */
         $player = $this->getUser();
-        return new JsonResponse([
-            'username' => $player->getUsername(),
-            'token' => $player->getToken(),
-            'role' => $player->getRoles()
-        ]);
+        return $this->successResponse($player);
     }
 }
