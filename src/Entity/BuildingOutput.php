@@ -38,7 +38,7 @@ class BuildingOutput
     /**
      * @var Building
      *
-     * @ORM\OneToOne(targetEntity="Building", inversedBy="buildingOutput")
+     * @ORM\OneToOne(targetEntity="Building")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="building_id", referencedColumnName="id")
      * })

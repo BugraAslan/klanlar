@@ -4,8 +4,6 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-// TODO building
-
 /**
  * PlayerVillageBuilding
  *
@@ -38,7 +36,7 @@ class PlayerVillageBuilding
     /**
      * @var Building
      *
-     * @ORM\OneToOne(targetEntity="Building", mappedBy="id")
+     * @ORM\OneToOne(targetEntity="Building")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="building_id", referencedColumnName="id")
      * })
@@ -55,11 +53,10 @@ class PlayerVillageBuilding
      */
     private $player;
 
-    // TODO oneToOne
     /**
      * @var PlayerVillage
      *
-     * @ORM\ManyToOne(targetEntity="PlayerVillage", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="PlayerVillage", inversedBy="villageBuildings")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="village_id", referencedColumnName="id")
      * })

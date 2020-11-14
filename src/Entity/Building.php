@@ -122,11 +122,6 @@ class Building
     private $isOutput = '0';
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\BuildingOutput", mappedBy="building")
-     */
-    private $buildingOutput;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\BuildingRequirements", mappedBy="building")
      */
     private $buildingRequirements;
@@ -399,24 +394,6 @@ class Building
     public function getIsOutput(): ?bool
     {
         return $this->isOutput;
-    }
-
-    public function getBuildingOutput(): ?BuildingOutput
-    {
-        return $this->buildingOutput;
-    }
-
-    public function setBuildingOutput(?BuildingOutput $buildingOutput): self
-    {
-        $this->buildingOutput = $buildingOutput;
-
-        // set (or unset) the owning side of the relation if necessary
-        $newBuilding = null === $buildingOutput ? null : $this;
-        if ($buildingOutput->getBuilding() !== $newBuilding) {
-            $buildingOutput->setBuilding($newBuilding);
-        }
-
-        return $this;
     }
 
     /**

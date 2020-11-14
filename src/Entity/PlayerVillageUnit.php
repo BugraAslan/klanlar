@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="player_village_unit", indexes={
  *     @ORM\Index(name="player_village_unit_player_id_fk", columns={"player_id"}),
+ *     @ORM\Index(name="player_village_unit_unit_id_fk", columns={"unit_id"}),
  *     @ORM\Index(name="player_village_unit_player_village_id_fk", columns={"village_id"})
  * })
  *
@@ -26,11 +27,12 @@ class PlayerVillageUnit
     private $id;
 
     /**
-     * @var int
+     * @var Unit|null
      *
-     * @ORM\Column(name="unit_id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\OneToOne(targetEntity="Unit")
+     * @ORM\JoinColumn(name="unit_id", referencedColumnName="id")
      */
-    private $unitId;
+    private $unit;
 
     /**
      * @var int
@@ -42,7 +44,7 @@ class PlayerVillageUnit
     /**
      * @var Player
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Player", inversedBy="villageUnits")
+     * @ORM\ManyToOne(targetEntity="Player", inversedBy="villageUnits")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="player_id", referencedColumnName="id")
      * })
@@ -52,7 +54,7 @@ class PlayerVillageUnit
     /**
      * @var PlayerVillage
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\PlayerVillage", inversedBy="id")
+     * @ORM\ManyToOne(targetEntity="PlayerVillage", inversedBy="villageUnits")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="village_id", referencedColumnName="id")
      * })
@@ -64,15 +66,21 @@ class PlayerVillageUnit
         return $this->id;
     }
 
-    public function getUnitId(): ?int
+    /**
+     * @return Unit|null
+     */
+    public function getUnit(): ?Unit
     {
-        return $this->unitId;
+        return $this->unit;
     }
 
-    public function setUnitId(int $unitId): self
+    /**
+     * @param Unit|null $unit
+     * @return PlayerVillageUnit
+     */
+    public function setUnit(?Unit $unit): PlayerVillageUnit
     {
-        $this->unitId = $unitId;
-
+        $this->unit = $unit;
         return $this;
     }
 

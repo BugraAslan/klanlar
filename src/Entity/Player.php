@@ -66,16 +66,6 @@ class Player implements UserInterface
     private $villages;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PlayerVillageUnit", mappedBy="player")
-     */
-    private $villageUnits;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PlayerVillageBuilding", mappedBy="player")
-     */
-    private $villageBuildings;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\PlayerToken", mappedBy="player")
      */
     private $playerTokens;
@@ -90,24 +80,6 @@ class Player implements UserInterface
      */
     private $commandSourcePlayers;
 
-    /**
-     * @var PlayerNotification|null
-     * @ORM\OneToOne(targetEntity="App\Entity\PlayerNotification", mappedBy="player")
-     */
-    private $playerNotification;
-
-    /**
-     * @var PlayerProfile|null
-     * @ORM\OneToOne(targetEntity="App\Entity\PlayerProfile", mappedBy="player")
-     */
-    private $playerProfile;
-
-    /**
-     * @var PlayerActivation|null
-     * @ORM\OneToOne(targetEntity="App\Entity\PlayerActivation", mappedBy="player")
-     */
-    private $playerActivation;
-
     /** @var string */
     public $token;
 
@@ -117,8 +89,6 @@ class Player implements UserInterface
     public function __construct()
     {
         $this->villages = new ArrayCollection();
-        $this->villageUnits = new ArrayCollection();
-        $this->villageBuildings = new ArrayCollection();
         $this->playerTokens = new ArrayCollection();
         $this->commandTargetPlayers = new ArrayCollection();
         $this->commandSourcePlayers = new ArrayCollection();
@@ -253,66 +223,6 @@ class Player implements UserInterface
     }
 
     /**
-     * @return Collection|PlayerVillageUnit[]
-     */
-    public function getVillageUnits(): Collection
-    {
-        return $this->villageUnits;
-    }
-
-    public function addVillageUnit(PlayerVillageUnit $playerVillageUnit): self
-    {
-        if (!$this->villageUnits->contains($playerVillageUnit)) {
-            $this->villageUnits[] = $playerVillageUnit;
-            $playerVillageUnit->setPlayer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeVillageUnit(PlayerVillageUnit $playerVillageUnit): self
-    {
-        if ($this->villageUnits->removeElement($playerVillageUnit)) {
-            // set the owning side to null (unless already changed)
-            if ($playerVillageUnit->getPlayer() === $this) {
-                $playerVillageUnit->setPlayer(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|PlayerVillageBuilding[]
-     */
-    public function getVillageBuildings(): Collection
-    {
-        return $this->villageBuildings;
-    }
-
-    public function addVillageBuilding(PlayerVillageBuilding $playerVillageBuilding): self
-    {
-        if (!$this->villageBuildings->contains($playerVillageBuilding)) {
-            $this->villageBuildings[] = $playerVillageBuilding;
-            $playerVillageBuilding->setPlayer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeVillageBuilding(PlayerVillageBuilding $playerVillageBuilding): self
-    {
-        if ($this->villageBuildings->removeElement($playerVillageBuilding)) {
-            // set the owning side to null (unless already changed)
-            if ($playerVillageBuilding->getPlayer() === $this) {
-                $playerVillageBuilding->setPlayer(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|PlayerToken[]
      */
     public function getPlayerTokens(): Collection
@@ -397,60 +307,6 @@ class Player implements UserInterface
             if ($commandSourcePlayer->getSourcePlayer() === $this) {
                 $commandSourcePlayer->setSourcePlayer(null);
             }
-        }
-
-        return $this;
-    }
-
-    public function getPlayerNotification(): ?PlayerNotification
-    {
-        return $this->playerNotification;
-    }
-
-    public function setPlayerNotification(?PlayerNotification $playerNotification): self
-    {
-        $this->playerNotification = $playerNotification;
-
-        // set (or unset) the owning side of the relation if necessary
-        $newPlayer = null === $playerNotification ? null : $this;
-        if ($playerNotification->getPlayer() !== $newPlayer) {
-            $playerNotification->setPlayer($newPlayer);
-        }
-
-        return $this;
-    }
-
-    public function getPlayerProfile(): ?PlayerProfile
-    {
-        return $this->playerProfile;
-    }
-
-    public function setPlayerProfile(?PlayerProfile $playerProfile): self
-    {
-        $this->playerProfile = $playerProfile;
-
-        // set (or unset) the owning side of the relation if necessary
-        $newPlayer = null === $playerProfile ? null : $this;
-        if ($playerProfile->getPlayer() !== $newPlayer) {
-            $playerProfile->setPlayer($newPlayer);
-        }
-
-        return $this;
-    }
-
-    public function getPlayerActivation(): ?PlayerActivation
-    {
-        return $this->playerActivation;
-    }
-
-    public function setPlayerActivation(?PlayerActivation $playerActivation): self
-    {
-        $this->playerActivation = $playerActivation;
-
-        // set (or unset) the owning side of the relation if necessary
-        $newPlayer = null === $playerActivation ? null : $this;
-        if ($playerActivation->getPlayer() !== $newPlayer) {
-            $playerActivation->setPlayer($newPlayer);
         }
 
         return $this;

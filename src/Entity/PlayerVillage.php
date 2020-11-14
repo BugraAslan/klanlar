@@ -26,9 +26,9 @@ class PlayerVillage
     /**
      * @var int
      *
-     * @ORM\Column(name="village_score", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="score", type="smallint", nullable=false, options={"unsigned"=true})
      */
-    private $villageScore = '0';
+    private $score = '0';
 
     /**
      * @var int
@@ -62,22 +62,22 @@ class PlayerVillage
     private $player;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PlayerVillageBuilding", mappedBy="village")
+     * @ORM\OneToMany(targetEntity="PlayerVillageBuilding", mappedBy="village")
      */
     private $villageBuildings;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PlayerVillageUnit", mappedBy="village")
+     * @ORM\OneToMany(targetEntity="PlayerVillageUnit", mappedBy="village")
      */
     private $villageUnits;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Command", mappedBy="sourceVillage")
+     * @ORM\OneToMany(targetEntity="Command", mappedBy="sourceVillage")
      */
     private $commandSourceVillages;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Command", mappedBy="targetVillage")
+     * @ORM\OneToMany(targetEntity="Command", mappedBy="targetVillage")
      */
     private $commandTargetVillages;
 
@@ -97,14 +97,14 @@ class PlayerVillage
         return $this->id;
     }
 
-    public function getVillageScore(): ?int
+    public function getScore(): ?int
     {
-        return $this->villageScore;
+        return $this->score;
     }
 
-    public function setVillageScore(int $villageScore): self
+    public function setVillageScore(int $score): self
     {
-        $this->villageScore = $villageScore;
+        $this->score = $score;
 
         return $this;
     }

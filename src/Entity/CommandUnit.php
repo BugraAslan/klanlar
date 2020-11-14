@@ -38,14 +38,11 @@ class CommandUnit
      */
     private $command;
 
-    // TODO oneToOne
     /**
-     * @var Unit
+     * @var Unit|null
      *
-     * @ORM\ManyToOne(targetEntity="Unit", inversedBy="id")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="unit_id", referencedColumnName="id")
-     * })
+     * @ORM\OneToOne(targetEntity="Unit")
+     * @ORM\JoinColumn(name="unit_id", referencedColumnName="id")
      */
     private $unit;
 
@@ -78,15 +75,21 @@ class CommandUnit
         return $this;
     }
 
+    /**
+     * @return Unit|null
+     */
     public function getUnit(): ?Unit
     {
         return $this->unit;
     }
 
-    public function setUnit(?Unit $unit): self
+    /**
+     * @param Unit|null $unit
+     * @return CommandUnit
+     */
+    public function setUnit(?Unit $unit): CommandUnit
     {
         $this->unit = $unit;
-
         return $this;
     }
 }
