@@ -9,6 +9,9 @@ class LoginResponse
     /** @var string */
     public $accessToken;
 
+    /** @var string */
+    public $refreshToken;
+
     /** @var DateTime */
     public $expireDate;
 
@@ -19,6 +22,16 @@ class LoginResponse
     public function setAccessToken(string $accessToken): LoginResponse
     {
         $this->accessToken = $accessToken;
+        return $this;
+    }
+
+    /**
+     * @param string $refreshToken
+     * @return LoginResponse
+     */
+    public function setRefreshToken(string $refreshToken): LoginResponse
+    {
+        $this->refreshToken = $refreshToken;
         return $this;
     }
 

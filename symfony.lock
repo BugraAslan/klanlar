@@ -1,4 +1,7 @@
 {
+    "firebase/php-jwt": {
+        "version": "v5.2.0"
+    },
     "symfony/options-resolver": {
         "version": "v5.1.8"
     },

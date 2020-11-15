@@ -15,6 +15,7 @@ class LoginResponseManager
     {
         return (new LoginResponse())
             ->setExpireDate($playerToken->getExpireDate())
+            ->setRefreshToken($playerToken->getRefreshToken())
             ->setAccessToken($playerToken->getAccessToken());
     }
 }

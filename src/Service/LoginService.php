@@ -5,11 +5,23 @@ namespace App\Service;
 use App\Entity\Player;
 use App\Entity\PlayerToken;
 use App\Model\Request\Login\LoginRequest;
+use App\Security\JwtTokenGenerator;
 use Doctrine\ORM\ORMException;
-use Symfony\Component\Security\Csrf\TokenGenerator\UriSafeTokenGenerator;
 
 class LoginService extends BaseService
 {
+    /** @var JwtTokenGenerator */
+    private $jwtTokenGenerator;
+
+    /**
+     * LoginService constructor.
+     * @param JwtTokenGenerator $jwtTokenGenerator
+     */
+    public function __construct(JwtTokenGenerator $jwtTokenGenerator)
+    {
+        $this->jwtTokenGenerator = $jwtTokenGenerator;
+    }
+
     /**
      * @param LoginRequest $loginRequest
      * @return PlayerToken|null
@@ -27,22 +39,23 @@ class LoginService extends BaseService
                 'player' => $player->getId()
             ]);
 
-            $token = (new UriSafeTokenGenerator())->generateToken();
-            $tomorrowDate = (new \DateTime())->modify('+1 day');
-            $player->setApiToken($token);
+            $accessToken = $this->jwtTokenGenerator->generateToken();
+            $refreshToken = $this->jwtTokenGenerator->generateRefreshToken($player->getId());
+            $player->setApiToken($accessToken);
+            $expireDate = (new \DateTime())->modify($this->container->getParameter('default_expire_time'));
 
             if ($playerToken instanceof PlayerToken){
-                $player->setApiToken($token);
+                $player->setApiToken($accessToken);
                 $playerToken
-                    ->setRefreshToken((new UriSafeTokenGenerator())->generateToken())
-                    ->setAccessToken($token)
-                    ->setExpireDate($tomorrowDate);
+                    ->setAccessToken($accessToken)
+                    ->setRefreshToken($refreshToken)
+                    ->setExpireDate($expireDate);
             } else {
                 $playerToken = (new PlayerToken())
-                    ->setAccessToken($token)
-                    ->setRefreshToken((new UriSafeTokenGenerator())->generateToken())
+                    ->setAccessToken($accessToken)
+                    ->setRefreshToken($refreshToken)
                     ->setPlayer($player)
-                    ->setExpireDate($tomorrowDate);
+                    ->setExpireDate($expireDate);
             }
             try {
                 $this->entityManager->persist($playerToken);
