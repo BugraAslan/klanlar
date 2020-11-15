@@ -82,6 +82,11 @@ class PlayerVillage
     private $commandTargetVillages;
 
     /**
+     * @ORM\OneToOne(targetEntity="VillageResource", mappedBy="village")
+     */
+    private $resource;
+
+    /**
      * PlayerVillage constructor.
      */
     public function __construct()
@@ -272,6 +277,23 @@ class PlayerVillage
             if ($commandTargetVillage->getTargetVillage() === $this) {
                 $commandTargetVillage->setTargetVillage(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getResource(): ?VillageResource
+    {
+        return $this->resource;
+    }
+
+    public function setSources(?VillageResource $resource): self
+    {
+        $this->resource = $resource;
+
+        $newVillage = $resource === null ? null : $this;
+        if ($newVillage !== $resource->getVillage()) {
+            $resource->setVillage($newVillage);
         }
 
         return $this;

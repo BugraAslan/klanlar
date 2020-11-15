@@ -46,7 +46,7 @@ class VillageController extends BaseController
         );
 
         if (!$villageInfo){
-            $this->notFoundErrorResponse('Köy bilgileri bulunamadı!');
+            return $this->notFoundErrorResponse('Köy bilgileri bulunamadı!');
         }
 
         return $this->successResponse(

@@ -2,6 +2,7 @@
 
 namespace App\Model\Response\Village\VillageInfo;
 
+use App\Model\Response\Village\VillageResourceResponse;
 use App\Model\Response\Village\VillageResponse;
 
 class VillageInfoResponse
@@ -12,8 +13,8 @@ class VillageInfoResponse
     /** @var BuildingByVillageInfoResponse[] */
     private $buildings;
 
-    /** @var array */
-    private $materials;
+    /** @var VillageResourceResponse */
+    private $resources;
 
     /** @var UnitByVillageInfoResponse[] */
     private $units;
@@ -55,20 +56,20 @@ class VillageInfoResponse
     }
 
     /**
-     * @return array
+     * @return VillageResourceResponse
      */
-    public function getMaterials(): array
+    public function getResources(): VillageResourceResponse
     {
-        return $this->materials;
+        return $this->resources;
     }
 
     /**
-     * @param array $materials
+     * @param VillageResourceResponse $resources
      * @return VillageInfoResponse
      */
-    public function setMaterials(array $materials): VillageInfoResponse
+    public function setResources(VillageResourceResponse $resources): VillageInfoResponse
     {
-        $this->materials = $materials;
+        $this->resources = $resources;
         return $this;
     }
 

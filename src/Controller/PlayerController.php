@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Player;
+use App\Service\PlayerService;
 
 class PlayerController extends BaseController
 {
