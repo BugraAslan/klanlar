@@ -4,7 +4,7 @@ security:
         klanlar_provider:
             entity:
                 class: App\Entity\Player
-                property: token
+                property: apiToken
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -16,9 +16,12 @@ security:
             custom_authenticators:
                 - App\Security\Authenticator
             #remember_me:
-             #   secret: '%kernel.secret%'
-              #  lifetime: 3600
-               # path: ^/api
+                #secret: '%env(APP_SECRET)%'
+                #lifetime: 3600
+                #path: ^/api
+                #always_remember_me: true
+            logout:
+                path: logout
     access_control:
         - { path: ^/api/public, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: ROLE_USER }

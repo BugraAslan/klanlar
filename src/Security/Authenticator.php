@@ -11,33 +11,44 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CustomCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
 class Authenticator extends AbstractAuthenticator
 {
     /** @var EntityManagerInterface */
     private $entityManager;
 
+    /** @var Security */
+    private $security;
+
     /**
      * Authenticator constructor.
      * @param EntityManagerInterface $entityManager
+     * @param Security $security
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, Security $security)
     {
         $this->entityManager = $entityManager;
+        $this->security = $security;
     }
 
     public function supports(Request $request): ?bool
     {
-        return strpos($request->getRequestUri(), '/api/public') === false;
+        return strpos($request->attributes->get('_route'), 'public') === false;
     }
 
     public function authenticate(Request $request): PassportInterface
     {
+        if ($this->security->getUser()){
+            return new SelfValidatingPassport($this->security->getUser());
+        }
+
         $token = $request->headers->get('Token');
         if (!$token) {
             throw new CustomUserMessageAuthenticationException('No API token provided');
@@ -50,16 +61,7 @@ class Authenticator extends AbstractAuthenticator
             throw new AuthenticationException();
         }
 
-        /** @var Player $player */
-        $player = $playerToken->getPlayer();
-        $player->setToken($token);
-
-        return new Passport($player, new CustomCredentials(
-            function ($credentials, UserInterface $player) {
-                return $player->getToken() === $credentials;
-            },
-            $token
-        ));
+        return new SelfValidatingPassport($playerToken->getPlayer());
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
@@ -71,7 +73,13 @@ class Authenticator extends AbstractAuthenticator
     {
         return new JsonResponse([
             'success' => false,
-            'error' => 'Authentication Failed'
+            'data' => null,
+            'errors' => 'Authentication Failed'
         ], Response::HTTP_UNAUTHORIZED);
+    }
+
+    public function supportsRememberMe()
+    {
+        return true;
     }
 }

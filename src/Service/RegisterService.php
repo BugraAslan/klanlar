@@ -28,7 +28,7 @@ class RegisterService extends BaseService
         try {
             $player = (new Player())
                 ->setEmail($registerRequest->getEmail())
-                ->setPassword($registerRequest->getPassword())
+                ->setPassword(md5($registerRequest->getPassword()))
                 ->setUsername($registerRequest->getUsername())
                 ->setCreatedDate(new \DateTime());
             $this->entityManager->persist($player);

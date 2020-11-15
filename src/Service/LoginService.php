@@ -18,19 +18,33 @@ class LoginService extends BaseService
     {
         $player = $this->entityManager->getRepository(Player::class)->findOneBy([
             'username' => $loginRequest->getUsername(),
-            'password' => $loginRequest->getPassword()
+            'password' => md5($loginRequest->getPassword())
         ]);
 
         $playerToken = null;
         if ($player instanceof Player){
-            try {
-                $token = (new UriSafeTokenGenerator())->generateToken();
-                $player->setToken($token);
+            $playerToken = $this->entityManager->getRepository(PlayerToken::class)->findOneBy([
+                'player' => $player->getId()
+            ]);
+
+            $token = (new UriSafeTokenGenerator())->generateToken();
+            $tomorrowDate = (new \DateTime())->modify('+1 day');
+            $player->setApiToken($token);
+
+            if ($playerToken instanceof PlayerToken){
+                $player->setApiToken($token);
+                $playerToken
+                    ->setRefreshToken((new UriSafeTokenGenerator())->generateToken())
+                    ->setAccessToken($token)
+                    ->setExpireDate($tomorrowDate);
+            } else {
                 $playerToken = (new PlayerToken())
                     ->setAccessToken($token)
+                    ->setRefreshToken((new UriSafeTokenGenerator())->generateToken())
                     ->setPlayer($player)
-                    ->setExpireDate((new \DateTime())->modify('+30 minutes'));
-
+                    ->setExpireDate($tomorrowDate);
+            }
+            try {
                 $this->entityManager->persist($playerToken);
                 $this->entityManager->flush($playerToken);
             } catch (ORMException $e) {
