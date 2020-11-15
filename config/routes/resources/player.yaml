@@ -1,4 +1,8 @@
-village_info:
+info:
   methods: GET
-  path: /village/info
-  controller: App\Controller\PlayerController::playerVillageInfo
+  path: /info
+  controller: App\Controller\PlayerController::playerInfo
+
+logout:
+  methods: POST
+  path: /logout

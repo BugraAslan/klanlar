@@ -13,12 +13,17 @@ class ExceptionListener
         $exception = $event->getThrowable();
 
         $event->setResponse(
-            (new JsonResponse())
-                ->setData([
-                    'error_message' => $exception->getMessage(),
-                    'error_code' => $exception->getCode()
-                ])
-                ->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)
+            new JsonResponse(
+                [
+                    'success' => false,
+                    'data' => null,
+                    'errors' => [
+                        'message' => $exception->getMessage(),
+                        'code' => $exception->getCode()
+                    ]
+                ],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            )
         );
     }
 }

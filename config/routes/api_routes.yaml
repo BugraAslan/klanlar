@@ -5,3 +5,7 @@ public:
 player:
   resource: "resources/player.yaml"
   prefix: /api/player
+
+village:
+  resource: "resources/village.yaml"
+  prefix: /api/village

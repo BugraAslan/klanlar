@@ -87,4 +87,20 @@ trait ResponseTrait
             )
         );
     }
+
+    /**
+     * @param $error
+     * @return Response
+     */
+    public function notFoundErrorResponse($error)
+    {
+        return $this->apiResponse(
+            new BaseResponseModel(
+                false,
+                null,
+                $error,
+                Response::HTTP_NOT_FOUND
+            )
+        );
+    }
 }

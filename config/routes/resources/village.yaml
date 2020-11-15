@@ -1,0 +1,4 @@
+village_info:
+  methods: GET
+  path: /info
+  controller: App\Controller\VillageController::villageInfo
