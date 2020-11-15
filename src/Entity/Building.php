@@ -122,6 +122,13 @@ class Building
     private $isOutput = '0';
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="base_icon", type="string", length=255, nullable=true)
+     */
+    private $baseIcon;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\BuildingRequirements", mappedBy="building")
      */
     private $buildingRequirements;
@@ -423,6 +430,17 @@ class Building
             }
         }
 
+        return $this;
+    }
+
+    public function getBaseIcon(): ?string
+    {
+        return $this->baseIcon;
+    }
+
+    public function setBaseIcon(?string $baseIcon): self
+    {
+        $this->baseIcon = $baseIcon;
         return $this;
     }
 }

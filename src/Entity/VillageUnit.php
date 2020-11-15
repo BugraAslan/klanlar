@@ -5,17 +5,16 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * PlayerVillageUnit
+ * VillageUnit
  *
- * @ORM\Table(name="player_village_unit", indexes={
- *     @ORM\Index(name="player_village_unit_player_id_fk", columns={"player_id"}),
- *     @ORM\Index(name="player_village_unit_unit_id_fk", columns={"unit_id"}),
- *     @ORM\Index(name="player_village_unit_player_village_id_fk", columns={"village_id"})
+ * @ORM\Table(name="village_unit", indexes={
+ *     @ORM\Index(name="village_unit_unit_id_fk", columns={"unit_id"}),
+ *     @ORM\Index(name="village_unit_village_id_fk", columns={"village_id"})
  * })
  *
  * @ORM\Entity
  */
-class PlayerVillageUnit
+class VillageUnit
 {
     /**
      * @var int
@@ -42,16 +41,6 @@ class PlayerVillageUnit
     private $unitCount = '0';
 
     /**
-     * @var Player
-     *
-     * @ORM\ManyToOne(targetEntity="Player", inversedBy="villageUnits")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="player_id", referencedColumnName="id")
-     * })
-     */
-    private $player;
-
-    /**
      * @var PlayerVillage
      *
      * @ORM\ManyToOne(targetEntity="PlayerVillage", inversedBy="villageUnits")
@@ -74,11 +63,7 @@ class PlayerVillageUnit
         return $this->unit;
     }
 
-    /**
-     * @param Unit|null $unit
-     * @return PlayerVillageUnit
-     */
-    public function setUnit(?Unit $unit): PlayerVillageUnit
+    public function setUnit(?Unit $unit): self
     {
         $this->unit = $unit;
         return $this;
@@ -92,18 +77,6 @@ class PlayerVillageUnit
     public function setUnitCount(int $unitCount): self
     {
         $this->unitCount = $unitCount;
-
-        return $this;
-    }
-
-    public function getPlayer(): ?Player
-    {
-        return $this->player;
-    }
-
-    public function setPlayer(?Player $player): self
-    {
-        $this->player = $player;
 
         return $this;
     }

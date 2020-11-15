@@ -35,7 +35,7 @@ class Player implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=20, nullable=false)
+     * @ORM\Column(name="password", type="string", length=255, nullable=false)
      */
     private $password = '';
 
@@ -66,11 +66,6 @@ class Player implements UserInterface
     private $villages;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PlayerToken", mappedBy="player")
-     */
-    private $playerTokens;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Command", mappedBy="targetPlayer")
      */
     private $commandTargetPlayers;
@@ -80,8 +75,8 @@ class Player implements UserInterface
      */
     private $commandSourcePlayers;
 
-    /** @var string */
-    public $token;
+    /** @var string|null */
+    public $apiToken;
 
     /**
      * Player constructor.
@@ -89,7 +84,6 @@ class Player implements UserInterface
     public function __construct()
     {
         $this->villages = new ArrayCollection();
-        $this->playerTokens = new ArrayCollection();
         $this->commandTargetPlayers = new ArrayCollection();
         $this->commandSourcePlayers = new ArrayCollection();
     }
@@ -223,36 +217,6 @@ class Player implements UserInterface
     }
 
     /**
-     * @return Collection|PlayerToken[]
-     */
-    public function getPlayerTokens(): Collection
-    {
-        return $this->playerTokens;
-    }
-
-    public function addPlayerToken(PlayerToken $playerToken): self
-    {
-        if (!$this->playerTokens->contains($playerToken)) {
-            $this->playerTokens[] = $playerToken;
-            $playerToken->setPlayer($this);
-        }
-
-        return $this;
-    }
-
-    public function removePlayerToken(PlayerToken $playerToken): self
-    {
-        if ($this->playerTokens->removeElement($playerToken)) {
-            // set the owning side to null (unless already changed)
-            if ($playerToken->getPlayer() === $this) {
-                $playerToken->setPlayer(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Command[]
      */
     public function getCommandTargetPlayers(): Collection
@@ -328,18 +292,20 @@ class Player implements UserInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getToken(): string
+    public function getApiToken(): ?string
     {
-        return $this->token;
+        return $this->apiToken;
     }
 
     /**
-     * @param string $token
+     * @param string|null $apiToken
+     * @return Player
      */
-    public function setToken(string $token): void
+    public function setApiToken(?string $apiToken): Player
     {
-        $this->token = $token;
+        $this->apiToken = $apiToken;
+        return $this;
     }
 }

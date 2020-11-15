@@ -5,17 +5,16 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * PlayerVillageBuilding
+ * VillageBuilding
  *
- * @ORM\Table(name="player_village_building", indexes={
- *     @ORM\Index(name="player_village_building_building_id_fk", columns={"building_id"}),
- *     @ORM\Index(name="player_village_building_player_id_fk", columns={"player_id"}),
- *     @ORM\Index(name="player_village_building_player_village_id_fk", columns={"village_id"})
+ * @ORM\Table(name="village_building", indexes={
+ *     @ORM\Index(name="village_building_building_id_fk", columns={"building_id"}),
+ *     @ORM\Index(name="village_building_village_id_fk", columns={"village_id"})
  * })
  *
  * @ORM\Entity
  */
-class PlayerVillageBuilding
+class VillageBuilding
 {
     /**
      * @var int
@@ -44,16 +43,6 @@ class PlayerVillageBuilding
     private $building;
 
     /**
-     * @var Player
-     *
-     * @ORM\ManyToOne(targetEntity="Player", inversedBy="villageBuildings")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="player_id", referencedColumnName="id")
-     * })
-     */
-    private $player;
-
-    /**
      * @var PlayerVillage
      *
      * @ORM\ManyToOne(targetEntity="PlayerVillage", inversedBy="villageBuildings")
@@ -76,18 +65,6 @@ class PlayerVillageBuilding
     public function setBuildingLevel(?int $buildingLevel): self
     {
         $this->buildingLevel = $buildingLevel;
-
-        return $this;
-    }
-
-    public function getPlayer(): ?Player
-    {
-        return $this->player;
-    }
-
-    public function setPlayer(?Player $player): self
-    {
-        $this->player = $player;
 
         return $this;
     }

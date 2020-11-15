@@ -46,10 +46,8 @@ class PlayerToken
     /**
      * @var Player
      *
-     * @ORM\ManyToOne(targetEntity="Player", inversedBy="playerTokens")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="player_id", referencedColumnName="id")
-     * })
+     * @ORM\OneToOne(targetEntity="Player")
+     * @ORM\JoinColumn(name="player_id", referencedColumnName="id")
      */
     private $player;
 

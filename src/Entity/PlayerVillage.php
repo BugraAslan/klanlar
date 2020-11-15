@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * PlayerVillage
  *
  * @ORM\Table(name="player_village", indexes={@ORM\Index(name="player_village_player_id_fk", columns={"player_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\PlayerVillageRepository")
  */
 class PlayerVillage
 {
@@ -62,12 +62,12 @@ class PlayerVillage
     private $player;
 
     /**
-     * @ORM\OneToMany(targetEntity="PlayerVillageBuilding", mappedBy="village")
+     * @ORM\OneToMany(targetEntity="VillageBuilding", mappedBy="village")
      */
     private $villageBuildings;
 
     /**
-     * @ORM\OneToMany(targetEntity="PlayerVillageUnit", mappedBy="village")
+     * @ORM\OneToMany(targetEntity="VillageUnit", mappedBy="village")
      */
     private $villageUnits;
 
@@ -158,14 +158,14 @@ class PlayerVillage
     }
 
     /**
-     * @return Collection|PlayerVillageBuilding[]
+     * @return Collection|VillageBuilding[]
      */
     public function getVillageBuildings(): Collection
     {
         return $this->villageBuildings;
     }
 
-    public function addVillageBuilding(PlayerVillageBuilding $villageBuilding): self
+    public function addVillageBuilding(VillageBuilding $villageBuilding): self
     {
         if (!$this->villageBuildings->contains($villageBuilding)) {
             $this->villageBuildings[] = $villageBuilding;
@@ -175,7 +175,7 @@ class PlayerVillage
         return $this;
     }
 
-    public function removeVillageBuilding(PlayerVillageBuilding $villageBuilding): self
+    public function removeVillageBuilding(VillageBuilding $villageBuilding): self
     {
         if ($this->villageBuildings->removeElement($villageBuilding)) {
             // set the owning side to null (unless already changed)
@@ -188,14 +188,14 @@ class PlayerVillage
     }
 
     /**
-     * @return Collection|PlayerVillageUnit[]
+     * @return Collection|VillageUnit[]
      */
     public function getVillageUnits(): Collection
     {
         return $this->villageUnits;
     }
 
-    public function addVillageUnit(PlayerVillageUnit $villageUnit): self
+    public function addVillageUnit(VillageUnit $villageUnit): self
     {
         if (!$this->villageUnits->contains($villageUnit)) {
             $this->villageUnits[] = $villageUnit;
@@ -205,7 +205,7 @@ class PlayerVillage
         return $this;
     }
 
-    public function removeVillageUnit(PlayerVillageUnit $villageUnit): self
+    public function removeVillageUnit(VillageUnit $villageUnit): self
     {
         if ($this->villageUnits->removeElement($villageUnit)) {
             // set the owning side to null (unless already changed)
