@@ -9,3 +9,7 @@ player:
 village:
   resource: "resources/village.yaml"
   prefix: /api/village
+
+building:
+  resource: "resources/building.yaml"
+  prefix: /api/building

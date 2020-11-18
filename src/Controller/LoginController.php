@@ -6,9 +6,7 @@ use App\Manager\Response\LoginResponseManager;
 use App\Model\Request\Login\LoginRequest;
 use App\Service\LoginService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\Validator\ConstraintViolationList;
 
 /**

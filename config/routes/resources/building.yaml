@@ -1,0 +1,4 @@
+building_detail:
+  methods: GET
+  path: /detail
+  controller: App\Controller\BuildingController::buildingDetail
