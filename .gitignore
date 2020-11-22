@@ -8,4 +8,6 @@
 .idea
 /.idea
 /docker/mysql
+/docker/mongodb/data
+/docker/redis
 /migrations

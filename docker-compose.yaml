@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
-    container_name: klanlar-php
+    container_name: klanlar_php
     volumes:
       - .:/var/www
     networks:
@@ -30,10 +30,10 @@ services:
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
-    container_name: klanlar-nginx
+    container_name: klanlar_nginx
     ports:
-      - 81:80
-      - 443:443
+      - "81:80"
+      - "443:443"
     volumes:
       - .:/var/www
     networks:
@@ -41,10 +41,10 @@ services:
 
   mysql:
     image: mysql:8.0
-    container_name: klanlar-mysql
+    container_name: klanlar_mysql
     restart: always
     ports:
-      - 3306:3306
+      - "3306:3306"
     volumes:
       - ./docker/mysql:/var/lib/mysql
     environment:
@@ -54,6 +54,39 @@ services:
       MYSQL_PASSWORD: '%env(MYSQL_PASSWORD)%'
     networks:
       - klanlar_dev
+
+  mongo:
+    image: mongo:latest
+    build:
+      context: .
+      dockerfile: docker/mongodb/Dockerfile
+    container_name: klanlar_mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./docker/mongodb/mongod.conf:/etc/mongod.conf
+      - ./docker/mongodb/initdb.d/:/docker-entrypoint-initdb.d/
+      - ./docker/mongodb/data/db/:/data/db/
+      - ./docker/mongodb/data/log/:/var/log/mongodb/
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: klanlar
+    command: ["-f", "/etc/mongod.conf"]
+    networks:
+      - klanlar_dev
+
+  #redis:
+    #  image: redis:latest
+    #container_name: klanlar_redis
+    #restart: always
+      #ports:
+      # - "6379-6381:6379-6381"
+      #volumes:
+      #- ./docker/redis:/var/lib/redis
+      #networks:
+      #- klanlar_dev
 
 networks:
   klanlar_dev:
