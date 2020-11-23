@@ -2,3 +2,8 @@ village_info:
   methods: GET
   path: /info
   controller: App\Controller\VillageController::villageInfo
+
+village_info_mongo:
+  methods: GET
+  path: /info/mongo
+  controller: App\Controller\VillageController::villageInfoFromMongo

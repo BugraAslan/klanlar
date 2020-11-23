@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Document\Village;
 use App\Manager\Response\VillageResponseManager;
 use App\Model\Request\Village\VillageIdRequest;
 use App\Service\VillageService;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -51,6 +53,17 @@ class VillageController extends BaseController
 
         return $this->successResponse(
             $this->villageResponseManager->buildVillageInfoResponse($villageInfo)
+        );
+    }
+
+    /**
+     * @param DocumentManager $documentManager
+     * @return Response
+     */
+    public function villageInfoFromMongo(DocumentManager $documentManager)
+    {
+        return $this->successResponse(
+            $documentManager->getRepository(Village::class)->findAll()
         );
     }
 }

@@ -32,8 +32,8 @@ services:
       dockerfile: docker/nginx/Dockerfile
     container_name: klanlar_nginx
     ports:
-      - "81:80"
-      - "443:443"
+      - 81:80
+      - 443:443
     volumes:
       - .:/var/www
     networks:
@@ -44,14 +44,15 @@ services:
     container_name: klanlar_mysql
     restart: always
     ports:
-      - "3306:3306"
+      - 3306:3306
     volumes:
       - ./docker/mysql:/var/lib/mysql
+    command: ["--default-authentication-plugin=mysql_native_password"]
     environment:
-      MYSQL_ROOT_PASSWORD: '%env(MYSQL_ROOT_PASSWORD)%'
-      MYSQL_DATABASE: '%env(MYSQL_DATABASE)%'
-      MYSQL_USER: '%env(MYSQL_USER)%'
-      MYSQL_PASSWORD: '%env(MYSQL_PASSWORD)%'
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: klanlar
+      MYSQL_USER: morwoss
+      MYSQL_PASSWORD: root
     networks:
       - klanlar_dev
 
@@ -63,7 +64,7 @@ services:
     container_name: klanlar_mongo
     restart: always
     ports:
-      - "27017:27017"
+      - 27020:27020
     volumes:
       - ./docker/mongodb/mongod.conf:/etc/mongod.conf
       - ./docker/mongodb/initdb.d/:/docker-entrypoint-initdb.d/

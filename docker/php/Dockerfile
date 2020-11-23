@@ -51,18 +51,11 @@ RUN apt-get update -y && apt-get install -y \
 #    && printf "extension=blackfire.so\nblackfire.agent_socket=tcp://0.0.0.0:8307\n" > $PHP_INI_DIR/conf.d/docker-php-ext-blackfire.ini \
 #    && rm -rf /tmp/blackfire /tmp/blackfire-probe.tar.gz
 
-RUN echo "extension=apcu.so" >> /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini
-RUN echo "extension=imagick.so" >> /usr/local/etc/php/conf.d/docker-php-ext-imagick.ini
-RUN echo "extension=mongodb.so" >> /usr/local/etc/php/conf.d/docker-php-ext-mongodb.ini
-
 COPY docker/php/config/php.ini /usr/local/etc/php/
 #COPY docker/php/config/blackfire.ini /usr/local/etc/php/
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && composer --version
-
-RUN chmod 777 -R /var/www/var/log || mkdir -p -m 777 /var/www/var/log
-RUN chmod 777 -R /var/www/var/cache || mkdir -p -m 777 /var/www/var/cache
 
 RUN chown -R www-data:www-data /var/www
 
