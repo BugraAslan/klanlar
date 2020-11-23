@@ -1,0 +1,1 @@
+#mongo -u root -p root --eval "db.getSiblingDB('klanlar').createUser({user: 'morwoss', pwd: 'root', roles: [{role: 'userAdminAnyDatabase', db: 'klanlar'}]});"

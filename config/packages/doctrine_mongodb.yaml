@@ -1,4 +1,6 @@
 doctrine_mongodb:
+    default_connection: default
+    default_document_manager: default
     auto_generate_proxy_classes: true
     auto_generate_hydrator_classes: true
     connections:

@@ -64,7 +64,7 @@ services:
     container_name: klanlar_mongo
     restart: always
     ports:
-      - 27020:27017
+      - 27018:27017
     volumes:
       - ./docker/mongodb/mongod.conf:/etc/mongod.conf
       - ./docker/mongodb/initdb.d/:/docker-entrypoint-initdb.d/
@@ -74,7 +74,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
       MONGO_INITDB_DATABASE: klanlar
-    command: ["-f", "/etc/mongod.conf"]
+    command: mongod --port 27018
     networks:
       - klanlar_dev
 
