@@ -27,6 +27,11 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
+    App\Util\RedisHelper:
+        arguments:
+            - '%env(REDIS_HOST)%'
+            - '%env(REDIS_PORT)%'
+
     ###>> EVENT LISTENERS >>###
     App\EventListener\ExceptionListener:
         tags:

@@ -9,4 +9,4 @@
 /.idea
 /docker/mysql
 /docker/mongodb/data
-/docker/redis
+/docker/redis/data

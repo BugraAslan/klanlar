@@ -9,6 +9,7 @@ use App\Entity\PlayerProfile;
 use App\Model\Request\Register\RegisterRequest;
 use App\Model\Response\Register\RegisterResponse;
 use App\Util\TextUtil;
+use DateTime;
 
 class RegisterService extends BaseService
 {
@@ -30,13 +31,14 @@ class RegisterService extends BaseService
                 ->setEmail($registerRequest->getEmail())
                 ->setPassword(md5($registerRequest->getPassword()))
                 ->setUsername($registerRequest->getUsername())
-                ->setCreatedDate(new \DateTime());
+                ->setCreatedDate(new DateTime());
             $this->entityManager->persist($player);
 
             $playerActivation = (new PlayerActivation())
                 ->setPlayer($player)
                 ->setActivationCode(TextUtil::generateActivationCode())
                 ->setIsActive(false)
+                ->setRequestDate(new DateTime())
                 ->setActivationDate(null);
             $this->entityManager->persist($playerActivation);
 
