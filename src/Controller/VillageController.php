@@ -2,12 +2,9 @@
 
 namespace App\Controller;
 
-use App\Document\Village;
 use App\Manager\Response\VillageResponseManager;
 use App\Model\Request\Village\VillageIdRequest;
 use App\Service\VillageService;
-use App\Util\RedisHelper;
-use Doctrine\ODM\MongoDB\DocumentManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -19,18 +16,6 @@ class VillageController extends BaseController
 
     /** @var VillageResponseManager */
     private $villageResponseManager;
-
-    /** @var RedisHelper */
-    public $redis;
-
-    /**
-     * @param RedisHelper $redis
-     * @required
-     */
-    public function setRedis(RedisHelper $redis): void
-    {
-        $this->redis = $redis;
-    }
 
     /**
      * VillageController constructor.
@@ -66,19 +51,6 @@ class VillageController extends BaseController
 
         return $this->successResponse(
             $this->villageResponseManager->buildVillageInfoResponse($villageInfo)
-        );
-    }
-
-    /**
-     * @param DocumentManager $documentManager
-     * @return Response
-     */
-    public function villageInfoFromMongo(DocumentManager $documentManager)
-    {
-        //$this->redis->set('name', 'bugra', 100);
-        $documentManager->getRepository(Village::class)->findAll();
-        return $this->successResponse(
-            [$this->redis->get('name')]
         );
     }
 }

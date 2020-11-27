@@ -4,6 +4,8 @@ namespace App\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
+// TODO example mongo document
+
 /**
  * @MongoDB\Document(db="klanlar")
  */
