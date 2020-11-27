@@ -87,6 +87,13 @@ class PlayerVillage
     private $resource;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="loyalty", type="smallint", nullable=false, options={"unsigned"=true})
+     */
+    private $loyalty = 100;
+
+    /**
      * PlayerVillage constructor.
      */
     public function __construct()
@@ -296,6 +303,17 @@ class PlayerVillage
             $resource->setVillage($newVillage);
         }
 
+        return $this;
+    }
+
+    public function getLoyalty(): int
+    {
+        return $this->loyalty;
+    }
+
+    public function setLoyalty(int $loyalty): self
+    {
+        $this->loyalty = $loyalty;
         return $this;
     }
 }
