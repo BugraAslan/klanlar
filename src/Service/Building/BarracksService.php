@@ -17,6 +17,7 @@ class BarracksService extends BaseService implements BuildingStrategyInterface
 
     public function buildingDetail(BuildingDetailRequest $buildingDetailRequest)
     {
+        return $this->player->getUsername();
         return 'Kışla';
     }
 }
