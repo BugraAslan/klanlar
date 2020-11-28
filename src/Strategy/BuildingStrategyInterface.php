@@ -2,9 +2,9 @@
 
 namespace App\Strategy;
 
-use App\Model\Request\Building\BuildingDetailRequest;
+use App\Entity\VillageBuilding;
 
 interface BuildingStrategyInterface
 {
-    public function buildingDetail(BuildingDetailRequest $buildingDetailRequest);
+    public function buildingDetail(VillageBuilding $villageBuilding);
 }

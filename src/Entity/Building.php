@@ -122,20 +122,19 @@ class Building
     private $isOutput = '0';
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="base_icon", type="string", length=255, nullable=true)
-     */
-    private $baseIcon;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\BuildingRequirements", mappedBy="building")
+     * @ORM\OneToMany(targetEntity="BuildingRequirements", mappedBy="building")
      */
     private $buildingRequirements;
+
+    /**
+     * @ORM\OneToMany(targetEntity="UnitManufacturer", mappedBy="building")
+     */
+    private $unitManufacturers;
 
     public function __construct()
     {
         $this->buildingRequirements = new ArrayCollection();
+        $this->unitManufacturers = new ArrayCollection();
     }
 
     /**
@@ -433,14 +432,33 @@ class Building
         return $this;
     }
 
-    public function getBaseIcon(): ?string
+    /**
+     * @return Collection|UnitManufacturer[]
+     */
+    public function getUnitManufacturers(): Collection
     {
-        return $this->baseIcon;
+        return $this->unitManufacturers;
     }
 
-    public function setBaseIcon(?string $baseIcon): self
+    public function addUnitManufacturer(UnitManufacturer $unitManufacturer): self
     {
-        $this->baseIcon = $baseIcon;
+        if (!$this->unitManufacturers->contains($unitManufacturer)) {
+            $this->unitManufacturers[] = $unitManufacturer;
+            $unitManufacturer->setBuilding($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUnitManufacturer(UnitManufacturer $unitManufacturer): self
+    {
+        if ($this->unitManufacturers->removeElement($unitManufacturer)) {
+            // set the owning side to null (unless already changed)
+            if ($unitManufacturer->getBuilding() === $this) {
+                $unitManufacturer->setBuilding(null);
+            }
+        }
+
         return $this;
     }
 }

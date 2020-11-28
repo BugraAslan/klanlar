@@ -2,25 +2,25 @@
 
 namespace App\Strategy;
 
-use App\Entity\Building;
+use App\Entity\VillageBuilding;
 use App\Model\Request\Building\BuildingDetailRequest;
-use App\Service\BuildingService;
+use App\Repository\VillageBuildingRepository;
 
 class BuildingStrategy
 {
     /** @var BuildingStrategyInterface[] */
     public $buildingStrategies = [];
 
-    /** @var BuildingService */
-    private $buildingService;
+    /** @var VillageBuildingRepository */
+    private $villageBuildingRepository;
 
     /**
-     * Building constructor.
-     * @param BuildingService $buildingService
+     * BuildingStrategy constructor.
+     * @param VillageBuildingRepository $villageBuildingRepository
      */
-    public function __construct(BuildingService $buildingService)
+    public function __construct(VillageBuildingRepository $villageBuildingRepository)
     {
-        $this->buildingService = $buildingService;
+        $this->villageBuildingRepository = $villageBuildingRepository;
     }
 
     public function addBuildingStrategy(BuildingStrategyInterface $buildingStrategy)
@@ -28,21 +28,26 @@ class BuildingStrategy
         $this->buildingStrategies[] = $buildingStrategy;
     }
 
+    /**
+     * @param BuildingDetailRequest $buildingDetailRequest
+     * @return VillageBuilding|null
+     */
     public function getBuildingDetail(BuildingDetailRequest $buildingDetailRequest)
     {
-        $buildingEntity = $this->buildingService->getBuildingById(
-            $buildingDetailRequest->getBuildingId(),
-            7200
+        $buildingDetail = $this->villageBuildingRepository->findBuildingDetail(
+            $buildingDetailRequest->getVillageId(),
+            $buildingDetailRequest->getBuildingId()
         );
 
-        if ($buildingEntity instanceof Building){
+        if ($buildingDetail){
             foreach ($this->buildingStrategies as $buildingStrategy){
-                if ($buildingStrategy->canHandle($buildingEntity->getName())) {
-                    return $buildingStrategy->buildingDetail($buildingDetailRequest);
+                if ($buildingStrategy->canHandle($buildingDetail->getBuilding()->getName())) {
+                    $buildingDetail = $buildingStrategy->buildingDetail($buildingDetail);
+                    break;
                 }
             }
         }
 
-        return false;
+        return $buildingDetail;
     }
 }

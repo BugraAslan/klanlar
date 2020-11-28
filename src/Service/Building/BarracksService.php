@@ -2,22 +2,25 @@
 
 namespace App\Service\Building;
 
-use App\Model\Request\Building\BuildingDetailRequest;
-use App\Service\BaseService;
+use App\Entity\VillageBuilding;
+use App\Repository\UnitManufacturerRepository;
 use App\Strategy\BuildingStrategyInterface;
 
-class BarracksService extends BaseService implements BuildingStrategyInterface
+class BarracksService extends AbstractBaseBuildingService implements BuildingStrategyInterface
 {
     public const BUILDING_NAME = 'Kışla';
 
+    /**
+     * @param string $buildingName
+     * @return bool
+     */
     public function canHandle(string $buildingName)
     {
         return self::BUILDING_NAME === $buildingName;
     }
 
-    public function buildingDetail(BuildingDetailRequest $buildingDetailRequest)
+    public function buildingDetail(VillageBuilding $villageBuilding)
     {
-        return $this->player->getUsername();
         return 'Kışla';
     }
 }

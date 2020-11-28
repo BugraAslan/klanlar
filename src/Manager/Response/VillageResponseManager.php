@@ -79,7 +79,7 @@ class VillageResponseManager
             ->setBuildingLevel($villageBuilding->getBuildingLevel())
             ->setBuildingId($villageBuilding->getBuilding()->getId())
             ->setBuildingName($villageBuilding->getBuilding()->getName())
-            ->setBuildingIcon('icon url'); // TODO $villageBuilding->getBuilding()->getBaseIcon()
+            ->setBuildingIcon('building icon url'); // TODO village icon entity data
     }
 
     /**
@@ -92,7 +92,7 @@ class VillageResponseManager
         if ($villageUnit->getUnit() instanceof Unit){
             $response = (new UnitByVillageInfoResponse())
                 ->setUnitCount($villageUnit->getUnitCount())
-                ->setUnitIcon('icon url') // TODO $villageUnit->getUnit()->getBaseIcon()
+                ->setUnitIcon('unit icon url') // TODO unit icon entity data
                 ->setUnitName($villageUnit->getUnit()->getName())
                 ->setUnitId($villageUnit->getUnit()->getId());
         }

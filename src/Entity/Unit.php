@@ -98,13 +98,6 @@ class Unit
      */
     private $baseBuildTime;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="base_icon", type="string", length=255, nullable=true)
-     */
-    private $baseIcon;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -239,17 +232,6 @@ class Unit
     {
         $this->baseBuildTime = $baseBuildTime;
 
-        return $this;
-    }
-
-    public function getBaseIcon(): ?string
-    {
-        return $this->baseIcon;
-    }
-
-    public function setBaseIcon(?string $baseIcon): self
-    {
-        $this->baseIcon = $baseIcon;
         return $this;
     }
 }

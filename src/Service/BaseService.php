@@ -16,9 +16,6 @@ class BaseService
     /** @var ContainerInterface */
     protected $container;
 
-    /** @var Player */
-    protected $player;
-
     /**
      * @param EntityManagerInterface $entityManager
      * @param ContainerInterface $container
@@ -32,6 +29,6 @@ class BaseService
     ): void {
         $this->entityManager = $entityManager;
         $this->container = $container;
-        $this->player = $security->getUser();
+        //$this->player = $security->getUser();
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Model\Request\Building\BuildingDetailRequest;
+use App\Service\BuildingService;
 use App\Strategy\BuildingStrategy;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,13 +14,18 @@ class BuildingController extends BaseController
     /** @var BuildingStrategy */
     private $buildingStrategy;
 
+    /** @var BuildingService */
+    private $buildingService;
+
     /**
      * BuildingController constructor.
-     * @param BuildingStrategy $building
+     * @param BuildingStrategy $buildingStrategy
+     * @param BuildingService $buildingService
      */
-    public function __construct(BuildingStrategy $building)
+    public function __construct(BuildingStrategy $buildingStrategy, BuildingService $buildingService)
     {
-        $this->buildingStrategy = $building;
+        $this->buildingStrategy = $buildingStrategy;
+        $this->buildingService = $buildingService;
     }
 
     /**

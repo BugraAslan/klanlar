@@ -2,11 +2,10 @@
 
 namespace App\Service\Building;
 
-use App\Model\Request\Building\BuildingDetailRequest;
-use App\Service\BaseService;
+use App\Entity\VillageBuilding;
 use App\Strategy\BuildingStrategyInterface;
 
-class MainBuildingService extends BaseService implements BuildingStrategyInterface
+class MainBuildingService extends AbstractBaseBuildingService implements BuildingStrategyInterface
 {
     public const BUILDING_NAME = 'Ana Bina';
 
@@ -15,7 +14,7 @@ class MainBuildingService extends BaseService implements BuildingStrategyInterfa
         return self::BUILDING_NAME === $buildingName;
     }
 
-    public function buildingDetail(BuildingDetailRequest $buildingDetailRequest)
+    public function buildingDetail(VillageBuilding $villageBuilding)
     {
         return 'Ana Bina';
     }

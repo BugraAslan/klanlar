@@ -8,8 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
  * UnitManufacturer
  *
  * @ORM\Table(name="unit_manufacturer", indexes={
- *     @ORM\Index(name="vunit_manufacturer_unit_id_fk", columns={"unit_id"}),
- *     @ORM\Index(name="vunit_manufacturer_building_id_fk", columns={"building_id"})
+ *     @ORM\Index(name="unit_manufacturer_unit_id_fk", columns={"unit_id"}),
+ *     @ORM\Index(name="unit_manufacturer_building_id_fk", columns={"building_id"})
  * })
  *
  * @ORM\Entity
@@ -36,7 +36,7 @@ class UnitManufacturer
     /**
      * @var Building|null
      *
-     * @ORM\OneToOne(targetEntity="Building")
+     * @ORM\ManyToOne(targetEntity="Building", inversedBy="unitManufacturers")
      * @ORM\JoinColumn(name="building_id", referencedColumnName="id")
      */
     private $building;
