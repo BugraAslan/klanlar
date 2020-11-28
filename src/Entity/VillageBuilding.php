@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     @ORM\Index(name="village_building_village_id_fk", columns={"village_id"})
  * })
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\VillageBuildingRepository")
  */
 class VillageBuilding
 {
