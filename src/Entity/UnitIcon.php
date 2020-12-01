@@ -25,7 +25,7 @@ class UnitIcon
     /**
      * @var Unit|null
      *
-     * @ORM\OneToOne(targetEntity="Unit")
+     * @ORM\OneToOne(targetEntity="Unit", inversedBy="icons")
      * @ORM\JoinColumn(name="unit_id", referencedColumnName="id")
      */
     private $unit;

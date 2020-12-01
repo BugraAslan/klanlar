@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -97,6 +99,16 @@ class Unit
      * @ORM\Column(name="base_build_time", type="smallint", nullable=true)
      */
     private $baseBuildTime;
+
+    /**
+     * @ORM\OneToOne(targetEntity="UnitIcon", mappedBy="unit")
+     */
+    private $icons;
+
+    public function __construct()
+    {
+        $this->icons = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -231,6 +243,36 @@ class Unit
     public function setBaseBuildTime(?int $baseBuildTime): self
     {
         $this->baseBuildTime = $baseBuildTime;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UnitIcon[]
+     */
+    public function getIcons(): Collection
+    {
+        return $this->icons;
+    }
+
+    public function addIcon(UnitIcon $unitIcon): self
+    {
+        if (!$this->icons->contains($unitIcon)) {
+            $this->icons[] = $unitIcon;
+            $unitIcon->setUnit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIcon(UnitIcon $unitIcon): self
+    {
+        if ($this->icons->removeElement($unitIcon)) {
+            // set the owning side to null (unless already changed)
+            if ($unitIcon->getUnit() === $this) {
+                $unitIcon->setUnit(null);
+            }
+        }
 
         return $this;
     }
