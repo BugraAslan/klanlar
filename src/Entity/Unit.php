@@ -28,7 +28,7 @@ class Unit
      *
      * @ORM\Column(name="name", type="string", length=55, nullable=false)
      */
-    private $name = '';
+    private $name;
 
     /**
      * @var int|null
@@ -265,13 +265,14 @@ class Unit
         return $this;
     }
 
-    public function removeIcon(UnitIcon $unitIcon): self
+    public function setIcons(?UnitIcon $icons): self
     {
-        if ($this->icons->removeElement($unitIcon)) {
-            // set the owning side to null (unless already changed)
-            if ($unitIcon->getUnit() === $this) {
-                $unitIcon->setUnit(null);
-            }
+        $this->icons = $icons;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newUnit = null === $icons ? null : $this;
+        if ($icons->getUnit() !== $newUnit) {
+            $icons->setUnit($newUnit);
         }
 
         return $this;

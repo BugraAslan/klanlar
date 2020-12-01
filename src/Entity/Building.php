@@ -131,6 +131,11 @@ class Building
      */
     private $unitManufacturers;
 
+    /**
+     * @ORM\OneToOne(targetEntity="BuildingDescription", mappedBy="building")
+     */
+    private $description;
+
     public function __construct()
     {
         $this->buildingRequirements = new ArrayCollection();
@@ -457,6 +462,24 @@ class Building
             if ($unitManufacturer->getBuilding() === $this) {
                 $unitManufacturer->setBuilding(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getDescription(): ?BuildingDescription
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?BuildingDescription $description): self
+    {
+        $this->description = $description;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newBuilding = null === $description ? null : $this;
+        if ($description->getBuilding() !== $newBuilding) {
+            $description->setBuilding($newBuilding);
         }
 
         return $this;

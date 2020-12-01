@@ -114,7 +114,7 @@ class PlayerVillage
         return $this->score;
     }
 
-    public function setVillageScore(int $score): self
+    public function setScore(int $score): self
     {
         $this->score = $score;
 
@@ -294,12 +294,13 @@ class PlayerVillage
         return $this->resource;
     }
 
-    public function setSources(?VillageResource $resource): self
+    public function setResource(?VillageResource $resource): self
     {
         $this->resource = $resource;
 
-        $newVillage = $resource === null ? null : $this;
-        if ($newVillage !== $resource->getVillage()) {
+        // set (or unset) the owning side of the relation if necessary
+        $newVillage = null === $resource ? null : $this;
+        if ($resource->getVillage() !== $newVillage) {
             $resource->setVillage($newVillage);
         }
 
