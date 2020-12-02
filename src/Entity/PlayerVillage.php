@@ -55,9 +55,7 @@ class PlayerVillage
      * @var Player
      *
      * @ORM\ManyToOne(targetEntity="Player", inversedBy="villages")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="player_id", referencedColumnName="id")
-     * })
+     * @ORM\JoinColumn(name="player_id", referencedColumnName="id")
      */
     private $player;
 
@@ -82,6 +80,11 @@ class PlayerVillage
     private $commandTargetVillages;
 
     /**
+     * @ORM\OneToMany(targetEntity="UnitCommand", mappedBy="village")
+     */
+    private $unitCommands;
+
+    /**
      * @ORM\OneToOne(targetEntity="VillageResource", mappedBy="village")
      */
     private $resource;
@@ -102,6 +105,7 @@ class PlayerVillage
         $this->villageUnits = new ArrayCollection();
         $this->commandSourceVillages = new ArrayCollection();
         $this->commandTargetVillages = new ArrayCollection();
+        $this->unitCommands = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -169,9 +173,6 @@ class PlayerVillage
         return $this;
     }
 
-    /**
-     * @return Collection|VillageBuilding[]
-     */
     public function getVillageBuildings(): Collection
     {
         return $this->villageBuildings;
@@ -199,9 +200,6 @@ class PlayerVillage
         return $this;
     }
 
-    /**
-     * @return Collection|VillageUnit[]
-     */
     public function getVillageUnits(): Collection
     {
         return $this->villageUnits;
@@ -229,9 +227,6 @@ class PlayerVillage
         return $this;
     }
 
-    /**
-     * @return Collection|Command[]
-     */
     public function getCommandSourceVillages(): Collection
     {
         return $this->commandSourceVillages;
@@ -259,9 +254,6 @@ class PlayerVillage
         return $this;
     }
 
-    /**
-     * @return Collection|Command[]
-     */
     public function getCommandTargetVillages(): Collection
     {
         return $this->commandTargetVillages;
@@ -315,6 +307,33 @@ class PlayerVillage
     public function setLoyalty(int $loyalty): self
     {
         $this->loyalty = $loyalty;
+        return $this;
+    }
+
+    public function getUnitCommands(): Collection
+    {
+        return $this->unitCommands;
+    }
+
+    public function addUnitCommand(UnitCommand $unitCommand): self
+    {
+        if (!$this->unitCommands->contains($unitCommand)) {
+            $this->unitCommands[] = $unitCommand;
+            $unitCommand->setVillage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUnitCommand(UnitCommand $unitCommand): self
+    {
+        if ($this->unitCommands->removeElement($unitCommand)) {
+            // set the owning side to null (unless already changed)
+            if ($unitCommand->getVillage() === $this) {
+                $unitCommand->setVillage(null);
+            }
+        }
+
         return $this;
     }
 }

@@ -84,17 +84,15 @@ class UnitCommand
     /**
      * @var Unit
      *
-     * @ORM\ManyToOne(targetEntity="Unit")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="unit_id", referencedColumnName="id")
-     * })
+     * @ORM\ManyToOne(targetEntity="Unit", inversedBy="commands")
+     * @ORM\JoinColumn(name="unit_id", referencedColumnName="id")
      */
     private $unit;
 
     /**
      * @var PlayerVillage
      *
-     * @ORM\ManyToOne(targetEntity="PlayerVillage")
+     * @ORM\ManyToOne(targetEntity="PlayerVillage", inversedBy="unitCommands")
      * @ORM\JoinColumn(name="village_id", referencedColumnName="id")
      */
     private $village;

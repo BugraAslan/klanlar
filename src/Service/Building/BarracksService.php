@@ -3,7 +3,6 @@
 namespace App\Service\Building;
 
 use App\Entity\VillageBuilding;
-use App\Repository\UnitManufacturerRepository;
 use App\Strategy\BuildingStrategyInterface;
 
 class BarracksService extends AbstractBaseBuildingService implements BuildingStrategyInterface
@@ -21,6 +20,10 @@ class BarracksService extends AbstractBaseBuildingService implements BuildingStr
 
     public function buildingDetail(VillageBuilding $villageBuilding)
     {
+        if ($this->isUnitManufacturer($villageBuilding)){
+            return $this->getUnitManufacturerBuildingDetail($villageBuilding);
+        }
+
         return 'Kışla';
     }
 }

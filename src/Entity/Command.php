@@ -109,49 +109,6 @@ class Command
      */
     private $sourcePlayer;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CommandUnit", mappedBy="command")
-     */
-    private $commandUnits;
-
-    /**
-     * Command constructor.
-     */
-    public function __construct()
-    {
-        $this->commandUnits = new ArrayCollection();
-    }
-
-    /**
-     * @return Collection|CommandUnit[]
-     */
-    public function getCommandUnits(): Collection
-    {
-        return $this->commandUnits;
-    }
-
-    public function addCommandUnit(CommandUnit $commandUnit): self
-    {
-        if (!$this->commandUnits->contains($commandUnit)) {
-            $this->commandUnits[] = $commandUnit;
-            $commandUnit->setCommand($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCommandUnit(CommandUnit $commandUnit): self
-    {
-        if ($this->commandUnits->removeElement($commandUnit)) {
-            // set the owning side to null (unless already changed)
-            if ($commandUnit->getCommand() === $this) {
-                $commandUnit->setCommand(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getId(): ?int
     {
         return $this->id;

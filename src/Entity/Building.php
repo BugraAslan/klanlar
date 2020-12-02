@@ -115,13 +115,6 @@ class Building
     private $populationCost;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="is_output", type="boolean", nullable=false)
-     */
-    private $isOutput = '0';
-
-    /**
      * @ORM\OneToMany(targetEntity="BuildingRequirements", mappedBy="building")
      */
     private $buildingRequirements;
@@ -135,6 +128,11 @@ class Building
      * @ORM\OneToOne(targetEntity="BuildingDescription", mappedBy="building")
      */
     private $description;
+
+    /**
+     * @ORM\OneToOne(targetEntity="BuildingIcon", mappedBy="building")
+     */
+    private $icons;
 
     public function __construct()
     {
@@ -385,29 +383,6 @@ class Building
     }
 
     /**
-     * @return bool
-     */
-    public function isOutput(): bool
-    {
-        return $this->isOutput;
-    }
-
-    /**
-     * @param bool $isOutput
-     * @return Building
-     */
-    public function setIsOutput(bool $isOutput): Building
-    {
-        $this->isOutput = $isOutput;
-        return $this;
-    }
-
-    public function getIsOutput(): ?bool
-    {
-        return $this->isOutput;
-    }
-
-    /**
      * @return Collection|BuildingRequirements[]
      */
     public function getBuildingRequirements(): Collection
@@ -480,6 +455,24 @@ class Building
         $newBuilding = null === $description ? null : $this;
         if ($description->getBuilding() !== $newBuilding) {
             $description->setBuilding($newBuilding);
+        }
+
+        return $this;
+    }
+
+    public function getIcons(): ?BuildingIcon
+    {
+        return $this->icons;
+    }
+
+    public function setIcons(?BuildingIcon $icons): self
+    {
+        $this->icons = $icons;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newBuilding = null === $icons ? null : $this;
+        if ($icons->getBuilding() !== $newBuilding) {
+            $icons->setBuilding($newBuilding);
         }
 
         return $this;

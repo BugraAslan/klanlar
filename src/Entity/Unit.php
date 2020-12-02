@@ -105,9 +105,17 @@ class Unit
      */
     private $icons;
 
+    /**
+     * @ORM\OneToMany(targetEntity="UnitCommand", mappedBy="unit")
+     */
+    private $commands;
+
+    /**
+     * Unit constructor.
+     */
     public function __construct()
     {
-        $this->icons = new ArrayCollection();
+        $this->commands = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -247,22 +255,9 @@ class Unit
         return $this;
     }
 
-    /**
-     * @return Collection|UnitIcon[]
-     */
-    public function getIcons(): Collection
+    public function getIcons(): ?UnitIcon
     {
         return $this->icons;
-    }
-
-    public function addIcon(UnitIcon $unitIcon): self
-    {
-        if (!$this->icons->contains($unitIcon)) {
-            $this->icons[] = $unitIcon;
-            $unitIcon->setUnit($this);
-        }
-
-        return $this;
     }
 
     public function setIcons(?UnitIcon $icons): self
@@ -273,6 +268,36 @@ class Unit
         $newUnit = null === $icons ? null : $this;
         if ($icons->getUnit() !== $newUnit) {
             $icons->setUnit($newUnit);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UnitCommand[]
+     */
+    public function getCommands(): Collection
+    {
+        return $this->commands;
+    }
+
+    public function addCommand(UnitCommand $command): self
+    {
+        if (!$this->commands->contains($command)) {
+            $this->commands[] = $command;
+            $command->setUnit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommand(UnitCommand $command): self
+    {
+        if ($this->commands->removeElement($command)) {
+            // set the owning side to null (unless already changed)
+            if ($command->getUnit() === $this) {
+                $command->setUnit(null);
+            }
         }
 
         return $this;
