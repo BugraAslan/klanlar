@@ -3,6 +3,7 @@
 namespace App\Service\Building;
 
 use App\Entity\VillageBuilding;
+use App\Model\Response\Building\UnitManufacturerBuildingDetailResponse;
 use App\Strategy\BuildingStrategyInterface;
 
 class BarracksService extends AbstractBaseBuildingService implements BuildingStrategyInterface
@@ -13,17 +14,22 @@ class BarracksService extends AbstractBaseBuildingService implements BuildingStr
      * @param string $buildingName
      * @return bool
      */
-    public function canHandle(string $buildingName)
+    public function canHandle(string $buildingName): bool
     {
         return self::BUILDING_NAME === $buildingName;
     }
 
-    public function buildingDetail(VillageBuilding $villageBuilding)
+    /**
+     * @param VillageBuilding $villageBuilding
+     * @return UnitManufacturerBuildingDetailResponse|null
+     */
+    public function buildingDetail(VillageBuilding $villageBuilding): ?UnitManufacturerBuildingDetailResponse
     {
+        $buildingDetail = null;
         if ($this->isUnitManufacturer($villageBuilding)){
-            return $this->getUnitManufacturerBuildingDetail($villageBuilding);
+            $buildingDetail = $this->getUnitManufacturerBuildingDetail($villageBuilding);
         }
 
-        return 'Kışla';
+        return $buildingDetail;
     }
 }
