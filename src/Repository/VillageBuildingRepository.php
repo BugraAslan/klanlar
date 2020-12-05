@@ -25,7 +25,7 @@ class VillageBuildingRepository extends ServiceEntityRepository
      * @param int $buildingId
      * @return VillageBuilding|null
      */
-    public function findBuildingDetail(int $villageId, int $buildingId)
+    public function findBuildingDetail(int $villageId, int $buildingId): ?VillageBuilding
     {
         try {
             return $this->createQueryBuilder('villageBuilding')
@@ -40,11 +40,11 @@ class VillageBuildingRepository extends ServiceEntityRepository
                 ->addSelect('buildingIcons')
                 ->addSelect('unitCommands')
                 ->join('villageBuilding.building', 'building')
-                ->leftJoin('building.description', 'buildingDescription')
+                ->leftJoin('building.buildingDescription', 'buildingDescription')
                 ->leftJoin('building.icons', 'buildingIcons')
                 ->join('building.unitManufacturers', 'unitManufacturers')
                 ->join('unitManufacturers.unit', 'unit')
-                ->leftJoin('unit.commands', 'unitCommands')
+                ->leftJoin('unit.commands', 'unitCommands', 'with', 'unitCommands.endDate > :now')
                 ->leftJoin('unit.icons', 'unitIcons')
                 ->join('villageBuilding.village', 'village')
                 ->leftJoin('village.villageUnits', 'villageUnits')
@@ -53,7 +53,8 @@ class VillageBuildingRepository extends ServiceEntityRepository
                 ->andWhere('villageBuilding.building = :buildingId')
                 ->setParameters([
                     'villageId' => $villageId,
-                    'buildingId' => $buildingId
+                    'buildingId' => $buildingId,
+                    'now' => new \DateTime()
                 ])
                 ->getQuery()
                 ->getOneOrNullResult();

@@ -31,7 +31,7 @@ class BuildingDescription
     /**
      * @var Building
      *
-     * @ORM\OneToOne(targetEntity="Building", inversedBy="description")
+     * @ORM\OneToOne(targetEntity="Building", inversedBy="buildingDescription")
      * @ORM\JoinColumn(name="building_id", referencedColumnName="id")
      */
     private $building;

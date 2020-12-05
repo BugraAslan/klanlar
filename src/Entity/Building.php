@@ -127,7 +127,7 @@ class Building
     /**
      * @ORM\OneToOne(targetEntity="BuildingDescription", mappedBy="building")
      */
-    private $description;
+    private $buildingDescription;
 
     /**
      * @ORM\OneToOne(targetEntity="BuildingIcon", mappedBy="building")
@@ -442,19 +442,19 @@ class Building
         return $this;
     }
 
-    public function getDescription(): ?BuildingDescription
+    public function getBuildingDescription(): ?BuildingDescription
     {
-        return $this->description;
+        return $this->buildingDescription;
     }
 
-    public function setDescription(?BuildingDescription $description): self
+    public function setBuildingDescription(?BuildingDescription $buildingDescription): self
     {
-        $this->description = $description;
+        $this->buildingDescription = $buildingDescription;
 
         // set (or unset) the owning side of the relation if necessary
-        $newBuilding = null === $description ? null : $this;
-        if ($description->getBuilding() !== $newBuilding) {
-            $description->setBuilding($newBuilding);
+        $newBuilding = null === $buildingDescription ? null : $this;
+        if ($buildingDescription->getBuilding() !== $newBuilding) {
+            $buildingDescription->setBuilding($newBuilding);
         }
 
         return $this;
