@@ -12,15 +12,17 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 abstract class AbstractBaseBuildingService extends BaseService
 {
-    protected function getUnitManufacturerBuildingDetail(VillageBuilding $villageBuilding)
+    /**
+     * @param VillageBuilding $villageBuilding
+     * @return UnitManufacturerBuildingDetailResponse
+     */
+    protected function getUnitManufacturerBuildingDetail(VillageBuilding $villageBuilding): UnitManufacturerBuildingDetailResponse
     {
         $buildingDetailResponse = (new UnitManufacturerBuildingDetailResponse())
             ->setId($villageBuilding->getBuilding()->getId())
             ->setName($villageBuilding->getBuilding()->getName())
-            //->setDescription($villageBuilding->getBuilding()->getDescription())
-            ->setDescription('desc')
-            //->setIconUrl($villageBuilding->getBuilding()->getIcons()->getBaseIcon());
-            ->setIconUrl('url');
+            ->setDescription($villageBuilding->getBuilding()->getBuildingDescription()->getDescription())
+            ->setIconUrl($villageBuilding->getBuilding()->getIcons()->getBaseIcon());
 
         $unitRequirementResponseCollection = new ArrayCollection();
         $unitCommandResponseCollection = new ArrayCollection();
@@ -28,7 +30,7 @@ abstract class AbstractBaseBuildingService extends BaseService
 
         foreach ($villageBuilding->getBuilding()->getUnitManufacturers() as $unitManufacturer) {
             $unit = $unitManufacturer->getUnit();
-            foreach ($unit->getCommands() as $unitCommand){
+            foreach ($unit->getCommands() as $unitCommand) {
                 $commandCostResponse = (new CostResponse())
                     ->setWood($unitCommand->getCostWood())
                     ->setClay($unitCommand->getCostClay())
@@ -38,7 +40,7 @@ abstract class AbstractBaseBuildingService extends BaseService
                 $unitCommandResponse = (new UnitCommandResponse())
                     ->setName($unit->getName())
                     ->setIconUrl('url')
-                    ->setRemainingTime($unitCommand->getRemainingTime()->format('H:i:s')) // TODO changeee!!!
+                    ->setRemainingTime(($unitCommand->getEndDate()->diff(new \DateTime()))->format('%h:%i:%s'))
                     ->setEndDate($unitCommand->getEndDate()->format('Y-m-d H:i:s'))
                     ->setCommandCount($unitCommand->getCommandCount())
                     ->setCosts($commandCostResponse);
@@ -55,10 +57,15 @@ abstract class AbstractBaseBuildingService extends BaseService
             $unitRequirementResponse = (new UnitRequirementResponse())
                 ->setId($unit->getId())
                 ->setName($unit->getName())
-                //->setIconUrl($unit->getIcons()->getOverviewIcon())
-                ->setIconUrl('url')
+                ->setIconUrl($unit->getIcons()->getOverviewIcon())
                 ->setCosts($requirementCostResponse)
-                ->setBuildCount(0) // TODO math process
+                ->setBuildCount(
+                    min([
+                        ceil($resource->getWood() / $unit->getCostPerWood()),
+                        ceil($resource->getClay() / $unit->getCostPerClay()),
+                        ceil($resource->getIron() / $unit->getCostPerIron())
+                    ])
+                )
                 ->setBuildTime($unit->getBaseBuildTime() / 60)
                 ->setExistingCount(0);
 
@@ -82,7 +89,7 @@ abstract class AbstractBaseBuildingService extends BaseService
      * @param VillageBuilding $villageBuilding
      * @return bool
      */
-    protected function isUnitManufacturer(VillageBuilding $villageBuilding)
+    protected function isUnitManufacturer(VillageBuilding $villageBuilding): bool
     {
         return (bool)$villageBuilding->getBuilding()->getUnitManufacturers()->count();
     }
