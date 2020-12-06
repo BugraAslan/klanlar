@@ -52,6 +52,20 @@ class VillageResource
     private $iron;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="warehouse", type="smallint", options={"unsigned"=true})
+     */
+    private $warehouse;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="population", type="smallint", options={"unsigned"=true})
+     */
+    private $population;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -128,6 +142,42 @@ class VillageResource
     public function setIron(int $iron): VillageResource
     {
         $this->iron = $iron;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWarehouse(): int
+    {
+        return $this->warehouse;
+    }
+
+    /**
+     * @param int $warehouse
+     * @return VillageResource
+     */
+    public function setWarehouse(int $warehouse): VillageResource
+    {
+        $this->warehouse = $warehouse;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPopulation(): int
+    {
+        return $this->population;
+    }
+
+    /**
+     * @param int $population
+     * @return VillageResource
+     */
+    public function setPopulation(int $population): VillageResource
+    {
+        $this->population = $population;
         return $this;
     }
 }

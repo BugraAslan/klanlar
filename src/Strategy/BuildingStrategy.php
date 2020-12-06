@@ -2,7 +2,6 @@
 
 namespace App\Strategy;
 
-use App\Entity\VillageBuilding;
 use App\Model\Request\Building\BuildingDetailRequest;
 use App\Repository\VillageBuildingRepository;
 
@@ -28,26 +27,21 @@ class BuildingStrategy
         $this->buildingStrategies[] = $buildingStrategy;
     }
 
-    /**
-     * @param BuildingDetailRequest $buildingDetailRequest
-     * @return VillageBuilding|null
-     */
     public function getBuildingDetail(BuildingDetailRequest $buildingDetailRequest)
     {
-        $buildingDetail = $this->villageBuildingRepository->findBuildingDetail(
+        $buildingName = $this->villageBuildingRepository->findBuildingNameById(
             $buildingDetailRequest->getVillageId(),
             $buildingDetailRequest->getBuildingId()
         );
 
-        if ($buildingDetail){
+        if ($buildingName){
             foreach ($this->buildingStrategies as $buildingStrategy){
-                if ($buildingStrategy->canHandle($buildingDetail->getBuilding()->getName())) {
-                    $buildingDetail = $buildingStrategy->buildingDetail($buildingDetail);
-                    break;
+                if ($buildingStrategy->canHandle($buildingName)) {
+                    return $buildingStrategy->buildingDetail($buildingDetailRequest);
                 }
             }
         }
 
-        return $buildingDetail;
+        return null;
     }
 }

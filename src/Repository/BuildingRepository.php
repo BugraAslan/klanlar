@@ -25,7 +25,7 @@ class BuildingRepository extends ServiceEntityRepository
      * @param int $cacheLifeTime
      * @return Building|null
      */
-    public function findBuildingById(int $id, int $cacheLifeTime = 0)
+    public function findBuildingById(int $id, int $cacheLifeTime = 0): ?Building
     {
         $queryBuilder = $this->createQueryBuilder('building')
             ->where('building.id = :buildingId')

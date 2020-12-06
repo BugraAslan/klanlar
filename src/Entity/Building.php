@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Building
  *
  * @ORM\Table(name="building")
- * @ORM\Entity(repositoryClass="App\Repository\BuildingRepository")
+ * @ORM\Entity(repositoryClass="BuildingCommandRepository")
  */
 class Building
 {

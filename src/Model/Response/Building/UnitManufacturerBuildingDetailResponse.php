@@ -5,7 +5,7 @@ namespace App\Model\Response\Building;
 use App\Model\Response\Unit\UnitCommandResponse;
 use App\Model\Response\Unit\UnitRequirementResponse;
 
-class UnitManufacturerBuildingDetailResponse extends BaseBuildingResponse
+class UnitManufacturerBuildingDetailResponse extends BaseBuildingDetailResponse
 {
     /** @var UnitRequirementResponse[]|null */
     protected $unitRequirements;

@@ -2,11 +2,11 @@
 
 namespace App\Strategy;
 
-use App\Entity\VillageBuilding;
+use App\Model\Request\Building\BuildingDetailRequest;
 
 interface BuildingStrategyInterface
 {
-    public function buildingDetail(VillageBuilding $villageBuilding);
+    public function buildingDetail(BuildingDetailRequest $buildingDetailRequest);
 
     public function canHandle(string $buildingName);
 }

@@ -2,7 +2,7 @@
 
 namespace App\Service\Building;
 
-use App\Entity\VillageBuilding;
+use App\Model\Request\Building\BuildingDetailRequest;
 use App\Model\Response\Building\UnitManufacturerBuildingDetailResponse;
 use App\Strategy\BuildingStrategyInterface;
 
@@ -20,11 +20,11 @@ class StableService extends AbstractBaseBuildingService implements BuildingStrat
     }
 
     /**
-     * @param VillageBuilding $villageBuilding
+     * @param BuildingDetailRequest $buildingDetailRequest
      * @return UnitManufacturerBuildingDetailResponse|null
      */
-    public function buildingDetail(VillageBuilding $villageBuilding): ?UnitManufacturerBuildingDetailResponse
+    public function buildingDetail(BuildingDetailRequest $buildingDetailRequest): ?UnitManufacturerBuildingDetailResponse
     {
-        return $this->getUnitManufacturerBuildingDetail($villageBuilding);
+        return $this->getUnitManufacturerBuildingDetail($buildingDetailRequest);
     }
 }

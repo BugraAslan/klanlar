@@ -36,9 +36,7 @@ class VillageBuilding
      * @var Building
      *
      * @ORM\OneToOne(targetEntity="Building")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="building_id", referencedColumnName="id")
-     * })
+     * @ORM\JoinColumn(name="building_id", referencedColumnName="id")
      */
     private $building;
 
@@ -46,9 +44,7 @@ class VillageBuilding
      * @var PlayerVillage
      *
      * @ORM\ManyToOne(targetEntity="PlayerVillage", inversedBy="villageBuildings")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="village_id", referencedColumnName="id")
-     * })
+     * @ORM\JoinColumn(name="village_id", referencedColumnName="id")
      */
     private $village;
 
@@ -81,12 +77,12 @@ class VillageBuilding
         return $this;
     }
 
-    public function getBuilding(): ?Building
+    public function getBuilding(): Building
     {
         return $this->building;
     }
 
-    public function setBuilding(?Building $building): self
+    public function setBuilding(Building $building): self
     {
         $this->building = $building;
 

@@ -2,7 +2,7 @@
 
 namespace App\Model\Response\Building;
 
-class BaseBuildingResponse
+class BaseBuildingDetailResponse
 {
     /** @var int */
     protected $id;
@@ -26,9 +26,9 @@ class BaseBuildingResponse
 
     /**
      * @param int $id
-     * @return BaseBuildingResponse
+     * @return BaseBuildingDetailResponse
      */
-    public function setId(int $id): BaseBuildingResponse
+    public function setId(int $id): BaseBuildingDetailResponse
     {
         $this->id = $id;
         return $this;
@@ -44,9 +44,9 @@ class BaseBuildingResponse
 
     /**
      * @param string $name
-     * @return BaseBuildingResponse
+     * @return BaseBuildingDetailResponse
      */
-    public function setName(string $name): BaseBuildingResponse
+    public function setName(string $name): BaseBuildingDetailResponse
     {
         $this->name = $name;
         return $this;
@@ -62,9 +62,9 @@ class BaseBuildingResponse
 
     /**
      * @param string $iconUrl
-     * @return BaseBuildingResponse
+     * @return BaseBuildingDetailResponse
      */
-    public function setIconUrl(string $iconUrl): BaseBuildingResponse
+    public function setIconUrl(string $iconUrl): BaseBuildingDetailResponse
     {
         $this->iconUrl = $iconUrl;
         return $this;
@@ -80,9 +80,9 @@ class BaseBuildingResponse
 
     /**
      * @param string $description
-     * @return BaseBuildingResponse
+     * @return BaseBuildingDetailResponse
      */
-    public function setDescription(string $description): BaseBuildingResponse
+    public function setDescription(string $description): BaseBuildingDetailResponse
     {
         $this->description = $description;
         return $this;

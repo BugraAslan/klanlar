@@ -3,18 +3,18 @@
 namespace App\Service;
 
 use App\Entity\Building;
-use App\Repository\BuildingRepository;
+use App\Repository\BuildingCommandRepository;
 
 class BuildingService extends BaseService
 {
-    /** @var BuildingRepository */
+    /** @var BuildingCommandRepository */
     private $buildingRepository;
 
     /**
      * BuildingService constructor.
-     * @param BuildingRepository $buildingRepository
+     * @param BuildingCommandRepository $buildingRepository
      */
-    public function __construct(BuildingRepository $buildingRepository)
+    public function __construct(BuildingCommandRepository $buildingRepository)
     {
         $this->buildingRepository = $buildingRepository;
     }

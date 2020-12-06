@@ -37,7 +37,8 @@ class BuildingController extends BaseController
     public function buildingDetail(
         BuildingDetailRequest $buildingDetailRequest,
         ConstraintViolationList $validationErrors
-    ) {
+    ): Response
+    {
         if ($validationErrors->count()){
             return $this->validationErrorResponse($validationErrors);
         }

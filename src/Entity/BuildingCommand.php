@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     @ORM\Index(name="building_command_village_id_fk", columns={"village_id"})
  * })
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\BuildingCommandRepository")
  */
 class BuildingCommand
 {
@@ -81,6 +81,13 @@ class BuildingCommand
      * @ORM\Column(name="is_finished", type="boolean", nullable=false)
      */
     private $isFinished = false;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="build_level", type="smallint", options={"unsigned"=true})
+     */
+    protected $buildLevel;
 
     /**
      * @var Building
@@ -196,6 +203,24 @@ class BuildingCommand
     {
         $this->isFinished = $isFinished;
 
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBuildLevel(): int
+    {
+        return $this->buildLevel;
+    }
+
+    /**
+     * @param int $buildLevel
+     * @return BuildingCommand
+     */
+    public function setBuildLevel(int $buildLevel): BuildingCommand
+    {
+        $this->buildLevel = $buildLevel;
         return $this;
     }
 
