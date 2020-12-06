@@ -44,7 +44,11 @@ class VillageBuildingRepository extends ServiceEntityRepository
                 ->leftJoin('building.icons', 'buildingIcons')
                 ->join('building.unitManufacturers', 'unitManufacturers')
                 ->join('unitManufacturers.unit', 'unit')
-                ->leftJoin('unit.commands', 'unitCommands', 'with', 'unitCommands.endDate > :now')
+                ->leftJoin(
+                    'unit.commands', 'unitCommands',
+                    'with',
+                    'unitCommands.endDate > :now' // TODO unitCommands.isFinished = 0
+                )
                 ->leftJoin('unit.icons', 'unitIcons')
                 ->join('villageBuilding.village', 'village')
                 ->leftJoin('village.villageUnits', 'villageUnits')

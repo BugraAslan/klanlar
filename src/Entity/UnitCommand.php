@@ -97,6 +97,13 @@ class UnitCommand
      */
     private $village;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="is_finished", type="smallint", nullable=false, options={"unsigned"=true, "default"=0})
+     */
+    private $isFinished = 0;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -218,6 +225,18 @@ class UnitCommand
     public function setVillage(?PlayerVillage $village): self
     {
         $this->village = $village;
+
+        return $this;
+    }
+
+    public function IsFinished(): int
+    {
+        return $this->isFinished;
+    }
+
+    public function setIsFinished(int $isFinished): self
+    {
+        $this->isFinished = $isFinished;
 
         return $this;
     }
