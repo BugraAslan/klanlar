@@ -25,11 +25,6 @@ class BarracksService extends AbstractBaseBuildingService implements BuildingStr
      */
     public function buildingDetail(VillageBuilding $villageBuilding): ?UnitManufacturerBuildingDetailResponse
     {
-        $buildingDetail = null;
-        if ($this->isUnitManufacturer($villageBuilding)){
-            $buildingDetail = $this->getUnitManufacturerBuildingDetail($villageBuilding);
-        }
-
-        return $buildingDetail;
+        return $this->getUnitManufacturerBuildingDetail($villageBuilding);
     }
 }

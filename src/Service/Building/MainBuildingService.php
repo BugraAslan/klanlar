@@ -9,7 +9,7 @@ class MainBuildingService extends AbstractBaseBuildingService implements Buildin
 {
     public const BUILDING_NAME = 'Ana Bina';
 
-    public function canHandle(string $buildingName)
+    public function canHandle(string $buildingName): bool
     {
         return self::BUILDING_NAME === $buildingName;
     }

@@ -25,11 +25,6 @@ class StableService extends AbstractBaseBuildingService implements BuildingStrat
      */
     public function buildingDetail(VillageBuilding $villageBuilding): ?UnitManufacturerBuildingDetailResponse
     {
-        $buildingDetail = null;
-        if ($this->isUnitManufacturer($villageBuilding)){
-            $buildingDetail = $this->getUnitManufacturerBuildingDetail($villageBuilding);
-        }
-
-        return $buildingDetail;
+        return $this->getUnitManufacturerBuildingDetail($villageBuilding);
     }
 }
