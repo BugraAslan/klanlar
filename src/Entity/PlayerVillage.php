@@ -85,6 +85,11 @@ class PlayerVillage
     private $unitCommands;
 
     /**
+     * @ORM\OneToMany(targetEntity="BuildingCommand", mappedBy="village")
+     */
+    private $buildingCommands;
+
+    /**
      * @ORM\OneToOne(targetEntity="VillageResource", mappedBy="village")
      */
     private $resource;
@@ -106,6 +111,7 @@ class PlayerVillage
         $this->commandSourceVillages = new ArrayCollection();
         $this->commandTargetVillages = new ArrayCollection();
         $this->unitCommands = new ArrayCollection();
+        $this->buildingCommands = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -331,6 +337,36 @@ class PlayerVillage
             // set the owning side to null (unless already changed)
             if ($unitCommand->getVillage() === $this) {
                 $unitCommand->setVillage(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BuildingCommand[]
+     */
+    public function getBuildingCommands(): Collection
+    {
+        return $this->buildingCommands;
+    }
+
+    public function addBuildingCommand(BuildingCommand $buildingCommand): self
+    {
+        if (!$this->buildingCommands->contains($buildingCommand)) {
+            $this->buildingCommands[] = $buildingCommand;
+            $buildingCommand->setVillage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBuildingCommand(BuildingCommand $buildingCommand): self
+    {
+        if ($this->buildingCommands->removeElement($buildingCommand)) {
+            // set the owning side to null (unless already changed)
+            if ($buildingCommand->getVillage() === $this) {
+                $buildingCommand->setVillage(null);
             }
         }
 

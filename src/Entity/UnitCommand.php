@@ -49,7 +49,7 @@ class UnitCommand
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="remaining_time", type="datetime", nullable=false)
+     * @ORM\Column(name="remaining_time", type="time", nullable=false)
      */
     private $remainingTime;
 
@@ -98,11 +98,11 @@ class UnitCommand
     private $village;
 
     /**
-     * @var int
+     * @var bool
      *
-     * @ORM\Column(name="is_finished", type="smallint", nullable=false, options={"unsigned"=true, "default"=0})
+     * @ORM\Column(name="is_finished", type="boolean", nullable=false)
      */
-    private $isFinished = 0;
+    private $isFinished = false;
 
     public function getId(): ?int
     {
@@ -229,12 +229,12 @@ class UnitCommand
         return $this;
     }
 
-    public function IsFinished(): int
+    public function IsFinished(): bool
     {
         return $this->isFinished;
     }
 
-    public function setIsFinished(int $isFinished): self
+    public function setFinished(bool $isFinished): self
     {
         $this->isFinished = $isFinished;
 

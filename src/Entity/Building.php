@@ -134,10 +134,16 @@ class Building
      */
     private $icons;
 
+    /**
+     * @ORM\OneToMany(targetEntity="BuildingCommand", mappedBy="building")
+     */
+    private $commands;
+
     public function __construct()
     {
         $this->buildingRequirements = new ArrayCollection();
         $this->unitManufacturers = new ArrayCollection();
+        $this->commands = new ArrayCollection();
     }
 
     /**
@@ -473,6 +479,36 @@ class Building
         $newBuilding = null === $icons ? null : $this;
         if ($icons->getBuilding() !== $newBuilding) {
             $icons->setBuilding($newBuilding);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BuildingCommand[]
+     */
+    public function getCommands(): Collection
+    {
+        return $this->commands;
+    }
+
+    public function addCommand(BuildingCommand $command): self
+    {
+        if (!$this->commands->contains($command)) {
+            $this->commands[] = $command;
+            $command->setBuilding($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommand(BuildingCommand $command): self
+    {
+        if ($this->commands->removeElement($command)) {
+            // set the owning side to null (unless already changed)
+            if ($command->getBuilding() === $this) {
+                $command->setBuilding(null);
+            }
         }
 
         return $this;
