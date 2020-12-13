@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Building
  *
  * @ORM\Table(name="building")
- * @ORM\Entity(repositoryClass="BuildingCommandRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\BuildingRepository")
  */
 class Building
 {
@@ -118,6 +118,11 @@ class Building
      * @ORM\OneToMany(targetEntity="BuildingRequirements", mappedBy="building")
      */
     private $buildingRequirements;
+
+    /**
+     * @ORM\OneToOne(targetEntity="BuildingOutput", mappedBy="building")
+     */
+    private $buildingOutput;
 
     /**
      * @ORM\OneToMany(targetEntity="UnitManufacturer", mappedBy="building")
@@ -413,6 +418,24 @@ class Building
             if ($buildingRequirement->getBuilding() === $this) {
                 $buildingRequirement->setBuilding(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getBuildingOutput(): ?BuildingOutput
+    {
+        return $this->buildingOutput;
+    }
+
+    public function setBuildingOutput(?BuildingOutput $buildingOutput): self
+    {
+        $this->buildingOutput = $buildingOutput;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newBuilding = null === $buildingOutput ? null : $this;
+        if ($buildingOutput->getBuilding() !== $newBuilding) {
+            $buildingOutput->setBuilding($newBuilding);
         }
 
         return $this;

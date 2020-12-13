@@ -144,4 +144,34 @@ class VillageBuildingRepository extends ServiceEntityRepository
             return null;
         }
     }
+
+    /**
+     * @param int $villageId
+     * @param int $buildingId
+     * @return VillageBuilding|null
+     */
+    public function findResourceManufacturerBuildingDetail(int $villageId, int $buildingId): ?VillageBuilding
+    {
+        try {
+            return $this->createQueryBuilder('villageBuilding')
+                ->addSelect('buildingDescription')
+                ->addSelect('buildingIcons')
+                ->addSelect('building')
+                ->addSelect('buildingOutput')
+                ->join('villageBuilding.building', 'building')
+                ->join('building.icons', 'buildingIcons')
+                ->join('building.buildingDescription', 'buildingDescription')
+                ->join('building.buildingOutput', 'buildingOutput')
+                ->where('villageBuilding.village = :villageId')
+                ->andWhere('building.id = :buildingId')
+                ->setParameters([
+                    'villageId' => $villageId,
+                    'buildingId' => $buildingId
+                ])
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
+    }
 }

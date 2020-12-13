@@ -6,24 +6,21 @@ use App\Entity\BuildingCommand;
 use App\Entity\Unit;
 use App\Entity\UnitCommand;
 use App\Entity\VillageBuilding;
-use App\Model\Response\Building\BaseBuildingDetailResponse;
+use App\Model\Response\Building\BaseBuildingDetailResponseInterface;
 use App\Model\Response\Building\BuildingCommandResponse;
 use App\Model\Response\CostResponse;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class BuildingDetailResponseManager
 {
-    public function buildBuildingDetailResponse(VillageBuilding $villageBuilding, $response = null)
+    public function buildBuildingDetailResponse(VillageBuilding $villageBuilding, BaseBuildingDetailResponseInterface $response): BaseBuildingDetailResponseInterface
     {
-        if (!$response){
-            $response = new BaseBuildingDetailResponse();
-        }
-
         return $response
             ->setId($villageBuilding->getBuilding()->getId())
             ->setName($villageBuilding->getBuilding()->getName())
             ->setDescription($villageBuilding->getBuilding()->getBuildingDescription()->getDescription())
-            ->setIconUrl($villageBuilding->getBuilding()->getIcons()->getBaseIcon());
+            ->setIconUrl($villageBuilding->getBuilding()->getIcons()->getBaseIcon())
+            ->setLevel($villageBuilding->getBuildingLevel());
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Model\Response\Village\VillageInfo;
 
+use App\Model\Response\EffectResponse;
 use App\Model\Response\Village\VillageResourceResponse;
 use App\Model\Response\Village\VillageResponse;
 
@@ -18,6 +19,9 @@ class VillageInfoResponse
 
     /** @var UnitByVillageInfoResponse[] */
     private $units;
+
+    /** @var EffectResponse[]|array */
+    private $effects = [];
 
     /**
      * @return VillageResponse
@@ -88,6 +92,24 @@ class VillageInfoResponse
     public function setUnits(array $units): VillageInfoResponse
     {
         $this->units = $units;
+        return $this;
+    }
+
+    /**
+     * @return EffectResponse[]|array
+     */
+    public function getEffects(): array
+    {
+        return $this->effects;
+    }
+
+    /**
+     * @param EffectResponse[]|array $effects
+     * @return VillageInfoResponse
+     */
+    public function setEffects(array $effects): VillageInfoResponse
+    {
+        $this->effects = $effects;
         return $this;
     }
 }

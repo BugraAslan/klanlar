@@ -24,7 +24,7 @@ class BuildingOutput
     /**
      * @var float
      *
-     * @ORM\Column(name="output_factor", type="float", precision=10, scale=2, nullable=false, options={"default"="1"})
+     * @ORM\Column(name="output_factor", type="float", precision=10, scale=5, nullable=false, options={"default"="1"})
      */
     private $outputFactor = '1';
 
@@ -38,10 +38,8 @@ class BuildingOutput
     /**
      * @var Building
      *
-     * @ORM\OneToOne(targetEntity="Building")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="building_id", referencedColumnName="id")
-     * })
+     * @ORM\OneToOne(targetEntity="Building", inversedBy="buildingOutput")
+     * @ORM\JoinColumn(name="building_id", referencedColumnName="id")
      */
     private $building;
 
@@ -85,6 +83,4 @@ class BuildingOutput
 
         return $this;
     }
-
-
 }

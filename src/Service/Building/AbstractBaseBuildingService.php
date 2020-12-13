@@ -4,6 +4,7 @@ namespace App\Service\Building;
 
 use App\Manager\Response\BuildingDetailResponseManager;
 use App\Model\Request\Building\BuildingDetailRequest;
+use App\Model\Response\Building\ResourceManufacturerBuildingDetailResponse;
 use App\Model\Response\Building\UnitManufacturerBuildingDetailResponse;
 use App\Model\Response\Unit\UnitCommandResponse;
 use App\Model\Response\Unit\UnitRequirementResponse;
@@ -84,7 +85,6 @@ abstract class AbstractBaseBuildingService extends BaseService
                 ->setBuildTime($unit->getBaseBuildTime() / 60)
                 ->setExistingCount(0);
 
-            // TODO existing unit count changed
             foreach ($villageBuilding->getVillage()->getVillageUnits() as $villageUnit) {
                 if ($villageUnit->getUnit()->getId() == $unit->getId()) {
                     $unitRequirementResponse->setExistingCount($villageUnit->getUnitCount());
@@ -98,5 +98,41 @@ abstract class AbstractBaseBuildingService extends BaseService
         return $buildingDetailResponse
             ->setUnitRequirements($unitRequirementResponseCollection->toArray())
             ->setUnitCommands($unitCommandResponseCollection->toArray());
+    }
+
+    protected function getResourceManufacturerBuildingDetail(BuildingDetailRequest $buildingDetailRequest): ?ResourceManufacturerBuildingDetailResponse
+    {
+        $villageBuilding = $this->villageBuildingRepository->findResourceManufacturerBuildingDetail(
+            $buildingDetailRequest->getVillageId(),
+            $buildingDetailRequest->getBuildingId()
+        );
+
+        if (!$villageBuilding) {
+            return null;
+        }
+
+        $buildingDetailResponse = $this->buildingDetailResponseManager->buildBuildingDetailResponse(
+            $villageBuilding,
+            new ResourceManufacturerBuildingDetailResponse()
+        );
+
+        $building = $villageBuilding->getBuilding();
+        $buildingOutput = $building->getBuildingOutput();
+        $currentOutput = $this->costCalculator(
+            $buildingOutput->getBaseOutput(),
+            $buildingOutput->getOutputFactor(),
+            $villageBuilding->getBuildingLevel()
+        );
+
+        return $buildingDetailResponse
+            ->setCurrentManufactureCount(ceil($currentOutput))
+            ->setNextManufactureCount(ceil($currentOutput * $buildingOutput->getOutputFactor()))
+            ->setResourceEffects([])
+            ->setHasMaxLevel($villageBuilding->getBuildingLevel() === $building->getMaxLevel());
+    }
+
+    protected function costCalculator(int $costPerItem, float $costFactor, int $itemLevel)
+    {
+        return ceil($costPerItem * pow($costFactor, $itemLevel));
     }
 }

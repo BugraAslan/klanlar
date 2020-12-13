@@ -39,16 +39,18 @@ class MainBuildingService extends AbstractBaseBuildingService implements Buildin
             new MainBuildingDetailResponse()
         );
 
+        // TODO to be include buildable buildings requirements
         $buildingRequirementCollection = new ArrayCollection();
         foreach ($villageBuildingDetails as $villageBuilding) {
-            $resource = $villageBuilding->getVillage()->getResource();
             $building = $villageBuilding->getBuilding();
-            $nextBuildingLevel = ($villageBuilding->getBuildingLevel() + 1);
+            $currentBuildingLevel = $villageBuilding->getBuildingLevel();
+            $resource = $villageBuilding->getVillage()->getResource();
 
-            $woodCost = $building->getWoodCost() * ($nextBuildingLevel * $building->getWoodFactor());
-            $clayCost = $building->getClayCost() * ($nextBuildingLevel * $building->getClayFactor());
-            $ironCost = $building->getIronCost() * ($nextBuildingLevel * $building->getIronFactor());
-            $populationCost = $building->getPopulationCost() * ($nextBuildingLevel * $building->getPopulationFactor());
+            $woodCost = $this->costCalculator($building->getWoodCost(), $building->getWoodFactor(), $currentBuildingLevel);
+            $clayCost = $this->costCalculator($building->getClayCost(), $building->getClayFactor(), $currentBuildingLevel);
+            $ironCost = $this->costCalculator($building->getIronCost(), $building->getIronFactor(), $currentBuildingLevel);
+            $totalPopulationCost = $this->costCalculator($building->getPopulationCost(), $building->getPopulationFactor(), $currentBuildingLevel);
+            $populationCost = $totalPopulationCost - ceil($totalPopulationCost / $building->getPopulationFactor());
 
             $buildable = true;
             $buildableMessage = null;
@@ -71,18 +73,19 @@ class MainBuildingService extends AbstractBaseBuildingService implements Buildin
                 $buildable = false;
             }
 
+            // TODO change
+            $buildTime = $this->costCalculator($building->getBaseBuildTime(), $building->getTimeFactor(), $currentBuildingLevel);
+            $buildTime = $buildTime > 60 ? ceil($buildTime / 60) : $buildTime;
+
             $buildingRequirementResponse = (new BuildingRequirementResponse())
                 ->setId($building->getId())
                 ->setName($building->getName())
-                ->setCurrentLevel($villageBuilding->getBuildingLevel())
-                ->setBuildLevel($nextBuildingLevel)
+                ->setCurrentLevel($currentBuildingLevel)
+                ->setBuildLevel($currentBuildingLevel + 1)
                 ->setIconUrl($building->getIcons()->getBaseIcon())
-                ->setBuildTime((
-                        $building->getBaseBuildTime() * ($building->getTimeFactor() * $nextBuildingLevel)
-                    ) / 60
-                )
-                ->setBuildableTime('') // TODO math process
-                ->setHasMaxLevel($villageBuilding->getBuildingLevel() === $building->getMaxLevel())
+                ->setBuildTime($buildTime)
+                ->setBuildableTime('') // TODO change
+                ->setHasMaxLevel($currentBuildingLevel === $building->getMaxLevel())
                 ->setIsBuildable($buildable)
                 ->setBuildableMessage($buildableMessage)
                 ->setCosts(

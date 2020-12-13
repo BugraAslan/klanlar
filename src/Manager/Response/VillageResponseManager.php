@@ -20,7 +20,7 @@ class VillageResponseManager
      * @param PlayerVillage $village
      * @return VillageInfoResponse
      */
-    public function buildVillageInfoResponse(PlayerVillage $village)
+    public function buildVillageInfoResponse(PlayerVillage $village): VillageInfoResponse
     {
         $villageBuildingCollection = new ArrayCollection();
         foreach ($village->getVillageBuildings() as $villageBuilding){
@@ -47,7 +47,7 @@ class VillageResponseManager
      * @param VillageResource $resource
      * @return VillageResourceResponse
      */
-    public function buildVillageResourceResponse(VillageResource $resource)
+    public function buildVillageResourceResponse(VillageResource $resource): VillageResourceResponse
     {
         return (new VillageResourceResponse())
             ->setClay($resource->getClay())
@@ -59,7 +59,7 @@ class VillageResponseManager
      * @param PlayerVillage $playerVillage
      * @return VillageResponse
      */
-    public function buildVillageResponse(PlayerVillage $playerVillage)
+    public function buildVillageResponse(PlayerVillage $playerVillage): VillageResponse
     {
         return (new VillageResponse())
             ->setVillageContinent($playerVillage->getContinent())
@@ -73,26 +73,26 @@ class VillageResponseManager
      * @param VillageBuilding $villageBuilding
      * @return BuildingByVillageInfoResponse
      */
-    public function buildVillageBuildingResponse(VillageBuilding $villageBuilding)
+    public function buildVillageBuildingResponse(VillageBuilding $villageBuilding): BuildingByVillageInfoResponse
     {
         return (new BuildingByVillageInfoResponse())
             ->setBuildingLevel($villageBuilding->getBuildingLevel())
             ->setBuildingId($villageBuilding->getBuilding()->getId())
             ->setBuildingName($villageBuilding->getBuilding()->getName())
-            ->setBuildingIcon('building icon url'); // TODO village icon entity data
+            ->setBuildingIcon($villageBuilding->getBuilding()->getIcons()->getBaseIcon());
     }
 
     /**
      * @param VillageUnit $villageUnit
      * @return UnitByVillageInfoResponse|null
      */
-    public function buildVillageUnitResponse(VillageUnit $villageUnit)
+    public function buildVillageUnitResponse(VillageUnit $villageUnit): ?UnitByVillageInfoResponse
     {
         $response = null;
         if ($villageUnit->getUnit() instanceof Unit){
             $response = (new UnitByVillageInfoResponse())
                 ->setUnitCount($villageUnit->getUnitCount())
-                ->setUnitIcon('unit icon url') // TODO unit icon entity data
+                ->setUnitIcon($villageUnit->getUnit()->getIcons()->getOverviewIcon())
                 ->setUnitName($villageUnit->getUnit()->getName())
                 ->setUnitId($villageUnit->getUnit()->getId());
         }

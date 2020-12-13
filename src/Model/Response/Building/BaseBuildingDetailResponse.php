@@ -2,13 +2,16 @@
 
 namespace App\Model\Response\Building;
 
-class BaseBuildingDetailResponse
+class BaseBuildingDetailResponse implements BaseBuildingDetailResponseInterface
 {
     /** @var int */
     protected $id;
 
     /** @var string */
     protected $name;
+
+    /** @var int */
+    protected $level;
 
     /** @var string */
     protected $iconUrl;
@@ -49,6 +52,24 @@ class BaseBuildingDetailResponse
     public function setName(string $name): BaseBuildingDetailResponse
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLevel(): int
+    {
+        return $this->level;
+    }
+
+    /**
+     * @param int $level
+     * @return BaseBuildingDetailResponse
+     */
+    public function setLevel(int $level): BaseBuildingDetailResponse
+    {
+        $this->level = $level;
         return $this;
     }
 
