@@ -10,6 +10,7 @@ use App\Model\Response\Unit\UnitCommandResponse;
 use App\Model\Response\Unit\UnitRequirementResponse;
 use App\Repository\VillageBuildingRepository;
 use App\Service\BaseService;
+use App\Util\BuildingUtil;
 use Doctrine\Common\Collections\ArrayCollection;
 
 abstract class AbstractBaseBuildingService extends BaseService
@@ -118,17 +119,25 @@ abstract class AbstractBaseBuildingService extends BaseService
 
         $building = $villageBuilding->getBuilding();
         $buildingOutput = $building->getBuildingOutput();
-        $currentOutput = $this->costCalculator(
-            $buildingOutput->getBaseOutput(),
-            $buildingOutput->getOutputFactor(),
-            $villageBuilding->getBuildingLevel()
-        );
+        $hasMaxLevel = $villageBuilding->getBuildingLevel() === $building->getMaxLevel();
+        if ($building->getId() == BuildingUtil::WALL_ID) {
+            $currentOutput = $villageBuilding->getBuildingLevel() * $buildingOutput->getOutputFactor();
+            $nexManufactureCount = $hasMaxLevel ? 0 : $currentOutput + $buildingOutput->getOutputFactor();
+        } else {
+            $currentOutput = $this->costCalculator(
+                $buildingOutput->getBaseOutput(),
+                $buildingOutput->getOutputFactor(),
+                in_array($building->getId(), [BuildingUtil::WAREHOUSE_ID, BuildingUtil::FARM_ID]) ?
+                    ($villageBuilding->getBuildingLevel() - 1) : $villageBuilding->getBuildingLevel()
+            );
+            $nexManufactureCount = $hasMaxLevel ? 0 : $currentOutput * $buildingOutput->getOutputFactor();
+        }
 
         return $buildingDetailResponse
             ->setCurrentManufactureCount(ceil($currentOutput))
-            ->setNextManufactureCount(ceil($currentOutput * $buildingOutput->getOutputFactor()))
+            ->setNextManufactureCount(ceil($nexManufactureCount))
             ->setResourceEffects([])
-            ->setHasMaxLevel($villageBuilding->getBuildingLevel() === $building->getMaxLevel());
+            ->setHasMaxLevel($hasMaxLevel);
     }
 
     protected function costCalculator(int $costPerItem, float $costFactor, int $itemLevel)
