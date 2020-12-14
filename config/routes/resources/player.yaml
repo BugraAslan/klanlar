@@ -1,8 +1,8 @@
-info:
-  methods: GET
-  path: /info
-  controller: App\Controller\PlayerController::playerInfo
-
 logout:
   methods: POST
   path: /logout
+
+world_login:
+  methods: GET
+  path: /world
+  controller: App\Controller\PlayerController::worldLogin

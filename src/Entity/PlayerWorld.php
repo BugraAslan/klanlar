@@ -4,13 +4,14 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-// TODO playerId foreign key
-
 /**
  * PlayerWorld
  *
- * @ORM\Table(name="player_world")
- * @ORM\Entity
+ * @ORM\Table(name="player_world", indexes={
+ *     @ORM\Index(name="player_world_player_id_fk", columns={"player_id"}),
+ *     @ORM\Index(name="player_world_world_id_fk", columns={"world_id"})
+ * })
+ * @ORM\Entity(repositoryClass="App\Repository\PlayerWorldRepository")
  */
 class PlayerWorld
 {
@@ -24,44 +25,46 @@ class PlayerWorld
     private $id;
 
     /**
-     * @var int
+     * @var Player|null
      *
-     * @ORM\Column(name="player_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Player", inversedBy="worlds")
+     * @ORM\JoinColumn(name="player_id", referencedColumnName="id")
      */
-    private $playerId;
+    private $player;
 
     /**
-     * @var int
+     * @var World|null
      *
-     * @ORM\Column(name="world_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="World")
+     * @ORM\JoinColumn(name="world_id", referencedColumnName="id")
      */
-    private $worldId;
+    private $world;
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getPlayerId(): ?int
+    public function getPlayer(): ?Player
     {
-        return $this->playerId;
+        return $this->player;
     }
 
-    public function setPlayerId(int $playerId): self
+    public function setPlayer(?Player $player): self
     {
-        $this->playerId = $playerId;
+        $this->player = $player;
 
         return $this;
     }
 
-    public function getWorldId(): ?int
+    public function getWorld(): ?World
     {
-        return $this->worldId;
+        return $this->world;
     }
 
-    public function setWorldId(int $worldId): self
+    public function setWorld(?World $world): self
     {
-        $this->worldId = $worldId;
+        $this->world = $world;
 
         return $this;
     }

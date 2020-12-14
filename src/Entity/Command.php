@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     @ORM\Index(name="command_command_type_id_fk", columns={"command_type_id"}),
  *     @ORM\Index(name="command_player_id_fk", columns={"target_player_id"}),
  *     @ORM\Index(name="command_player_id_fk_2", columns={"source_player_id"}),
- *     @ORM\Index(name="command_player_village_id_fk_", columns={"source_player_id"}),
+ *     @ORM\Index(name="command_player_village_id_fk", columns={"source_player_id"}),
  *     @ORM\Index(name="command_player_village_id_fk_2", columns={"target_player_id"})
  * })
  *
@@ -35,19 +33,15 @@ class Command
      * @var PlayerVillage
      *
      * @ORM\ManyToOne(targetEntity="PlayerVillage", inversedBy="commandSourceVillages")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="source_village_id", referencedColumnName="id")
-     * })
+     * @ORM\JoinColumn(name="source_village_id", referencedColumnName="id")
      */
     private $sourceVillage;
 
     /**
      * @var PlayerVillage
      *
-     * @ORM\ManyToOne(targetEntity="PlayerVillage", inversedBy="commandTargetVillagesvi")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="target_village_id", referencedColumnName="id")
-     * })
+     * @ORM\ManyToOne(targetEntity="PlayerVillage", inversedBy="commandTargetVillages")
+     * @ORM\JoinColumn(name="target_village_id", referencedColumnName="id")
      */
     private $targetVillage;
 
@@ -68,24 +62,22 @@ class Command
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_arrival", type="boolean", nullable=false)
+     * @ORM\Column(name="is_arrival", type="boolean", nullable=false, options={"default"=false})
      */
-    private $isArrival = '0';
+    private $isArrival = false;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_return", type="boolean", nullable=false)
+     * @ORM\Column(name="is_return", type="boolean", nullable=false, options={"default"=false})
      */
-    private $isReturn = '0';
+    private $isReturn = false;
 
     /**
      * @var CommandType
      *
-     * @ORM\ManyToOne(targetEntity="CommandType", inversedBy="commands")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="command_type_id", referencedColumnName="id")
-     * })
+     * @ORM\ManyToOne(targetEntity="CommandType")
+     * @ORM\JoinColumn(name="command_type_id", referencedColumnName="id")
      */
     private $commandType;
 
@@ -93,9 +85,7 @@ class Command
      * @var Player
      *
      * @ORM\ManyToOne(targetEntity="Player", inversedBy="commandTargetPlayers")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="target_player_id", referencedColumnName="id")
-     * })
+     * @ORM\JoinColumn(name="target_player_id", referencedColumnName="id")
      */
     private $targetPlayer;
 
@@ -103,9 +93,7 @@ class Command
      * @var Player
      *
      * @ORM\ManyToOne(targetEntity="Player", inversedBy="commandSourcePlayers")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="source_player_id", referencedColumnName="id")
-     * })
+     * @ORM\JoinColumn(name="source_player_id", referencedColumnName="id")
      */
     private $sourcePlayer;
 

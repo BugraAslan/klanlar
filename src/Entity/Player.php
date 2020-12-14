@@ -61,19 +61,34 @@ class Player implements UserInterface
     private $createdDate = 'CURRENT_TIMESTAMP';
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PlayerVillage", mappedBy="player")
+     * @ORM\OneToMany(targetEntity="PlayerVillage", mappedBy="player")
      */
     private $villages;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Command", mappedBy="targetPlayer")
+     * @ORM\OneToMany(targetEntity="Command", mappedBy="targetPlayer")
      */
     private $commandTargetPlayers;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Command", mappedBy="sourcePlayer")
+     * @ORM\OneToMany(targetEntity="Command", mappedBy="sourcePlayer")
      */
     private $commandSourcePlayers;
+
+    /**
+     * @ORM\OneToOne(targetEntity="PlayerActivation", mappedBy="player")
+     */
+    private $activation;
+
+    /**
+     * @ORM\OneToOne(targetEntity="PlayerProfile", mappedBy="player")
+     */
+    private $profile;
+
+    /**
+     * @ORM\OneToMany(targetEntity="PlayerWorld", mappedBy="player")
+     */
+    private $worlds;
 
     /** @var string|null */
     public $apiToken;
@@ -86,6 +101,7 @@ class Player implements UserInterface
         $this->villages = new ArrayCollection();
         $this->commandTargetPlayers = new ArrayCollection();
         $this->commandSourcePlayers = new ArrayCollection();
+        $this->worlds = new ArrayCollection();
     }
 
     /**
@@ -270,6 +286,72 @@ class Player implements UserInterface
             // set the owning side to null (unless already changed)
             if ($commandSourcePlayer->getSourcePlayer() === $this) {
                 $commandSourcePlayer->setSourcePlayer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getActivation(): ?PlayerActivation
+    {
+        return $this->activation;
+    }
+
+    public function setActivation(?PlayerActivation $playerActivation): self
+    {
+        $this->activation = $playerActivation;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newPlayer = null === $playerActivation ? null : $this;
+        if ($playerActivation->getPlayer() !== $newPlayer) {
+            $playerActivation->setPlayer($newPlayer);
+        }
+
+        return $this;
+    }
+
+    public function getProfile(): ?PlayerProfile
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(?PlayerProfile $playerProfile): self
+    {
+        $this->profile = $playerProfile;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newPlayer = null === $playerProfile ? null : $this;
+        if ($playerProfile->getPlayer() !== $newPlayer) {
+            $playerProfile->setPlayer($newPlayer);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PlayerWorld[]
+     */
+    public function getWorlds(): Collection
+    {
+        return $this->worlds;
+    }
+
+    public function addWorld(PlayerWorld $playerWorld): self
+    {
+        if (!$this->worlds->contains($playerWorld)) {
+            $this->worlds[] = $playerWorld;
+            $playerWorld->setPlayer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorld(PlayerWorld $playerWorld): self
+    {
+        if ($this->worlds->removeElement($playerWorld)) {
+            // set the owning side to null (unless already changed)
+            if ($playerWorld->getPlayer() === $this) {
+                $playerWorld->setPlayer(null);
             }
         }
 

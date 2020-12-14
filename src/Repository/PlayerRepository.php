@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Player;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,31 +21,48 @@ class PlayerRepository extends ServiceEntityRepository
         parent::__construct($registry, Player::class);
     }
 
-    /**
-     * @param string $username
-     * @return int
-     */
-    public function findPlayerCountByUsername(string $username)
+    public function findPlayerCountByUsername(string $username): ?int
     {
-        return $this->createQueryBuilder('player')
-            ->select('COUNT(player.id)')
-            ->where('LOWER(player.username) = :username')
-            ->setParameter('username', strtolower($username))
-            ->getQuery()
-            ->getSingleScalarResult();
+        try {
+            return $this->createQueryBuilder('player')
+                ->select('COUNT(player.id)')
+                ->where('LOWER(player.username) = :username')
+                ->setParameter('username', strtolower($username))
+                ->getQuery()
+                ->getSingleScalarResult();
+        } catch (NoResultException | NonUniqueResultException $e) {
+            return null;
+        }
     }
 
-    /**
-     * @param string $email
-     * @return int
-     */
-    public function findPlayerCountByEmail(string $email)
+    public function findPlayerCountByEmail(string $email): ?int
     {
-        return $this->createQueryBuilder('player')
-            ->select('COUNT(player.id)')
-            ->where('LOWER(player.email) = :email')
-            ->setParameter('email', strtolower($email))
-            ->getQuery()
-            ->getSingleScalarResult();
+        try {
+            return $this->createQueryBuilder('player')
+                ->select('COUNT(player.id)')
+                ->where('LOWER(player.email) = :email')
+                ->setParameter('email', strtolower($email))
+                ->getQuery()
+                ->getSingleScalarResult();
+        } catch (NoResultException | NonUniqueResultException $e) {
+            return null;
+        }
+    }
+
+    public function findPlayerWorldByPlayerId(int $playerId): ?Player
+    {
+        try {
+            return $this->createQueryBuilder('player')
+                ->addSelect('playerWorlds')
+                ->addSelect('world')
+                ->join('player.worlds', 'playerWorlds')
+                ->join('playerWorlds.world', 'world')
+                ->where('player.id = :playerId')
+                ->setParameter('playerId', $playerId)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            return null;
+        }
     }
 }

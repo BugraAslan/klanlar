@@ -11,7 +11,7 @@ class LoginResponseManager
      * @param PlayerToken $playerToken
      * @return LoginResponse
      */
-    public function buildLoginResponse(PlayerToken $playerToken)
+    public function buildLoginResponse(PlayerToken $playerToken): LoginResponse
     {
         return (new LoginResponse())
             ->setExpireDate($playerToken->getExpireDate())

@@ -34,7 +34,7 @@ class VillageController extends BaseController
      * @param ConstraintViolationList $validationErrors
      * @return Response
      */
-    public function villageInfo(VillageIdRequest $villageIdRequest, ConstraintViolationList $validationErrors)
+    public function villageInfo(VillageIdRequest $villageIdRequest, ConstraintViolationList $validationErrors): Response
     {
         if ($validationErrors->count()){
             return $this->validationErrorResponse($validationErrors);
