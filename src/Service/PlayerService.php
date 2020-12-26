@@ -53,4 +53,9 @@ class PlayerService extends BaseService
 
         return $worldLoginCollection;
     }
+
+    public function getPlayerProfile()
+    {
+
+    }
 }

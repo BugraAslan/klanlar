@@ -76,11 +76,22 @@ class Player implements UserInterface
     private $commandSourcePlayers;
 
     /**
+     * @var PlayerActivation|null
+     *
      * @ORM\OneToOne(targetEntity="PlayerActivation", mappedBy="player")
      */
     private $activation;
 
     /**
+     * @var PlayerNotification|null
+     *
+     * @ORM\OneToOne(targetEntity="PlayerNotification", mappedBy="player")
+     */
+    private $notification;
+
+    /**
+     * @var PlayerProfile|null
+     *
      * @ORM\OneToOne(targetEntity="PlayerProfile", mappedBy="player")
      */
     private $profile;
@@ -305,6 +316,24 @@ class Player implements UserInterface
         $newPlayer = null === $playerActivation ? null : $this;
         if ($playerActivation->getPlayer() !== $newPlayer) {
             $playerActivation->setPlayer($newPlayer);
+        }
+
+        return $this;
+    }
+
+    public function getNotification(): ?PlayerNotification
+    {
+        return $this->notification;
+    }
+
+    public function setNotification(?PlayerNotification $playerNotification): self
+    {
+        $this->notification = $playerNotification;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newPlayer = null === $playerNotification ? null : $this;
+        if ($playerNotification->getPlayer() !== $newPlayer) {
+            $playerNotification->setPlayer($newPlayer);
         }
 
         return $this;

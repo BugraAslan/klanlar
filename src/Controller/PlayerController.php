@@ -36,4 +36,9 @@ class PlayerController extends BaseController
             )
         );
     }
+
+    public function profile()
+    {
+
+    }
 }

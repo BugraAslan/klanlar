@@ -38,7 +38,7 @@ class PlayerProfile
     /**
      * @var string|null
      *
-     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
@@ -49,6 +49,13 @@ class PlayerProfile
      * @ORM\JoinColumn(name="player_id", referencedColumnName="id")
      */
     private $player;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="avatar_url", type="string", length=500, nullable=true)
+     */
+    private $avatarUrl;
 
     public function getId(): ?int
     {
@@ -100,6 +107,17 @@ class PlayerProfile
     {
         $this->player = $player;
 
+        return $this;
+    }
+
+    public function getAvatarUrl(): ?string
+    {
+        return $this->avatarUrl;
+    }
+
+    public function setAvatarUrl(?string $avatarUrl): self
+    {
+        $this->avatarUrl = $avatarUrl;
         return $this;
     }
 }

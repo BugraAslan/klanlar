@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Manager\Response\RegisterResponseManager;
 use App\Model\Request\Register\RegisterRequest;
 use App\Service\RegisterService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -17,13 +18,18 @@ class RegisterController extends BaseController
     /** @var RegisterService */
     private $registerService;
 
+    /** @var RegisterResponseManager */
+    private $registerResponseManager;
+
     /**
      * RegisterController constructor.
      * @param RegisterService $registerService
+     * @param RegisterResponseManager $registerResponseManager
      */
-    public function __construct(RegisterService $registerService)
+    public function __construct(RegisterService $registerService, RegisterResponseManager $registerResponseManager)
     {
         $this->registerService = $registerService;
+        $this->registerResponseManager = $registerResponseManager;
     }
 
     /**
@@ -32,20 +38,23 @@ class RegisterController extends BaseController
      * @ParamConverter("registerRequest", converter="fos_rest.request_body")
      * @return Response
      */
-    public function register(RegisterRequest $registerRequest, ConstraintViolationList $validationErrors)
+    public function register(RegisterRequest $registerRequest, ConstraintViolationList $validationErrors): Response
     {
         if ($validationErrors->count()){
             return $this->validationErrorResponse($validationErrors);
         }
 
-        $registerResponse = $this->registerService->register($registerRequest);
-        if (!$registerResponse){
+        $player = $this->registerService->register($registerRequest);
+        if (!$player){
             return $this->customErrorResponse(
                 'Üye kaydı oluşturulamadı',
                 Response::HTTP_NOT_ACCEPTABLE
             );
         }
 
-        return $this->successResponse($registerResponse, Response::HTTP_CREATED);
+        return $this->successResponse(
+            $this->registerResponseManager->buildRegisterResponse($player),
+            Response::HTTP_CREATED
+        );
     }
 }

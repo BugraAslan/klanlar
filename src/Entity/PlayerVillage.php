@@ -102,6 +102,13 @@ class PlayerVillage
     private $loyalty = 100;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=55, nullable=false)
+     */
+    private $name;
+
+    /**
      * PlayerVillage constructor.
      */
     public function __construct()
@@ -370,6 +377,24 @@ class PlayerVillage
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return PlayerVillage
+     */
+    public function setName(string $name): PlayerVillage
+    {
+        $this->name = $name;
         return $this;
     }
 }

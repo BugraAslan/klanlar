@@ -5,26 +5,23 @@ namespace App\Service;
 use App\Entity\Player;
 use App\Entity\PlayerActivation;
 use App\Entity\PlayerNotification;
-use App\Entity\PlayerProfile;
 use App\Model\Request\Register\RegisterRequest;
-use App\Model\Response\Register\RegisterResponse;
 use App\Util\TextUtil;
 use DateTime;
+use Doctrine\DBAL\ConnectionException;
 
 class RegisterService extends BaseService
 {
     /**
      * @param RegisterRequest $registerRequest
-     * @return RegisterResponse|null
+     * @return Player|null
      */
-    public function register(RegisterRequest $registerRequest)
+    public function register(RegisterRequest $registerRequest): ?Player
     {
-        $registerResponse = null;
+        $player = null;
         $this->entityManager->getConnection()->beginTransaction();
 
-        // TODO change !!!!
-        // TODO send mail for activation code
-        // TODO response !!!
+        // TODO send mail for activation code !!!
 
         try {
             $player = (new Player())
@@ -32,7 +29,6 @@ class RegisterService extends BaseService
                 ->setPassword(md5($registerRequest->getPassword()))
                 ->setUsername($registerRequest->getUsername())
                 ->setCreatedDate(new DateTime());
-            $this->entityManager->persist($player);
 
             $playerActivation = (new PlayerActivation())
                 ->setPlayer($player)
@@ -40,29 +36,30 @@ class RegisterService extends BaseService
                 ->setIsActive(false)
                 ->setRequestDate(new DateTime())
                 ->setActivationDate(null);
-            $this->entityManager->persist($playerActivation);
-
-            $playerProfile = (new PlayerProfile())->setPlayer($player);
-            $this->entityManager->persist($playerProfile);
 
             $playerNotification = (new PlayerNotification())
                 ->setPlayer($player)
                 ->setBuildNotification(true)
                 ->setMessageNotification(true);
-            $this->entityManager->persist($playerNotification);
 
+            $player
+                ->setActivation($playerActivation)
+                ->setNotification($playerNotification);
+
+            $this->entityManager->persist($playerActivation);
+            $this->entityManager->persist($playerNotification);
+            $this->entityManager->persist($player);
             $this->entityManager->flush();
             $this->entityManager->getConnection()->commit();
-
-            $registerResponse = (new RegisterResponse())
-                ->setActivationCode($playerActivation->getActivationCode())
-                ->setUsername($player->getUsername())
-                ->setId($player->getId());
-
-        } catch (\Exception $exception){
-            $this->entityManager->getConnection()->rollBack();
+        } catch (\Exception $exception) {
+            try {
+                $this->entityManager->getConnection()->rollBack();
+            } catch (ConnectionException $e) {
+                return null;
+            }
+            return null;
         }
 
-        return $registerResponse;
+        return $player;
     }
 }

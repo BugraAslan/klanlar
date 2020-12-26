@@ -27,6 +27,7 @@ class WorldRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('world')
             ->where('world.id NOT IN (:excludeWorldIds)')
+            ->andWhere('world.status = true')
             ->setParameter('excludeWorldIds', $excludeWorldIds)
             ->getQuery()
             ->getResult();
