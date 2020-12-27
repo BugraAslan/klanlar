@@ -45,7 +45,7 @@ class PlayerProfile
     /**
      * @var Player
      *
-     * @ORM\OneToOne(targetEntity="Player", inversedBy="profile")
+     * @ORM\ManyToOne(targetEntity="Player", inversedBy="profile")
      * @ORM\JoinColumn(name="player_id", referencedColumnName="id")
      */
     private $player;
@@ -98,12 +98,12 @@ class PlayerProfile
         return $this;
     }
 
-    public function getPlayer(): ?Player
+    public function getPlayer(): Player
     {
         return $this->player;
     }
 
-    public function setPlayer(?Player $player): self
+    public function setPlayer(Player $player): self
     {
         $this->player = $player;
 

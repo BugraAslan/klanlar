@@ -53,7 +53,7 @@ class PlayerActivation
     /**
      * @var Player
      *
-     * @ORM\OneToOne(targetEntity="Player", inversedBy="activation")
+     * @ORM\OneToOne(targetEntity="Player")
      * @ORM\JoinColumn(name="player_id", referencedColumnName="id")
      */
     private $player;
@@ -143,12 +143,12 @@ class PlayerActivation
         return $this->isActive;
     }
 
-    public function getPlayer(): ?Player
+    public function getPlayer(): Player
     {
         return $this->player;
     }
 
-    public function setPlayer(?Player $player): self
+    public function setPlayer(Player $player): self
     {
         $this->player = $player;
 

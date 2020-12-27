@@ -14,9 +14,9 @@ class RegisterService extends BaseService
 {
     /**
      * @param RegisterRequest $registerRequest
-     * @return Player|null
+     * @return PlayerActivation|null
      */
-    public function register(RegisterRequest $registerRequest): ?Player
+    public function register(RegisterRequest $registerRequest): ?PlayerActivation
     {
         $player = null;
         $this->entityManager->getConnection()->beginTransaction();
@@ -26,7 +26,7 @@ class RegisterService extends BaseService
         try {
             $player = (new Player())
                 ->setEmail($registerRequest->getEmail())
-                ->setPassword(md5($registerRequest->getPassword()))
+                ->setPassword($registerRequest->getPassword())
                 ->setUsername($registerRequest->getUsername())
                 ->setCreatedDate(new DateTime());
 
@@ -42,10 +42,6 @@ class RegisterService extends BaseService
                 ->setBuildNotification(true)
                 ->setMessageNotification(true);
 
-            $player
-                ->setActivation($playerActivation)
-                ->setNotification($playerNotification);
-
             $this->entityManager->persist($playerActivation);
             $this->entityManager->persist($playerNotification);
             $this->entityManager->persist($player);
@@ -60,6 +56,6 @@ class RegisterService extends BaseService
             return null;
         }
 
-        return $player;
+        return $playerActivation;
     }
 }

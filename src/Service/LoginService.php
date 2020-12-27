@@ -26,7 +26,7 @@ class LoginService extends BaseService
      * @param LoginRequest $loginRequest
      * @return PlayerToken|null
      */
-    public function login(LoginRequest $loginRequest)
+    public function login(LoginRequest $loginRequest): ?PlayerToken
     {
         $player = $this->entityManager->getRepository(Player::class)->findOneBy([
             'username' => $loginRequest->getUsername(),
@@ -45,7 +45,6 @@ class LoginService extends BaseService
             $expireDate = (new \DateTime())->modify($this->container->getParameter('default_expire_time'));
 
             if ($playerToken instanceof PlayerToken){
-                $player->setApiToken($accessToken);
                 $playerToken
                     ->setAccessToken($accessToken)
                     ->setRefreshToken($refreshToken)
@@ -57,6 +56,7 @@ class LoginService extends BaseService
                     ->setPlayer($player)
                     ->setExpireDate($expireDate);
             }
+
             try {
                 $this->entityManager->persist($playerToken);
                 $this->entityManager->flush($playerToken);

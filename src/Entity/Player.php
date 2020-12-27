@@ -76,23 +76,7 @@ class Player implements UserInterface
     private $commandSourcePlayers;
 
     /**
-     * @var PlayerActivation|null
-     *
-     * @ORM\OneToOne(targetEntity="PlayerActivation", mappedBy="player")
-     */
-    private $activation;
-
-    /**
-     * @var PlayerNotification|null
-     *
-     * @ORM\OneToOne(targetEntity="PlayerNotification", mappedBy="player")
-     */
-    private $notification;
-
-    /**
-     * @var PlayerProfile|null
-     *
-     * @ORM\OneToOne(targetEntity="PlayerProfile", mappedBy="player")
+     * @ORM\OneToMany(targetEntity="PlayerProfile", mappedBy="player")
      */
     private $profile;
 
@@ -113,6 +97,7 @@ class Player implements UserInterface
         $this->commandTargetPlayers = new ArrayCollection();
         $this->commandSourcePlayers = new ArrayCollection();
         $this->worlds = new ArrayCollection();
+        $this->profile = new ArrayCollection();
     }
 
     /**
@@ -155,7 +140,7 @@ class Player implements UserInterface
      */
     public function setPassword(string $password): Player
     {
-        $this->password = $password;
+        $this->password = md5($password);
         return $this;
     }
 
@@ -303,55 +288,31 @@ class Player implements UserInterface
         return $this;
     }
 
-    public function getActivation(): ?PlayerActivation
-    {
-        return $this->activation;
-    }
-
-    public function setActivation(?PlayerActivation $playerActivation): self
-    {
-        $this->activation = $playerActivation;
-
-        // set (or unset) the owning side of the relation if necessary
-        $newPlayer = null === $playerActivation ? null : $this;
-        if ($playerActivation->getPlayer() !== $newPlayer) {
-            $playerActivation->setPlayer($newPlayer);
-        }
-
-        return $this;
-    }
-
-    public function getNotification(): ?PlayerNotification
-    {
-        return $this->notification;
-    }
-
-    public function setNotification(?PlayerNotification $playerNotification): self
-    {
-        $this->notification = $playerNotification;
-
-        // set (or unset) the owning side of the relation if necessary
-        $newPlayer = null === $playerNotification ? null : $this;
-        if ($playerNotification->getPlayer() !== $newPlayer) {
-            $playerNotification->setPlayer($newPlayer);
-        }
-
-        return $this;
-    }
-
-    public function getProfile(): ?PlayerProfile
+    /**
+     * @return Collection|PlayerProfile[]
+     */
+    public function getProfile(): Collection
     {
         return $this->profile;
     }
 
-    public function setProfile(?PlayerProfile $playerProfile): self
+    public function addProfile(PlayerProfile $playerProfile): self
     {
-        $this->profile = $playerProfile;
+        if (!$this->profile->contains($playerProfile)) {
+            $this->profile[] = $playerProfile;
+            $playerProfile->setPlayer($this);
+        }
 
-        // set (or unset) the owning side of the relation if necessary
-        $newPlayer = null === $playerProfile ? null : $this;
-        if ($playerProfile->getPlayer() !== $newPlayer) {
-            $playerProfile->setPlayer($newPlayer);
+        return $this;
+    }
+
+    public function removeProfile(PlayerProfile $playerProfile): self
+    {
+        if ($this->profile->removeElement($playerProfile)) {
+            // set the owning side to null (unless already changed)
+            if ($playerProfile->getPlayer() === $this) {
+                $playerProfile->setPlayer(null);
+            }
         }
 
         return $this;
