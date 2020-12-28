@@ -25,7 +25,7 @@ class PlayerVillageRepository extends ServiceEntityRepository
      * @param int $villageId
      * @return PlayerVillage|null
      */
-    public function findVillageInfo(int $playerId, int $villageId)
+    public function findVillageInfo(int $playerId, int $villageId): ?PlayerVillage
     {
         try {
             return $this->createQueryBuilder('playerVillage')

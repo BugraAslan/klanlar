@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use App\Entity\Player;
+use App\Entity\PlayerVillage;
+use App\Entity\PlayerWorld;
 use App\Entity\World;
 use App\Repository\PlayerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -36,7 +38,7 @@ class PlayerService extends BaseService
         return $this->playerRepository->findPlayerWorldByPlayerId($playerId);
     }
 
-    public function getWorldLogin(int $playerId): ArrayCollection
+    public function getPlayerWorld(int $playerId): ArrayCollection
     {
         $player = $this->getPlayerWorldByPlayerId($playerId);
         $excludeWorldIds = [];
@@ -52,6 +54,22 @@ class PlayerService extends BaseService
         );
 
         return $worldLoginCollection;
+    }
+
+    public function hasPlayingInWorld(int $playerId, int $worldId): bool
+    {
+        return (bool)$this->entityManager->getRepository(PlayerWorld::class)->count([
+            'player' => $playerId,
+            'world' => $worldId
+        ]);
+    }
+
+    public function getPlayerVillageCountByWorld(int $playerId, int $worldId): int
+    {
+        return $this->entityManager->getRepository(PlayerVillage::class)->count([
+            'player' => $playerId,
+            'world' => $worldId
+        ]);
     }
 
     public function getPlayerProfile()

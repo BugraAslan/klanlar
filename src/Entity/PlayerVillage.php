@@ -60,6 +60,14 @@ class PlayerVillage
     private $player;
 
     /**
+     * @var World
+     *
+     * @ORM\OneToOne(targetEntity="World")
+     * @ORM\JoinColumn(name="world_id", referencedColumnName="id")
+     */
+    private $world;
+
+    /**
      * @ORM\OneToMany(targetEntity="VillageBuilding", mappedBy="village")
      */
     private $villageBuildings;
@@ -174,15 +182,26 @@ class PlayerVillage
         return $this;
     }
 
-    public function getPlayer(): ?Player
+    public function getPlayer(): Player
     {
         return $this->player;
     }
 
-    public function setPlayer(?Player $player): self
+    public function setPlayer(Player $player): self
     {
         $this->player = $player;
 
+        return $this;
+    }
+
+    public function getWorld(): World
+    {
+        return $this->world;
+    }
+
+    public function setWorld(World $world): self
+    {
+        $this->world = $world;
         return $this;
     }
 

@@ -4,16 +4,16 @@ namespace App\Model\Response\Login;
 
 use App\Model\Response\WorldResponse;
 
-class WorldLoginResponse
+class PlayerWorldResponse
 {
     /** @var string */
     protected $username;
 
     /** @var WorldResponse[] */
-    protected $playerWorlds = [];
+    protected $playerWorlds;
 
     /** @var WorldResponse[] */
-    protected $availableWorlds = [];
+    protected $availableWorlds;
 
     /**
      * @return string
@@ -25,9 +25,9 @@ class WorldLoginResponse
 
     /**
      * @param string $username
-     * @return WorldLoginResponse
+     * @return PlayerWorldResponse
      */
-    public function setUsername(string $username): WorldLoginResponse
+    public function setUsername(string $username): PlayerWorldResponse
     {
         $this->username = $username;
         return $this;
@@ -43,9 +43,9 @@ class WorldLoginResponse
 
     /**
      * @param WorldResponse[] $playerWorlds
-     * @return WorldLoginResponse
+     * @return PlayerWorldResponse
      */
-    public function setPlayerWorlds(array $playerWorlds): WorldLoginResponse
+    public function setPlayerWorlds(array $playerWorlds): PlayerWorldResponse
     {
         $this->playerWorlds = $playerWorlds;
         return $this;
@@ -61,9 +61,9 @@ class WorldLoginResponse
 
     /**
      * @param WorldResponse[] $availableWorlds
-     * @return WorldLoginResponse
+     * @return PlayerWorldResponse
      */
-    public function setAvailableWorlds(array $availableWorlds): WorldLoginResponse
+    public function setAvailableWorlds(array $availableWorlds): PlayerWorldResponse
     {
         $this->availableWorlds = $availableWorlds;
         return $this;

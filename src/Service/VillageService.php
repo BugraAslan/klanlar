@@ -24,7 +24,7 @@ class VillageService extends BaseService
      * @param int $villageId
      * @return PlayerVillage|null
      */
-    public function getVillageInfoById(int $playerId, int $villageId)
+    public function getVillageInfoById(int $playerId, int $villageId): ?PlayerVillage
     {
         return $this->playerVillageRepository->findVillageInfo($playerId, $villageId);
     }

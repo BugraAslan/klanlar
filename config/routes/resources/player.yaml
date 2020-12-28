@@ -2,7 +2,12 @@ logout:
   methods: POST
   path: /logout
 
-world_login:
+player_world:
   methods: GET
   path: /world
-  controller: App\Controller\PlayerController::worldLogin
+  controller: App\Controller\PlayerController::playerWorld
+
+play:
+  methods: GET
+  path: /play
+  controller: App\Controller\PlayerController::play

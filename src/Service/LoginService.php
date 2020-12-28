@@ -2,10 +2,17 @@
 
 namespace App\Service;
 
+use App\Entity\Building;
 use App\Entity\Player;
 use App\Entity\PlayerToken;
+use App\Entity\PlayerVillage;
+use App\Entity\PlayerWorld;
+use App\Entity\VillageBuilding;
+use App\Entity\VillageResource;
+use App\Entity\World;
 use App\Model\Request\Login\LoginRequest;
 use App\Security\JwtTokenGenerator;
+use App\Util\VillageUtil;
 use Doctrine\ORM\ORMException;
 
 class LoginService extends BaseService
@@ -41,7 +48,6 @@ class LoginService extends BaseService
 
             $accessToken = $this->jwtTokenGenerator->generateToken();
             $refreshToken = $this->jwtTokenGenerator->generateRefreshToken($player->getId());
-            $player->setApiToken($accessToken);
             $expireDate = (new \DateTime())->modify($this->container->getParameter('default_expire_time'));
 
             if ($playerToken instanceof PlayerToken){
@@ -66,5 +72,55 @@ class LoginService extends BaseService
         }
 
         return $playerToken;
+    }
+
+    public function firstLoginInWorld(Player $player, int $worldId): ?PlayerVillage
+    {
+        try {
+            $this->entityManager->getConnection()->beginTransaction();
+
+            $playerVillage = (new PlayerVillage())
+                ->setPlayer($player)
+                ->setName(ucfirst($player->getUsername()) . ' Köyü')
+                ->setContinent(random_int(1, 100)) // TODO change !!!
+                ->setCoordinateX(random_int(1, 100)) // TODO change !!!
+                ->setCoordinateY(random_int(1, 100)) // TODO change !!!
+                ->setLoyalty(100)
+                ->setScore(VillageUtil::DEFAULT_VILLAGE_SCORE);
+            $this->entityManager->persist($playerVillage);
+
+            $playerWorld = (new PlayerWorld())
+                ->setPlayer($player)
+                ->setWorld($this->entityManager->getRepository(World::class)->find($worldId));
+            $this->entityManager->persist($playerWorld);
+
+            $villageResource = (new VillageResource())
+                ->setVillage($playerVillage)
+                ->setWood(VillageUtil::DEFAULT_RESOURCE)
+                ->setIron(VillageUtil::DEFAULT_RESOURCE)
+                ->setClay(VillageUtil::DEFAULT_RESOURCE)
+                ->setPopulation(VillageUtil::DEFAULT_POPULATION)
+                ->setWarehouse(VillageUtil::DEFAULT_WAREHOUSE);
+            $this->entityManager->persist($villageResource);
+
+            $defaultBuildings = $this->entityManager->getRepository(Building::class)->findBy([
+                'minLevel' => 1
+            ]);
+            foreach ($defaultBuildings as $building) {
+                $villageBuilding = (new VillageBuilding())
+                    ->setVillage($playerVillage)
+                    ->setBuilding($building)
+                    ->setBuildingLevel($building->getMinLevel());
+                $this->entityManager->persist($villageBuilding);
+            }
+
+            $this->entityManager->flush();
+            $this->entityManager->getConnection()->commit();
+        } catch (\Exception $e) {
+            $this->entityManager->getConnection()->rollBack();
+            return null;
+        }
+
+        return $playerVillage;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Manager\Response;
 use App\Entity\Player;
 use App\Entity\PlayerWorld;
 use App\Entity\World;
+use App\Model\Response\Login\PlayerWorldResponse;
 use App\Model\Response\Login\WorldLoginResponse;
 use App\Model\Response\WorldResponse;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -35,9 +36,9 @@ class WorldResponseManager
         return $worldsResponseCollection->toArray();
     }
 
-    public function buildWorldLoginResponse(Player $player, array $availableWorlds): WorldLoginResponse
+    public function buildPlayerWorldResponse(Player $player, array $availableWorlds): PlayerWorldResponse
     {
-        return (new WorldLoginResponse())
+        return (new PlayerWorldResponse())
             ->setAvailableWorlds($this->buildWorldResponseCollection($availableWorlds))
             ->setPlayerWorlds($this->buildWorldResponseCollection($player->getWorlds()->toArray()))
             ->setUsername($player->getUsername());

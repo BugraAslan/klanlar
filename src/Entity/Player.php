@@ -88,6 +88,9 @@ class Player implements UserInterface
     /** @var string|null */
     public $apiToken;
 
+    /** @var int|null */
+    public $worldId;
+
     /**
      * Player constructor.
      */
@@ -378,6 +381,24 @@ class Player implements UserInterface
     public function setApiToken(?string $apiToken): Player
     {
         $this->apiToken = $apiToken;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getWorldId(): ?int
+    {
+        return $this->worldId;
+    }
+
+    /**
+     * @param int|null $worldId
+     * @return Player
+     */
+    public function setWorldId(?int $worldId): Player
+    {
+        $this->worldId = $worldId;
         return $this;
     }
 }
