@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Building;
 use App\Entity\Player;
+use App\Entity\PlayerProfile;
 use App\Entity\PlayerToken;
 use App\Entity\PlayerVillage;
 use App\Entity\PlayerWorld;
@@ -103,9 +104,15 @@ class LoginService extends BaseService
                 ->setWarehouse(VillageUtil::DEFAULT_WAREHOUSE);
             $this->entityManager->persist($villageResource);
 
+            $playerProfile = (new PlayerProfile())
+                ->setWorldId($worldId)
+                ->setPlayer($player);
+            $this->entityManager->persist($playerProfile);
+
             $defaultBuildings = $this->entityManager->getRepository(Building::class)->findBy([
                 'minLevel' => 1
             ]);
+
             foreach ($defaultBuildings as $building) {
                 $villageBuilding = (new VillageBuilding())
                     ->setVillage($playerVillage)

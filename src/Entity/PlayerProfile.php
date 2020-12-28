@@ -51,6 +51,13 @@ class PlayerProfile
     private $player;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="world_id", type="int", nullable=false, options={"unsigned"=true})
+     */
+    private $worldId;
+
+    /**
      * @var string|null
      *
      * @ORM\Column(name="avatar_url", type="string", length=500, nullable=true)
@@ -107,6 +114,24 @@ class PlayerProfile
     {
         $this->player = $player;
 
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWorldId(): int
+    {
+        return $this->worldId;
+    }
+
+    /**
+     * @param int $worldId
+     * @return PlayerProfile
+     */
+    public function setWorldId(int $worldId): PlayerProfile
+    {
+        $this->worldId = $worldId;
         return $this;
     }
 
