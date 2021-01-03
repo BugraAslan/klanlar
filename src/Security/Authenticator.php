@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\Player;
 use App\Entity\PlayerToken;
 use Doctrine\ORM\EntityManagerInterface;
 use Firebase\JWT\JWT;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
@@ -50,9 +52,11 @@ class Authenticator extends AbstractAuthenticator
 
     public function authenticate(Request $request): PassportInterface
     {
-        if ($this->security->getUser()){
-            return new SelfValidatingPassport($this->security->getUser());
-        }
+        /*if ($this->security->getUser()) {
+            return new SelfValidatingPassport(
+                $this->checkPlayerRoute($request, $this->security->getUser())
+            );
+        }*/
 
         $token = $request->headers->get('Token');
         if (!$token) {
@@ -77,7 +81,9 @@ class Authenticator extends AbstractAuthenticator
             throw new AuthenticationException('Oturum süresi doldu, lütfen tekrar giriş yapınız');
         }
 
-        return new SelfValidatingPassport($playerToken->getPlayer());
+        return new SelfValidatingPassport(
+            $this->checkPlayerRoute($request, $playerToken->getPlayer())
+        );
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
@@ -94,8 +100,22 @@ class Authenticator extends AbstractAuthenticator
         ], Response::HTTP_UNAUTHORIZED);
     }
 
-    public function supportsRememberMe()
+    public function supportsRememberMe(): bool
     {
         return true;
+    }
+
+    public function checkPlayerRoute(Request $request, UserInterface $player): UserInterface
+    {
+        if ($request->attributes->get('_route') == 'play') {
+            $body = json_decode($request->getContent(), 'assoc');
+            if (isset($body['world_id'])) {
+                $player->setWorldId($body['world_id']);
+            } else {
+                throw new AuthenticationException('Dünya bilgisi bulunamadı!');
+            }
+        }
+
+        return $player;
     }
 }

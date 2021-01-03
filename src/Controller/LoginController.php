@@ -38,7 +38,7 @@ class LoginController extends BaseController
      * @ParamConverter("loginRequest", converter="fos_rest.request_body")
      * @return Response
      */
-    public function login(LoginRequest $loginRequest, ConstraintViolationList $validationErrors)
+    public function login(LoginRequest $loginRequest, ConstraintViolationList $validationErrors): Response
     {
         if ($validationErrors->count()){
             return $this->validationErrorResponse($validationErrors);

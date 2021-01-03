@@ -7,6 +7,9 @@ class VillageResponse
     /** @var int */
     private $villageId;
 
+    /** @var string */
+    private $villageName;
+
     /** @var int */
     private $villageScore;
 
@@ -34,6 +37,24 @@ class VillageResponse
     public function setVillageId(int $villageId): VillageResponse
     {
         $this->villageId = $villageId;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVillageName(): string
+    {
+        return $this->villageName;
+    }
+
+    /**
+     * @param string $villageName
+     * @return VillageResponse
+     */
+    public function setVillageName(string $villageName): VillageResponse
+    {
+        $this->villageName = $villageName;
         return $this;
     }
 

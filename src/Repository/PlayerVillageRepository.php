@@ -34,9 +34,9 @@ class PlayerVillageRepository extends ServiceEntityRepository
                 ->addSelect('villageUnit')
                 ->addSelect('unit')
                 ->addSelect('resource')
-                ->leftJoin('playerVillage.villageBuildings', 'villageBuilding')
-                ->leftJoin('villageBuilding.building', 'building')
-                ->leftJoin('playerVillage.resource', 'resource')
+                ->join('playerVillage.villageBuildings', 'villageBuilding')
+                ->join('villageBuilding.building', 'building')
+                ->join('playerVillage.resource', 'resource')
                 ->leftJoin('playerVillage.villageUnits', 'villageUnit')
                 ->leftJoin('villageUnit.unit', 'unit')
                 ->where('playerVillage.player = :playerId')
@@ -50,5 +50,20 @@ class PlayerVillageRepository extends ServiceEntityRepository
         } catch (NonUniqueResultException $e) {
             return null;
         }
+    }
+
+    public function findPlayerVillageForDefaultOverview(int $playerId, int $worldId)
+    {
+        return $this->createQueryBuilder('playerVillage')
+            ->addSelect('villageResource')
+            ->join('playerVillage.resource', 'villageResource')
+            ->where('playerVillage.player = :playerId')
+            ->andWhere('playerVillage.worldId = :worldId')
+            ->setParameters([
+                'playerId' => $playerId,
+                'worldId' => $worldId
+            ])
+            ->getQuery()
+            ->getResult();
     }
 }

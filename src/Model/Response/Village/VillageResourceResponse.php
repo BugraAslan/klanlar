@@ -4,8 +4,6 @@ namespace App\Model\Response\Village;
 
 class VillageResourceResponse
 {
-    // TODO private $villageId;
-
     /** @var int */
     private $wood;
 

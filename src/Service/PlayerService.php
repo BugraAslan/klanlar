@@ -56,19 +56,11 @@ class PlayerService extends BaseService
         return $worldLoginCollection;
     }
 
-    public function hasPlayingInWorld(int $playerId, int $worldId): bool
+    public function hasPlayingInWorld(Player $player): bool
     {
         return (bool)$this->entityManager->getRepository(PlayerWorld::class)->count([
-            'player' => $playerId,
-            'world' => $worldId
-        ]);
-    }
-
-    public function getPlayerVillageCountByWorld(int $playerId, int $worldId): int
-    {
-        return $this->entityManager->getRepository(PlayerVillage::class)->count([
-            'player' => $playerId,
-            'world' => $worldId
+            'player' => $player->getId(),
+            'world' => $player->getWorldId()
         ]);
     }
 

@@ -14,6 +14,7 @@ use App\Entity\World;
 use App\Model\Request\Login\LoginRequest;
 use App\Security\JwtTokenGenerator;
 use App\Util\VillageUtil;
+use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\ORMException;
 
 class LoginService extends BaseService
@@ -75,25 +76,24 @@ class LoginService extends BaseService
         return $playerToken;
     }
 
-    public function firstLoginInWorld(Player $player, int $worldId): ?PlayerVillage
+    public function firstLoginInWorld(Player $player): ?PlayerVillage
     {
         try {
             $this->entityManager->getConnection()->beginTransaction();
 
+            $world = $this->entityManager->getRepository(World::class)->find(
+                $player->getWorldId()
+            );
+
             $playerVillage = (new PlayerVillage())
                 ->setPlayer($player)
+                ->setWorldId($world->getId())
                 ->setName(ucfirst($player->getUsername()) . ' Köyü')
                 ->setContinent(random_int(1, 100)) // TODO change !!!
-                ->setCoordinateX(random_int(1, 100)) // TODO change !!!
-                ->setCoordinateY(random_int(1, 100)) // TODO change !!!
+                ->setCoordinateX(random_int(1, 999)) // TODO change !!!
+                ->setCoordinateY(random_int(1, 999)) // TODO change !!!
                 ->setLoyalty(100)
                 ->setScore(VillageUtil::DEFAULT_VILLAGE_SCORE);
-            $this->entityManager->persist($playerVillage);
-
-            $playerWorld = (new PlayerWorld())
-                ->setPlayer($player)
-                ->setWorld($this->entityManager->getRepository(World::class)->find($worldId));
-            $this->entityManager->persist($playerWorld);
 
             $villageResource = (new VillageResource())
                 ->setVillage($playerVillage)
@@ -103,9 +103,15 @@ class LoginService extends BaseService
                 ->setPopulation(VillageUtil::DEFAULT_POPULATION)
                 ->setWarehouse(VillageUtil::DEFAULT_WAREHOUSE);
             $this->entityManager->persist($villageResource);
+            $playerVillage->setResource($villageResource);
+
+            $playerWorld = (new PlayerWorld())
+                ->setPlayer($player)
+                ->setWorld($world);
+            $this->entityManager->persist($playerWorld);
 
             $playerProfile = (new PlayerProfile())
-                ->setWorldId($worldId)
+                ->setWorldId($world->getId())
                 ->setPlayer($player);
             $this->entityManager->persist($playerProfile);
 
@@ -119,12 +125,26 @@ class LoginService extends BaseService
                     ->setBuilding($building)
                     ->setBuildingLevel($building->getMinLevel());
                 $this->entityManager->persist($villageBuilding);
+                $playerVillage->addVillageBuilding($villageBuilding);
             }
+
+            $player
+                ->addProfile($playerProfile)
+                ->addWorld($playerWorld)
+                ->addVillage($playerVillage);
+
+            $this->entityManager->persist($playerVillage);
+            $this->entityManager->persist($player);
 
             $this->entityManager->flush();
             $this->entityManager->getConnection()->commit();
         } catch (\Exception $e) {
-            $this->entityManager->getConnection()->rollBack();
+            var_dump($e->getMessage());
+            try {
+                $this->entityManager->getConnection()->rollBack();
+            } catch (ConnectionException $e) {
+                // TODO
+            }
             return null;
         }
 

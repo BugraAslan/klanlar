@@ -66,6 +66,7 @@ class VillageResponseManager
             ->setVillageCoordinateX($playerVillage->getCoordinateX())
             ->setVillageCoordinateY($playerVillage->getCoordinateY())
             ->setVillageId($playerVillage->getId())
+            ->setVillageName($playerVillage->getName())
             ->setVillageScore($playerVillage->getScore());
     }
 

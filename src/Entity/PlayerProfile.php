@@ -53,7 +53,7 @@ class PlayerProfile
     /**
      * @var int
      *
-     * @ORM\Column(name="world_id", type="int", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="world_id", type="integer", nullable=false, options={"unsigned"=true})
      */
     private $worldId;
 
