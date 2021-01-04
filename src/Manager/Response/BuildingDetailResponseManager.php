@@ -15,10 +15,11 @@ class BuildingDetailResponseManager
 {
     public function buildBuildingDetailResponse(VillageBuilding $villageBuilding, BaseBuildingDetailResponseInterface $response): BaseBuildingDetailResponseInterface
     {
+        $building = $villageBuilding->getBuilding();
         return $response
-            ->setId($villageBuilding->getBuilding()->getId())
-            ->setName($villageBuilding->getBuilding()->getName())
-            ->setDescription($villageBuilding->getBuilding()->getBuildingDescription()->getDescription())
+            ->setId($building->getId())
+            ->setName($building->getName())
+            ->setDescription($building->getDescription())
             ->setIconUrl($villageBuilding->getBuilding()->getIcons()->getBaseIcon())
             ->setLevel($villageBuilding->getBuildingLevel());
     }

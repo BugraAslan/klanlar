@@ -13,6 +13,12 @@ class VillageResourceResponse
     /** @var int */
     private $iron;
 
+    /** @var int */
+    private $warehouse;
+
+    /** @var int */
+    private $population;
+
     /**
      * @return int
      */
@@ -64,6 +70,42 @@ class VillageResourceResponse
     public function setIron(int $iron): VillageResourceResponse
     {
         $this->iron = $iron;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWarehouse(): int
+    {
+        return $this->warehouse;
+    }
+
+    /**
+     * @param int $warehouse
+     * @return VillageResourceResponse
+     */
+    public function setWarehouse(int $warehouse): VillageResourceResponse
+    {
+        $this->warehouse = $warehouse;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPopulation(): int
+    {
+        return $this->population;
+    }
+
+    /**
+     * @param int $population
+     * @return VillageResourceResponse
+     */
+    public function setPopulation(int $population): VillageResourceResponse
+    {
+        $this->population = $population;
         return $this;
     }
 }

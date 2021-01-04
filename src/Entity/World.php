@@ -15,7 +15,7 @@ class World
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,14 +24,14 @@ class World
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="status", type="boolean", nullable=false, options={"default"=true})
+     * @ORM\Column(name="status", type="boolean", options={"default"=true})
      */
     private $status = true;
 

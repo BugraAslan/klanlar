@@ -17,7 +17,7 @@ class Unit
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -26,7 +26,7 @@ class Unit
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=55, nullable=false)
+     * @ORM\Column(name="name", type="string", length=55)
      */
     private $name;
 

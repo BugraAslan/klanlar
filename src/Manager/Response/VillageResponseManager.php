@@ -5,7 +5,6 @@ namespace App\Manager\Response;
 use App\Entity\PlayerVillage;
 use App\Entity\Unit;
 use App\Entity\VillageBuilding;
-use App\Entity\VillageResource;
 use App\Entity\VillageUnit;
 use App\Model\Response\Village\VillageInfo\BuildingByVillageInfoResponse;
 use App\Model\Response\Village\VillageInfo\UnitByVillageInfoResponse;
@@ -39,20 +38,22 @@ class VillageResponseManager
         return (new VillageInfoResponse())
             ->setVillage($this->buildVillageResponse($village))
             ->setBuildings($villageBuildingCollection->toArray())
-            ->setResources($this->buildVillageResourceResponse($village->getResource()))
+            ->setResources($this->buildVillageResourceResponse($village))
             ->setUnits($villageUnitCollection->toArray());
     }
 
     /**
-     * @param VillageResource $resource
+     * @param PlayerVillage $playerVillage
      * @return VillageResourceResponse
      */
-    public function buildVillageResourceResponse(VillageResource $resource): VillageResourceResponse
+    public function buildVillageResourceResponse(PlayerVillage $playerVillage): VillageResourceResponse
     {
         return (new VillageResourceResponse())
-            ->setClay($resource->getClay())
-            ->setIron($resource->getIron())
-            ->setWood($resource->getWood());
+            ->setClay($playerVillage->getClay())
+            ->setIron($playerVillage->getIron())
+            ->setWood($playerVillage->getWood())
+            ->setWarehouse($playerVillage->getWarehouse())
+            ->setPopulation($playerVillage->getPopulation());
     }
 
     /**
@@ -62,11 +63,11 @@ class VillageResponseManager
     public function buildVillageResponse(PlayerVillage $playerVillage): VillageResponse
     {
         return (new VillageResponse())
+            ->setVillageId($playerVillage->getId())
+            ->setVillageName($playerVillage->getName())
             ->setVillageContinent($playerVillage->getContinent())
             ->setVillageCoordinateX($playerVillage->getCoordinateX())
             ->setVillageCoordinateY($playerVillage->getCoordinateY())
-            ->setVillageId($playerVillage->getId())
-            ->setVillageName($playerVillage->getName())
             ->setVillageScore($playerVillage->getScore());
     }
 
@@ -77,9 +78,9 @@ class VillageResponseManager
     public function buildVillageBuildingResponse(VillageBuilding $villageBuilding): BuildingByVillageInfoResponse
     {
         return (new BuildingByVillageInfoResponse())
-            ->setBuildingLevel($villageBuilding->getBuildingLevel())
             ->setBuildingId($villageBuilding->getBuilding()->getId())
             ->setBuildingName($villageBuilding->getBuilding()->getName())
+            ->setBuildingLevel($villageBuilding->getBuildingLevel())
             ->setBuildingIcon($villageBuilding->getBuilding()->getIcons()->getBaseIcon());
     }
 

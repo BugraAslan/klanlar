@@ -99,7 +99,11 @@ class PlayerController extends BaseController
             } else {
                 $playerVillage = array_shift($playerVillage);
                 $response = $this->villageResponseManager->buildVillageInfoResponse(
-                    $this->villageService->getVillageInfoById($player->getId(), $playerVillage->getId())
+                    $this->villageService->getVillageInfoById(
+                        $player->getId(),
+                        $player->getWorldId(),
+                        $playerVillage->getId()
+                    )
                 );
             }
         } else {

@@ -22,10 +22,11 @@ class PlayerVillageRepository extends ServiceEntityRepository
 
     /**
      * @param int $playerId
+     * @param int $worldId
      * @param int $villageId
      * @return PlayerVillage|null
      */
-    public function findVillageInfo(int $playerId, int $villageId): ?PlayerVillage
+    public function findVillageInfoById(int $playerId, int $worldId, int $villageId): ?PlayerVillage
     {
         try {
             return $this->createQueryBuilder('playerVillage')
@@ -33,37 +34,22 @@ class PlayerVillageRepository extends ServiceEntityRepository
                 ->addSelect('building')
                 ->addSelect('villageUnit')
                 ->addSelect('unit')
-                ->addSelect('resource')
                 ->join('playerVillage.villageBuildings', 'villageBuilding')
                 ->join('villageBuilding.building', 'building')
-                ->join('playerVillage.resource', 'resource')
                 ->leftJoin('playerVillage.villageUnits', 'villageUnit')
                 ->leftJoin('villageUnit.unit', 'unit')
                 ->where('playerVillage.player = :playerId')
                 ->andWhere('playerVillage.id = :villageId')
+                ->andWhere('playerVillage.worldId = :worldId')
                 ->setParameters([
                     'villageId' => $villageId,
-                    'playerId' => $playerId
+                    'playerId' => $playerId,
+                    'worldId' => $worldId
                 ])
                 ->getQuery()
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
             return null;
         }
-    }
-
-    public function findPlayerVillageForDefaultOverview(int $playerId, int $worldId)
-    {
-        return $this->createQueryBuilder('playerVillage')
-            ->addSelect('villageResource')
-            ->join('playerVillage.resource', 'villageResource')
-            ->where('playerVillage.player = :playerId')
-            ->andWhere('playerVillage.worldId = :worldId')
-            ->setParameters([
-                'playerId' => $playerId,
-                'worldId' => $worldId
-            ])
-            ->getQuery()
-            ->getResult();
     }
 }

@@ -17,7 +17,7 @@ class Report
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -26,7 +26,7 @@ class Report
     /**
      * @var int
      *
-     * @ORM\Column(name="report_type_id", type="integer", nullable=false)
+     * @ORM\Column(name="report_type_id", type="integer")
      */
     private $reportTypeId;
 

@@ -20,7 +20,7 @@ class BuildingCommand
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -29,56 +29,56 @@ class BuildingCommand
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="start_date", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
+     * @ORM\Column(name="start_date", type="datetime", options={"default"="CURRENT_TIMESTAMP"})
      */
     private $startDate = 'CURRENT_TIMESTAMP';
 
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="end_date", type="datetime", nullable=false)
+     * @ORM\Column(name="end_date", type="datetime")
      */
     private $endDate;
 
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="remaining_time", type="time", nullable=false)
+     * @ORM\Column(name="remaining_time", type="time")
      */
     private $remainingTime;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="cost_wood", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="cost_wood", type="smallint", options={"unsigned"=true})
      */
     private $costWood;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="cost_clay", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="cost_clay", type="smallint", options={"unsigned"=true})
      */
     private $costClay;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="cost_iron", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="cost_iron", type="smallint", options={"unsigned"=true})
      */
     private $costIron;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="cost_population", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="cost_population", type="smallint", options={"unsigned"=true})
      */
     private $costPopulation;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_finished", type="boolean", nullable=false)
+     * @ORM\Column(name="is_finished", type="boolean")
      */
     private $isFinished = false;
 

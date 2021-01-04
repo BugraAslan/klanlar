@@ -54,7 +54,7 @@ abstract class AbstractBaseBuildingService extends BaseService
             new UnitManufacturerBuildingDetailResponse()
         );
 
-        $resource = $villageBuilding->getVillage()->getResource();
+        $village = $villageBuilding->getVillage();
         $unitRequirementResponseCollection = new ArrayCollection();
         $unitCommandResponseCollection = new ArrayCollection();
         foreach ($villageBuilding->getBuilding()->getUnitManufacturers() as $unitManufacturer) {
@@ -78,9 +78,9 @@ abstract class AbstractBaseBuildingService extends BaseService
                 ->setCosts($this->buildingDetailResponseManager->buildCostResponse($unit))
                 ->setBuildCount(
                     min([
-                        ceil($resource->getWood() / $unit->getCostPerWood()),
-                        ceil($resource->getClay() / $unit->getCostPerClay()),
-                        ceil($resource->getIron() / $unit->getCostPerIron())
+                        ceil($village->getWood() / $unit->getCostPerWood()),
+                        ceil($village->getClay() / $unit->getCostPerClay()),
+                        ceil($village->getIron() / $unit->getCostPerIron())
                     ])
                 )
                 ->setBuildTime($unit->getBaseBuildTime() / 60)
@@ -118,19 +118,18 @@ abstract class AbstractBaseBuildingService extends BaseService
         );
 
         $building = $villageBuilding->getBuilding();
-        $buildingOutput = $building->getBuildingOutput();
         $hasMaxLevel = $villageBuilding->getBuildingLevel() === $building->getMaxLevel();
         if ($building->getId() == BuildingUtil::WALL_ID) {
-            $currentOutput = $villageBuilding->getBuildingLevel() * $buildingOutput->getOutputFactor();
-            $nexManufactureCount = $hasMaxLevel ? 0 : $currentOutput + $buildingOutput->getOutputFactor();
+            $currentOutput = $villageBuilding->getBuildingLevel() * $building->getOutputFactor();
+            $nexManufactureCount = $hasMaxLevel ? 0 : $currentOutput + $building->getOutputFactor();
         } else {
             $currentOutput = $this->costCalculator(
-                $buildingOutput->getBaseOutput(),
-                $buildingOutput->getOutputFactor(),
+                $building->getBaseOutput(),
+                $building->getOutputFactor(),
                 in_array($building->getId(), [BuildingUtil::WAREHOUSE_ID, BuildingUtil::FARM_ID]) ?
                     ($villageBuilding->getBuildingLevel() - 1) : $villageBuilding->getBuildingLevel()
             );
-            $nexManufactureCount = $hasMaxLevel ? 0 : $currentOutput * $buildingOutput->getOutputFactor();
+            $nexManufactureCount = $hasMaxLevel ? 0 : $currentOutput * $building->getOutputFactor();
         }
 
         return $buildingDetailResponse

@@ -34,8 +34,8 @@ class BuildingStrategy
             $buildingDetailRequest->getBuildingId()
         );
 
-        if ($buildingName){
-            foreach ($this->buildingStrategies as $buildingStrategy){
+        if ($buildingName) {
+            foreach ($this->buildingStrategies as $buildingStrategy) {
                 if ($buildingStrategy->canHandle($buildingName)) {
                     return $buildingStrategy->buildingDetail($buildingDetailRequest);
                 }

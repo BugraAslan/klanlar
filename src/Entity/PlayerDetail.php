@@ -16,7 +16,7 @@ class PlayerDetail
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -25,7 +25,7 @@ class PlayerDetail
     /**
      * @var bool
      *
-     * @ORM\Column(name="email_activation", type="boolean", nullable=false)
+     * @ORM\Column(name="email_activation", type="boolean")
      */
     private $emailActivation = '0';
 

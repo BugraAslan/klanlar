@@ -33,7 +33,7 @@ class VillageBuildingRepository extends ServiceEntityRepository
                 ->select('building.name')
                 ->join('villageBuilding.building', 'building')
                 ->where('villageBuilding.village = :villageId')
-                ->andWhere('villageBuilding.building = :buildingId')
+                ->andWhere('building.id = :buildingId')
                 ->setParameters([
                     'villageId' => $villageId,
                     'buildingId' => $buildingId
@@ -58,20 +58,16 @@ class VillageBuildingRepository extends ServiceEntityRepository
                 ->addSelect('building')
                 ->addSelect('village')
                 ->addSelect('villageUnits')
-                ->addSelect('villageResource')
                 ->addSelect('unitManufacturers')
                 ->addSelect('unit')
                 ->addSelect('unitIcons')
-                ->addSelect('buildingDescription')
                 ->addSelect('buildingIcons')
                 ->addSelect('unitCommands')
                 ->join('villageBuilding.building', 'building')
                 ->join('villageBuilding.village', 'village')
-                ->join('village.resource', 'villageResource')
                 ->join('building.icons', 'buildingIcons')
                 ->join('building.unitManufacturers', 'unitManufacturers')
                 ->join('unitManufacturers.unit', 'unit')
-                ->join('building.buildingDescription', 'buildingDescription')
                 ->leftJoin(
                     'unit.commands', 'unitCommands',
                     'with',
@@ -102,14 +98,10 @@ class VillageBuildingRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('villageBuilding')
             ->addSelect('building')
             ->addSelect('village')
-            ->addSelect('villageResource')
-            ->addSelect('buildingDescription')
             ->addSelect('buildingIcons')
             ->join('villageBuilding.village', 'village')
             ->join('villageBuilding.building', 'building')
-            ->join('village.resource', 'villageResource')
             ->join('building.icons', 'buildingIcons')
-            ->join('building.buildingDescription', 'buildingDescription')
             ->where('village.id = :villageId')
             ->setParameter('villageId', $villageId)
             ->getQuery()
@@ -125,12 +117,10 @@ class VillageBuildingRepository extends ServiceEntityRepository
     {
         try {
             return $this->createQueryBuilder('villageBuilding')
-                ->addSelect('buildingDescription')
                 ->addSelect('buildingIcons')
                 ->addSelect('building')
                 ->join('villageBuilding.building', 'building')
                 ->join('building.icons', 'buildingIcons')
-                ->join('building.buildingDescription', 'buildingDescription')
                 ->where('villageBuilding.village = :villageId')
                 ->andWhere('building.id = :buildingId')
                 ->setParameters([
@@ -154,14 +144,10 @@ class VillageBuildingRepository extends ServiceEntityRepository
     {
         try {
             return $this->createQueryBuilder('villageBuilding')
-                ->addSelect('buildingDescription')
                 ->addSelect('buildingIcons')
                 ->addSelect('building')
-                ->addSelect('buildingOutput')
                 ->join('villageBuilding.building', 'building')
                 ->join('building.icons', 'buildingIcons')
-                ->join('building.buildingDescription', 'buildingDescription')
-                ->join('building.buildingOutput', 'buildingOutput')
                 ->where('villageBuilding.village = :villageId')
                 ->andWhere('building.id = :buildingId')
                 ->setParameters([

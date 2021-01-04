@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Player;
 use App\Manager\Response\VillageResponseManager;
 use App\Model\Request\Village\VillageIdRequest;
 use App\Service\VillageService;
@@ -36,12 +37,15 @@ class VillageController extends BaseController
      */
     public function villageInfo(VillageIdRequest $villageIdRequest, ConstraintViolationList $validationErrors): Response
     {
-        if ($validationErrors->count()){
+        if ($validationErrors->count()) {
             return $this->validationErrorResponse($validationErrors);
         }
 
+        /** @var Player $player */
+        $player = $this->getUser();
         $villageInfo = $this->villageService->getVillageInfoById(
-            $this->getUser()->getId(),
+            $player->getId(),
+            $player->getWorldId(),
             $villageIdRequest->getVillageId()
         );
 

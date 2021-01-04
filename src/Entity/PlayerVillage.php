@@ -17,37 +17,44 @@ class PlayerVillage
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=55)
+     */
+    private $name;
+
+    /**
      * @var int
      *
-     * @ORM\Column(name="score", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="score", type="smallint", options={"unsigned"=true})
      */
     private $score = '0';
 
     /**
      * @var int
      *
-     * @ORM\Column(name="coordinate_x", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="coordinate_x", type="smallint", options={"unsigned"=true})
      */
     private $coordinateX;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="coordinate_y", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="coordinate_y", type="smallint", options={"unsigned"=true})
      */
     private $coordinateY;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="continent", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="continent", type="smallint", options={"unsigned"=true})
      */
     private $continent;
 
@@ -62,7 +69,7 @@ class PlayerVillage
     /**
      * @var int
      *
-     * @ORM\Column(name="world_id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="world_id", type="integer", options={"unsigned"=true})
      */
     private $worldId;
 
@@ -97,23 +104,46 @@ class PlayerVillage
     private $buildingCommands;
 
     /**
-     * @ORM\OneToOne(targetEntity="VillageResource", mappedBy="village")
+     * @var int
+     *
+     * @ORM\Column(name="wood", type="integer", options={"unsigned"=true})
      */
-    private $resource;
+    private $wood;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="loyalty", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="clay", type="integer", options={"unsigned"=true})
      */
-    private $loyalty = 100;
+    private $clay;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="name", type="string", length=55, nullable=false)
+     * @ORM\Column(name="iron", type="integer", options={"unsigned"=true})
      */
-    private $name;
+    private $iron;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="warehouse", type="integer", options={"unsigned"=true})
+     */
+    private $warehouse;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="population", type="smallint", options={"unsigned"=true})
+     */
+    private $population;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="loyalty", type="smallint", options={"unsigned"=true})
+     */
+    private $loyalty = 100;
 
     /**
      * PlayerVillage constructor.
@@ -312,24 +342,6 @@ class PlayerVillage
         return $this;
     }
 
-    public function getResource(): ?VillageResource
-    {
-        return $this->resource;
-    }
-
-    public function setResource(?VillageResource $resource): self
-    {
-        $this->resource = $resource;
-
-        // set (or unset) the owning side of the relation if necessary
-        $newVillage = null === $resource ? null : $this;
-        if ($resource->getVillage() !== $newVillage) {
-            $resource->setVillage($newVillage);
-        }
-
-        return $this;
-    }
-
     public function getLoyalty(): int
     {
         return $this->loyalty;
@@ -338,6 +350,96 @@ class PlayerVillage
     public function setLoyalty(int $loyalty): self
     {
         $this->loyalty = $loyalty;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWood(): int
+    {
+        return $this->wood;
+    }
+
+    /**
+     * @param int $wood
+     * @return PlayerVillage
+     */
+    public function setWood(int $wood): PlayerVillage
+    {
+        $this->wood = $wood;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getClay(): int
+    {
+        return $this->clay;
+    }
+
+    /**
+     * @param int $clay
+     * @return PlayerVillage
+     */
+    public function setClay(int $clay): PlayerVillage
+    {
+        $this->clay = $clay;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getIron(): int
+    {
+        return $this->iron;
+    }
+
+    /**
+     * @param int $iron
+     * @return PlayerVillage
+     */
+    public function setIron(int $iron): PlayerVillage
+    {
+        $this->iron = $iron;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWarehouse(): int
+    {
+        return $this->warehouse;
+    }
+
+    /**
+     * @param int $warehouse
+     * @return PlayerVillage
+     */
+    public function setWarehouse(int $warehouse): PlayerVillage
+    {
+        $this->warehouse = $warehouse;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPopulation(): int
+    {
+        return $this->population;
+    }
+
+    /**
+     * @param int $population
+     * @return PlayerVillage
+     */
+    public function setPopulation(int $population): PlayerVillage
+    {
+        $this->population = $population;
         return $this;
     }
 

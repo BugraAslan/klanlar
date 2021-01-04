@@ -19,7 +19,7 @@ class VillageUnit
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -36,7 +36,7 @@ class VillageUnit
     /**
      * @var int
      *
-     * @ORM\Column(name="unit_count", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="unit_count", type="smallint", options={"unsigned"=true})
      */
     private $unitCount = '0';
 

@@ -22,20 +22,13 @@ class VillageService extends BaseService
 
     /**
      * @param int $playerId
+     * @param int $worldId
      * @param int $villageId
      * @return PlayerVillage|null
      */
-    public function getVillageInfoById(int $playerId, int $villageId): ?PlayerVillage
+    public function getVillageInfoById(int $playerId, int $worldId, int $villageId): ?PlayerVillage
     {
-        return $this->playerVillageRepository->findVillageInfo($playerId, $villageId);
-    }
-
-    public function getPlayerVillageByWorldForDefaultOverview(Player $player)
-    {
-        return $this->playerVillageRepository->findPlayerVillageForDefaultOverview(
-            $player->getId(),
-            $player->getWorldId()
-        );
+        return $this->playerVillageRepository->findVillageInfoById($playerId, $worldId, $villageId);
     }
 
     public function getPlayerVillageCountByWorld(Player $player): int

@@ -15,7 +15,7 @@ class BuildingRequirements
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,14 +24,14 @@ class BuildingRequirements
     /**
      * @var int
      *
-     * @ORM\Column(name="required_building_id", type="integer", nullable=false)
+     * @ORM\Column(name="required_building_id", type="integer")
      */
     private $requiredBuildingId = '0';
 
     /**
      * @var int
      *
-     * @ORM\Column(name="required_level", type="smallint", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="required_level", type="smallint", options={"unsigned"=true})
      */
     private $requiredLevel = '0';
 

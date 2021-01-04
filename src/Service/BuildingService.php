@@ -3,18 +3,18 @@
 namespace App\Service;
 
 use App\Entity\Building;
-use App\Repository\BuildingCommandRepository;
+use App\Repository\BuildingRepository;
 
 class BuildingService extends BaseService
 {
-    /** @var BuildingCommandRepository */
+    /** @var BuildingRepository */
     private $buildingRepository;
 
     /**
      * BuildingService constructor.
-     * @param BuildingCommandRepository $buildingRepository
+     * @param BuildingRepository $buildingRepository
      */
-    public function __construct(BuildingCommandRepository $buildingRepository)
+    public function __construct(BuildingRepository $buildingRepository)
     {
         $this->buildingRepository = $buildingRepository;
     }
@@ -24,7 +24,7 @@ class BuildingService extends BaseService
      * @param int $cacheLifeTime
      * @return Building|null
      */
-    public function getBuildingById(int $buildingId, int $cacheLifeTime = 0)
+    public function getBuildingById(int $buildingId, int $cacheLifeTime = 0): ?Building
     {
         return $this->buildingRepository->findBuildingById($buildingId, $cacheLifeTime);
     }

@@ -23,7 +23,7 @@ class Command
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -62,14 +62,14 @@ class Command
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_arrival", type="boolean", nullable=false, options={"default"=false})
+     * @ORM\Column(name="is_arrival", type="boolean", options={"default"=false})
      */
     private $isArrival = false;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_return", type="boolean", nullable=false, options={"default"=false})
+     * @ORM\Column(name="is_return", type="boolean", options={"default"=false})
      */
     private $isReturn = false;
 

@@ -17,7 +17,7 @@ class Building
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -26,9 +26,16 @@ class Building
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=55, nullable=false)
+     * @ORM\Column(name="name", type="string", length=55)
      */
-    private $name = '';
+    private $name;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="description", type="string", length=65535, nullable=true)
+     */
+    private $description;
 
     /**
      * @var int|null
@@ -115,24 +122,28 @@ class Building
     private $populationCost;
 
     /**
+     * @var float|null
+     *
+     * @ORM\Column(name="output_factor", type="float", precision=10, scale=5, nullable=true)
+     */
+    private $outputFactor;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="base_output", type="smallint", nullable=true, options={"unsigned"=true})
+     */
+    private $baseOutput;
+
+    /**
      * @ORM\OneToMany(targetEntity="BuildingRequirements", mappedBy="building")
      */
     private $buildingRequirements;
 
     /**
-     * @ORM\OneToOne(targetEntity="BuildingOutput", mappedBy="building")
-     */
-    private $buildingOutput;
-
-    /**
      * @ORM\OneToMany(targetEntity="UnitManufacturer", mappedBy="building")
      */
     private $unitManufacturers;
-
-    /**
-     * @ORM\OneToOne(targetEntity="BuildingDescription", mappedBy="building")
-     */
-    private $buildingDescription;
 
     /**
      * @ORM\OneToOne(targetEntity="BuildingIcon", mappedBy="building")
@@ -174,6 +185,24 @@ class Building
     public function setName(string $name): Building
     {
         $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string|null $description
+     * @return Building
+     */
+    public function setDescription(?string $description): Building
+    {
+        $this->description = $description;
         return $this;
     }
 
@@ -394,6 +423,42 @@ class Building
     }
 
     /**
+     * @return float|null
+     */
+    public function getOutputFactor(): ?float
+    {
+        return $this->outputFactor;
+    }
+
+    /**
+     * @param float|null $outputFactor
+     * @return Building
+     */
+    public function setOutputFactor(?float $outputFactor): Building
+    {
+        $this->outputFactor = $outputFactor;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getBaseOutput(): ?int
+    {
+        return $this->baseOutput;
+    }
+
+    /**
+     * @param int|null $baseOutput
+     * @return Building
+     */
+    public function setBaseOutput(?int $baseOutput): Building
+    {
+        $this->baseOutput = $baseOutput;
+        return $this;
+    }
+
+    /**
      * @return Collection|BuildingRequirements[]
      */
     public function getBuildingRequirements(): Collection
@@ -418,24 +483,6 @@ class Building
             if ($buildingRequirement->getBuilding() === $this) {
                 $buildingRequirement->setBuilding(null);
             }
-        }
-
-        return $this;
-    }
-
-    public function getBuildingOutput(): ?BuildingOutput
-    {
-        return $this->buildingOutput;
-    }
-
-    public function setBuildingOutput(?BuildingOutput $buildingOutput): self
-    {
-        $this->buildingOutput = $buildingOutput;
-
-        // set (or unset) the owning side of the relation if necessary
-        $newBuilding = null === $buildingOutput ? null : $this;
-        if ($buildingOutput->getBuilding() !== $newBuilding) {
-            $buildingOutput->setBuilding($newBuilding);
         }
 
         return $this;
@@ -466,24 +513,6 @@ class Building
             if ($unitManufacturer->getBuilding() === $this) {
                 $unitManufacturer->setBuilding(null);
             }
-        }
-
-        return $this;
-    }
-
-    public function getBuildingDescription(): ?BuildingDescription
-    {
-        return $this->buildingDescription;
-    }
-
-    public function setBuildingDescription(?BuildingDescription $buildingDescription): self
-    {
-        $this->buildingDescription = $buildingDescription;
-
-        // set (or unset) the owning side of the relation if necessary
-        $newBuilding = null === $buildingDescription ? null : $this;
-        if ($buildingDescription->getBuilding() !== $newBuilding) {
-            $buildingDescription->setBuilding($newBuilding);
         }
 
         return $this;

@@ -41,7 +41,7 @@ class OverviewResponseManager
                 $this->villageResponseManager->buildVillageResponse($playerVillage)
             )
             ->setResource(
-                $this->villageResponseManager->buildVillageResourceResponse($playerVillage->getResource())
+                $this->villageResponseManager->buildVillageResourceResponse($playerVillage)
             );
     }
 }

@@ -44,7 +44,7 @@ class MainBuildingService extends AbstractBaseBuildingService implements Buildin
         foreach ($villageBuildingDetails as $villageBuilding) {
             $building = $villageBuilding->getBuilding();
             $currentBuildingLevel = $villageBuilding->getBuildingLevel();
-            $resource = $villageBuilding->getVillage()->getResource();
+            $village = $villageBuilding->getVillage();
 
             $woodCost = $this->costCalculator($building->getWoodCost(), $building->getWoodFactor(), $currentBuildingLevel);
             $clayCost = $this->costCalculator($building->getClayCost(), $building->getClayFactor(), $currentBuildingLevel);
@@ -58,17 +58,17 @@ class MainBuildingService extends AbstractBaseBuildingService implements Buildin
             $maxResourceCost = array_search(max($resourceCost), $resourceCost);
             $resourceGetter = 'get'.$maxResourceCost;
 
-            if ($resource->getWarehouse() < max($resourceCost)) {
+            if ($village->getWarehouse() < max($resourceCost)) {
                 $buildableMessage = 'Yetersiz depo';
                 $buildable = false;
             }
 
-            if ($buildable && $populationCost > $resource->getPopulation()) {
+            if ($buildable && $populationCost > $village->getPopulation()) {
                 $buildableMessage = 'Yetersiz işçi';
                 $buildable = false;
             }
 
-            if ($buildable && $resource->$resourceGetter() < $resourceCost[$maxResourceCost]) {
+            if ($buildable && $village->$resourceGetter() < $resourceCost[$maxResourceCost]) {
                 $buildableMessage = 'Yetersiz kaynak';
                 $buildable = false;
             }

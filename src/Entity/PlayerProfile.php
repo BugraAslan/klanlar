@@ -15,7 +15,7 @@ class PlayerProfile
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -53,7 +53,7 @@ class PlayerProfile
     /**
      * @var int
      *
-     * @ORM\Column(name="world_id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="world_id", type="integer", options={"unsigned"=true})
      */
     private $worldId;
 

@@ -24,7 +24,7 @@ class VillageBuildingService extends BaseService
      * @param int $buildingId
      * @return VillageBuilding|null
      */
-    public function getVillageBuilding(int $villageId, int $buildingId)
+    public function getVillageBuilding(int $villageId, int $buildingId): ?VillageBuilding
     {
         return $this->villageBuildingRepository->findOneBy([
             'village' => $villageId,
