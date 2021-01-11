@@ -27,13 +27,15 @@ class LogoutListener
     {
         /** @var Player $player */
         $player = $logoutEvent->getToken()->getUser();
-        $player->setApiToken(null);
+        $player
+            ->setApiToken(null)
+            ->setWorldId(null);
 
         $playerToken = $this->entityManager->getRepository(PlayerToken::class)->findOneBy([
             'player' => $player->getId()
         ]);
 
-        if ($playerToken instanceof PlayerToken){
+        if ($playerToken instanceof PlayerToken) {
             $this->entityManager->remove($playerToken);
         }
 
@@ -44,7 +46,7 @@ class LogoutListener
             new JsonResponse(
                 [
                     'success' => true,
-                    'data' => 'Başarıyla çıkış yapıldı',
+                    'data' => 'Başarıyla çıkış yapıldı.',
                     'errors' => null
                 ],
                 Response::HTTP_OK

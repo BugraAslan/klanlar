@@ -52,6 +52,13 @@ class PlayerToken
     private $player;
 
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="world_id", type="smallint", nullable=true, options={"default"=null})
+     */
+    private $worldId;
+
+    /**
      * @return int
      */
     public function getId(): int
@@ -128,6 +135,24 @@ class PlayerToken
     public function setPlayer(Player $player): PlayerToken
     {
         $this->player = $player;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getWorldId(): ?int
+    {
+        return $this->worldId;
+    }
+
+    /**
+     * @param int|null $worldId
+     * @return PlayerToken
+     */
+    public function setWorldId(?int $worldId): PlayerToken
+    {
+        $this->worldId = $worldId;
         return $this;
     }
 }

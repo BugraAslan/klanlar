@@ -1,6 +1,6 @@
 public:
   resource: "resources/public.yaml"
-  prefix: /api/public
+  prefix: /public
 
 player:
   resource: "resources/player.yaml"

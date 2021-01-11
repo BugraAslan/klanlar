@@ -20,19 +20,22 @@ class JwtTokenGenerator implements TokenGeneratorInterface
         $this->container = $container;
     }
 
-    public function generateToken()
+    public function generateToken(int $worldId = 0): string
     {
-        return JWT::encode([
+        $parameters = [
             'expireTime' => (new \DateTime())
                 ->modify($this->container->getParameter('default_expire_time'))
                 ->getTimestamp()
-        ],
-        $this->container->getParameter('app_secret'),
-        'HS256'
-        );
+        ];
+
+        if ($worldId) {
+            $parameters['worldId'] = $worldId;
+        }
+
+        return JWT::encode($parameters, $this->container->getParameter('app_secret'));
     }
 
-    public function generateRefreshToken(int $playerId)
+    public function generateRefreshToken(int $playerId): string
     {
         return hash_hmac(
             'SHA256',
