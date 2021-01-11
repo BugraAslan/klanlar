@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Manager\Response\LoginResponseManager;
 use App\Model\Request\Login\LoginRequest;
+use App\Model\Request\Login\PlayRequest;
 use App\Service\LoginService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,6 +49,35 @@ class LoginController extends BaseController
         if (!$playerToken){
             return $this->customErrorResponse(
                 'Üye bulunamadı, şifrenizi mi unuttunuz ?',
+                Response::HTTP_NOT_ACCEPTABLE
+            );
+        }
+
+        return $this->successResponse(
+            $this->loginResponseManager->buildLoginResponse($playerToken)
+        );
+    }
+
+    /**
+     * @param PlayRequest $playRequest
+     * @param ConstraintViolationList $validationErrors
+     * @ParamConverter("playRequest", converter="fos_rest.request_body")
+     * @return Response
+     */
+    public function worldLogin(PlayRequest $playRequest, ConstraintViolationList $validationErrors): Response
+    {
+        if ($validationErrors->count()) {
+            return $this->validationErrorResponse($validationErrors);
+        }
+
+        $playerToken = $this->loginService->worldLogin(
+            $this->getUser()->getId(),
+            $playRequest->getWorldId()
+        );
+
+        if (!$playerToken){
+            return $this->customErrorResponse(
+                'Dünyaya giriş yapılamadı!',
                 Response::HTTP_NOT_ACCEPTABLE
             );
         }

@@ -11,3 +11,8 @@ play:
   methods: GET
   path: /play
   controller: App\Controller\PlayerController::play
+
+world_login:
+  methods: GET
+  path: /login
+  controller: App\Controller\LoginController::worldLogin

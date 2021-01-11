@@ -15,13 +15,8 @@ security:
             provider: klanlar_provider
             custom_authenticators:
                 - App\Security\Authenticator
-            #remember_me:
-                #secret: '%env(APP_SECRET)%'
-                #lifetime: 3600
-                #path: ^/api
-                #always_remember_me: true
             logout:
                 path: logout
     access_control:
-        - { path: ^/api/public, roles: PUBLIC_ACCESS }
+        - { path: ^/public, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: ROLE_USER }

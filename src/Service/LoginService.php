@@ -9,7 +9,6 @@ use App\Entity\PlayerToken;
 use App\Entity\PlayerVillage;
 use App\Entity\PlayerWorld;
 use App\Entity\VillageBuilding;
-use App\Entity\VillageResource;
 use App\Entity\World;
 use App\Model\Request\Login\LoginRequest;
 use App\Security\JwtTokenGenerator;
@@ -43,7 +42,7 @@ class LoginService extends BaseService
         ]);
 
         $playerToken = null;
-        if ($player instanceof Player){
+        if ($player instanceof Player) {
             $playerToken = $this->entityManager->getRepository(PlayerToken::class)->findOneBy([
                 'player' => $player->getId()
             ]);
@@ -52,7 +51,7 @@ class LoginService extends BaseService
             $refreshToken = $this->jwtTokenGenerator->generateRefreshToken($player->getId());
             $expireDate = (new \DateTime())->modify($this->container->getParameter('default_expire_time'));
 
-            if ($playerToken instanceof PlayerToken){
+            if ($playerToken instanceof PlayerToken) {
                 $playerToken
                     ->setAccessToken($accessToken)
                     ->setRefreshToken($refreshToken)
@@ -76,6 +75,31 @@ class LoginService extends BaseService
         return $playerToken;
     }
 
+    public function worldLogin(int $playerId, int $worldId)
+    {
+        $playerToken = $this->entityManager->getRepository(PlayerToken::class)->findOneBy([
+            'player' => $playerId
+        ]);
+
+        if (!$playerToken) {
+            return null;
+        }
+
+        $accessToken = $this->jwtTokenGenerator->generateToken($worldId);
+        $playerToken
+            ->setAccessToken($accessToken)
+            ->setWorldId($worldId);
+
+        try {
+            $this->entityManager->persist($playerToken);
+            $this->entityManager->flush($playerToken);
+        } catch (ORMException $e) {
+            return null;
+        }
+
+        return $playerToken;
+    }
+
     public function firstLoginInWorld(Player $player): ?PlayerVillage
     {
         try {
@@ -93,17 +117,12 @@ class LoginService extends BaseService
                 ->setCoordinateX(random_int(1, 999)) // TODO change !!!
                 ->setCoordinateY(random_int(1, 999)) // TODO change !!!
                 ->setLoyalty(100)
-                ->setScore(VillageUtil::DEFAULT_VILLAGE_SCORE);
-
-            $villageResource = (new VillageResource())
-                ->setVillage($playerVillage)
+                ->setScore(VillageUtil::DEFAULT_VILLAGE_SCORE)
                 ->setWood(VillageUtil::DEFAULT_RESOURCE)
                 ->setIron(VillageUtil::DEFAULT_RESOURCE)
                 ->setClay(VillageUtil::DEFAULT_RESOURCE)
                 ->setPopulation(VillageUtil::DEFAULT_POPULATION)
                 ->setWarehouse(VillageUtil::DEFAULT_WAREHOUSE);
-            $this->entityManager->persist($villageResource);
-            $playerVillage->setResource($villageResource);
 
             $playerWorld = (new PlayerWorld())
                 ->setPlayer($player)
