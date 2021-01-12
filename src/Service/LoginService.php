@@ -8,7 +8,9 @@ use App\Entity\PlayerProfile;
 use App\Entity\PlayerToken;
 use App\Entity\PlayerVillage;
 use App\Entity\PlayerWorld;
+use App\Entity\Unit;
 use App\Entity\VillageBuilding;
+use App\Entity\VillageUnitFounder;
 use App\Entity\World;
 use App\Model\Request\Login\LoginRequest;
 use App\Security\JwtTokenGenerator;
@@ -145,6 +147,15 @@ class LoginService extends BaseService
                     ->setBuildingLevel($building->getMinLevel());
                 $this->entityManager->persist($villageBuilding);
                 $playerVillage->addVillageBuilding($villageBuilding);
+            }
+
+            foreach ($this->entityManager->getRepository(Unit::class)->findAll() as $unit) {
+                $villageUnitFounder = (new VillageUnitFounder())
+                    ->setVillage($playerVillage)
+                    ->setUnit($unit)
+                    ->setIsFound(in_array($unit->getId(), VillageUtil::DEFAULT_FOUNDED_UNIT_IDS));
+                $this->entityManager->persist($villageUnitFounder);
+                $playerVillage->addVillageUnitFounder($villageUnitFounder);
             }
 
             $player

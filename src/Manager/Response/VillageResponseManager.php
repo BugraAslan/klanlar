@@ -22,7 +22,7 @@ class VillageResponseManager
     public function buildVillageInfoResponse(PlayerVillage $village): VillageInfoResponse
     {
         $villageBuildingCollection = new ArrayCollection();
-        foreach ($village->getVillageBuildings() as $villageBuilding){
+        foreach ($village->getVillageBuildings() as $villageBuilding) {
             if ($villageBuilding instanceof VillageBuilding){
                 $villageBuildingCollection->add($this->buildVillageBuildingResponse($villageBuilding));
             }
@@ -30,7 +30,7 @@ class VillageResponseManager
 
         $villageUnitCollection = new ArrayCollection();
         foreach ($village->getVillageUnits() as $villageUnit){
-            if ($villageUnit instanceof VillageUnit){
+            if ($villageUnit instanceof VillageUnit) {
                 $villageUnitCollection->add($this->buildVillageUnitResponse($villageUnit));
             }
         }
@@ -91,7 +91,7 @@ class VillageResponseManager
     public function buildVillageUnitResponse(VillageUnit $villageUnit): ?UnitByVillageInfoResponse
     {
         $response = null;
-        if ($villageUnit->getUnit() instanceof Unit){
+        if ($villageUnit->getUnit() instanceof Unit) {
             $response = (new UnitByVillageInfoResponse())
                 ->setUnitCount($villageUnit->getUnitCount())
                 ->setUnitIcon($villageUnit->getUnit()->getIcons()->getOverviewIcon())

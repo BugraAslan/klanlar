@@ -36,17 +36,15 @@ class VillageUnit
     /**
      * @var int
      *
-     * @ORM\Column(name="unit_count", type="smallint", options={"unsigned"=true})
+     * @ORM\Column(name="unit_count", type="smallint", options={"unsigned"=true,"default"="0"})
      */
-    private $unitCount = '0';
+    private $unitCount = 0;
 
     /**
-     * @var PlayerVillage
+     * @var PlayerVillage|null
      *
      * @ORM\ManyToOne(targetEntity="PlayerVillage", inversedBy="villageUnits")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="village_id", referencedColumnName="id")
-     * })
+     * @ORM\JoinColumn(name="village_id", referencedColumnName="id")
      */
     private $village;
 

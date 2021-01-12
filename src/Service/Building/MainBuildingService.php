@@ -29,7 +29,7 @@ class MainBuildingService extends AbstractBaseBuildingService implements Buildin
             return null;
         }
 
-        $buildingDetail = $this->villageBuildingRepository->findBuildingDetailById(
+        $buildingDetail = $this->villageBuildingRepository->findOneBuildingDetailById(
             $buildingDetailRequest->getVillageId(),
             $buildingDetailRequest->getBuildingId()
         );

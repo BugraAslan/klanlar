@@ -69,9 +69,10 @@ class VillageBuildingRepository extends ServiceEntityRepository
                 ->join('building.unitManufacturers', 'unitManufacturers')
                 ->join('unitManufacturers.unit', 'unit')
                 ->leftJoin(
-                    'unit.commands', 'unitCommands',
+                    'unit.commands',
+                    'unitCommands',
                     'with',
-                    'unitCommands.endDate > :now' // TODO unitCommands.isFinished = false
+                    'unitCommands.isFinished = false'
                 )
                 ->leftJoin('unit.icons', 'unitIcons')
                 ->leftJoin('village.villageUnits', 'villageUnits')
@@ -79,8 +80,7 @@ class VillageBuildingRepository extends ServiceEntityRepository
                 ->andWhere('building.id = :buildingId')
                 ->setParameters([
                     'villageId' => $villageId,
-                    'buildingId' => $buildingId,
-                    'now' => new \DateTime()
+                    'buildingId' => $buildingId
                 ])
                 ->getQuery()
                 ->getOneOrNullResult();
@@ -113,7 +113,7 @@ class VillageBuildingRepository extends ServiceEntityRepository
      * @param int $buildingId
      * @return VillageBuilding|null
      */
-    public function findBuildingDetailById(int $villageId, int $buildingId): ?VillageBuilding
+    public function findOneBuildingDetailById(int $villageId, int $buildingId): ?VillageBuilding
     {
         try {
             return $this->createQueryBuilder('villageBuilding')
@@ -128,25 +128,27 @@ class VillageBuildingRepository extends ServiceEntityRepository
                     'buildingId' => $buildingId
                 ])
                 ->getQuery()
-                ->enableResultCache(9999)
                 ->getOneOrNullResult();
         } catch (NonUniqueResultException $e) {
             return null;
         }
     }
 
-    /**
-     * @param int $villageId
-     * @param int $buildingId
-     * @return VillageBuilding|null
-     */
-    public function findResourceManufacturerBuildingDetail(int $villageId, int $buildingId): ?VillageBuilding
+    public function findOneBuildingDetailWithUnitFounders(int $villageId, int $buildingId): ?VillageBuilding
     {
         try {
             return $this->createQueryBuilder('villageBuilding')
                 ->addSelect('buildingIcons')
                 ->addSelect('building')
+                ->addSelect('village')
+                ->addSelect('villageUnitFounders')
+                ->addSelect('unit')
+                ->addSelect('unitIcon')
+                ->join('villageBuilding.village', 'village')
                 ->join('villageBuilding.building', 'building')
+                ->join('village.villageUnitFounders', 'villageUnitFounders')
+                ->join('villageUnitFounders.unit', 'unit')
+                ->join('unit.icons', 'unitIcon')
                 ->join('building.icons', 'buildingIcons')
                 ->where('villageBuilding.village = :villageId')
                 ->andWhere('building.id = :buildingId')

@@ -273,9 +273,6 @@ class Unit
         return $this;
     }
 
-    /**
-     * @return Collection|UnitCommand[]
-     */
     public function getCommands(): Collection
     {
         return $this->commands;

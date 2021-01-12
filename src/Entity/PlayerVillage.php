@@ -104,6 +104,11 @@ class PlayerVillage
     private $buildingCommands;
 
     /**
+     * @ORM\OneToMany(targetEntity="VillageUnitFounder", mappedBy="village")
+     */
+    private $villageUnitFounders;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="wood", type="integer", options={"unsigned"=true})
@@ -156,6 +161,7 @@ class PlayerVillage
         $this->commandTargetVillages = new ArrayCollection();
         $this->unitCommands = new ArrayCollection();
         $this->buildingCommands = new ArrayCollection();
+        $this->villageUnitFounders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -494,6 +500,33 @@ class PlayerVillage
             // set the owning side to null (unless already changed)
             if ($buildingCommand->getVillage() === $this) {
                 $buildingCommand->setVillage(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getVillageUnitFounders(): Collection
+    {
+        return $this->villageUnitFounders;
+    }
+
+    public function addVillageUnitFounder(VillageUnitFounder $villageUnitFounder): self
+    {
+        if (!$this->villageUnitFounders->contains($villageUnitFounder)) {
+            $this->villageUnitFounders[] = $villageUnitFounder;
+            $villageUnitFounder->setVillage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVillageUnitFounder(VillageUnitFounder $villageUnitFounder): self
+    {
+        if ($this->villageUnitFounders->removeElement($villageUnitFounder)) {
+            // set the owning side to null (unless already changed)
+            if ($villageUnitFounder->getVillage() === $this) {
+                $villageUnitFounder->setVillage(null);
             }
         }
 

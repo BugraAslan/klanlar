@@ -40,12 +40,13 @@ abstract class AbstractBaseBuildingService extends BaseService
      */
     protected function getUnitManufacturerBuildingDetail(BuildingDetailRequest $buildingDetailRequest): ?UnitManufacturerBuildingDetailResponse
     {
+        // TODO founder unit control !!!
         $villageBuilding = $this->villageBuildingRepository->findUnitManufacturerBuildingDetail(
             $buildingDetailRequest->getVillageId(),
             $buildingDetailRequest->getBuildingId()
         );
 
-        if (!$villageBuilding){
+        if (!$villageBuilding) {
             return null;
         }
 
@@ -103,7 +104,7 @@ abstract class AbstractBaseBuildingService extends BaseService
 
     protected function getResourceManufacturerBuildingDetail(BuildingDetailRequest $buildingDetailRequest): ?ResourceManufacturerBuildingDetailResponse
     {
-        $villageBuilding = $this->villageBuildingRepository->findResourceManufacturerBuildingDetail(
+        $villageBuilding = $this->villageBuildingRepository->findOneBuildingDetailById(
             $buildingDetailRequest->getVillageId(),
             $buildingDetailRequest->getBuildingId()
         );

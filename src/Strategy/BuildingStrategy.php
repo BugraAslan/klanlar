@@ -2,24 +2,26 @@
 
 namespace App\Strategy;
 
+use App\Entity\Building;
 use App\Model\Request\Building\BuildingDetailRequest;
 use App\Repository\VillageBuildingRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class BuildingStrategy
 {
     /** @var BuildingStrategyInterface[] */
     public $buildingStrategies = [];
 
-    /** @var VillageBuildingRepository */
-    private $villageBuildingRepository;
+    /** @var EntityManagerInterface */
+    private $entityManager;
 
     /**
      * BuildingStrategy constructor.
-     * @param VillageBuildingRepository $villageBuildingRepository
+     * @param EntityManagerInterface $entityManager
      */
-    public function __construct(VillageBuildingRepository $villageBuildingRepository)
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->villageBuildingRepository = $villageBuildingRepository;
+        $this->entityManager = $entityManager;
     }
 
     public function addBuildingStrategy(BuildingStrategyInterface $buildingStrategy)
@@ -29,9 +31,9 @@ class BuildingStrategy
 
     public function getBuildingDetail(BuildingDetailRequest $buildingDetailRequest)
     {
-        $buildingName = $this->villageBuildingRepository->findBuildingNameById(
-            $buildingDetailRequest->getVillageId(),
-            $buildingDetailRequest->getBuildingId()
+        $buildingName = $this->entityManager->getRepository(Building::class)->findBuildingNameById(
+            $buildingDetailRequest->getBuildingId(),
+            9999
         );
 
         if ($buildingName) {

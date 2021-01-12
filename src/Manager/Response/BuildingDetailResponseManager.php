@@ -6,9 +6,11 @@ use App\Entity\BuildingCommand;
 use App\Entity\Unit;
 use App\Entity\UnitCommand;
 use App\Entity\VillageBuilding;
+use App\Entity\VillageUnitFounder;
 use App\Model\Response\Building\BaseBuildingDetailResponseInterface;
 use App\Model\Response\Building\BuildingCommandResponse;
 use App\Model\Response\CostResponse;
+use App\Model\Response\Unit\UnitFounderResponse;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class BuildingDetailResponseManager
@@ -67,5 +69,34 @@ class BuildingDetailResponseManager
         }
 
         return $buildingCommandCollection->toArray();
+    }
+
+    /**
+     * @param VillageUnitFounder[] $villageUnitFounders
+     * @return UnitFounderResponse[]
+     */
+    public function buildUnitFounderResponseCollection(array $villageUnitFounders): array
+    {
+        $unitFounderResponseCollection = new ArrayCollection();
+        foreach ($villageUnitFounders as $villageUnitFounder) {
+            $unit = $villageUnitFounder->getUnit();
+            $unitFounderResponseCollection->add(
+                (new UnitFounderResponse())
+                    ->setIsFound($villageUnitFounder->isFound())
+                    ->setId($unit->getId())
+                    ->setName($unit->getName())
+                    ->setIconUrl($unit->getIcons()->getOverviewIcon())
+                    ->setLevel($villageUnitFounder->getUnitLevel())
+                    ->setCosts(
+                        (new CostResponse())
+                            ->setWood($unit->getCostPerWood() * 20)
+                            ->setClay($unit->getCostPerClay() * 20)
+                            ->setIron($unit->getCostPerIron() * 20)
+                            ->setPopulation(0)
+                    )
+            );
+        }
+
+        return $unitFounderResponseCollection->toArray();
     }
 }
