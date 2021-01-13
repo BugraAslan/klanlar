@@ -2,12 +2,12 @@
 
 namespace App\Service\Building;
 
-use App\Entity\BuildingCommand;
 use App\Model\Request\Building\BuildingDetailRequest;
 use App\Model\Response\Building\BuildingRequirementResponse;
 use App\Model\Response\Building\MainBuildingDetailResponse;
 use App\Model\Response\CostResponse;
 use App\Strategy\BuildingStrategyInterface;
+use App\Util\VillageUtil;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class MainBuildingService extends AbstractBaseBuildingService implements BuildingStrategyInterface
@@ -21,37 +21,42 @@ class MainBuildingService extends AbstractBaseBuildingService implements Buildin
 
     public function buildingDetail(BuildingDetailRequest $buildingDetailRequest)
     {
-        $villageBuildingDetails = $this->villageBuildingRepository->findBuildingDetailByVillageId(
+        $villageBuildingDetails = $this->villageBuildingRepository->findBuildingDetailWithCommandByVillageId(
             $buildingDetailRequest->getVillageId()
         );
 
-        if (empty($villageBuildingDetails)){
+        if (empty($villageBuildingDetails)) {
             return null;
         }
 
-        $buildingDetail = $this->villageBuildingRepository->findOneBuildingDetailById(
+        $mainBuilding = $this->villageBuildingRepository->findOneBuildingDetailById(
             $buildingDetailRequest->getVillageId(),
             $buildingDetailRequest->getBuildingId()
         );
 
         $buildingDetailResponse = $this->buildingDetailResponseManager->buildBuildingDetailResponse(
-            $buildingDetail,
+            $mainBuilding,
             new MainBuildingDetailResponse()
         );
 
         // TODO to be include buildable buildings requirements
         $buildingRequirementCollection = new ArrayCollection();
+        $buildingCommandCollection = new ArrayCollection();
+        $villageUtil = new VillageUtil();
         foreach ($villageBuildingDetails as $villageBuilding) {
             $building = $villageBuilding->getBuilding();
             $currentBuildingLevel = $villageBuilding->getBuildingLevel();
             $village = $villageBuilding->getVillage();
+            foreach ($building->getCommands() as $buildingCommand) {
+                $currentBuildingLevel++;
+                $buildingCommandCollection->add(
+                    $this->commandResponseManager->buildBuildingCommandResponse($buildingCommand, $building)
+                );
+            }
 
-            $woodCost = $this->costCalculator($building->getWoodCost(), $building->getWoodFactor(), $currentBuildingLevel);
-            $clayCost = $this->costCalculator($building->getClayCost(), $building->getClayFactor(), $currentBuildingLevel);
-            $ironCost = $this->costCalculator($building->getIronCost(), $building->getIronFactor(), $currentBuildingLevel);
-            $totalPopulationCost = $this->costCalculator($building->getPopulationCost(), $building->getPopulationFactor(), $currentBuildingLevel);
-            $populationCost = $totalPopulationCost - ceil($totalPopulationCost / $building->getPopulationFactor());
-
+            list($woodCost, $clayCost, $ironCost, $populationCost, $buildTime) = array_values(
+                $villageUtil->getBuildingCost($building, $currentBuildingLevel)
+            );
             $buildable = true;
             $buildableMessage = null;
             $hasMaxLevel = $currentBuildingLevel === $building->getMaxLevel();
@@ -79,10 +84,6 @@ class MainBuildingService extends AbstractBaseBuildingService implements Buildin
                 }
             }
 
-            // TODO change
-            $buildTime = $this->costCalculator($building->getBaseBuildTime(), $building->getTimeFactor(), $currentBuildingLevel);
-            $buildTime = $buildTime > 60 ? ceil($buildTime / 60) : $buildTime;
-
             $buildingRequirementResponse = (new BuildingRequirementResponse())
                 ->setId($building->getId())
                 ->setName($building->getName())
@@ -105,13 +106,8 @@ class MainBuildingService extends AbstractBaseBuildingService implements Buildin
             $buildingRequirementCollection->add($buildingRequirementResponse);
         }
 
-        $buildingCommands = $this->entityManager->getRepository(BuildingCommand::class)
-            ->findBuildingCommandsByVillageId($buildingDetailRequest->getVillageId());
-
         return $buildingDetailResponse
-            ->setBuildingCommands(
-                $this->buildingDetailResponseManager->buildBuildingCommandResponseCollection($buildingCommands)
-            )
+            ->setBuildingCommands($buildingCommandCollection->toArray())
             ->setBuildingRequirements($buildingRequirementCollection->toArray());
     }
 }

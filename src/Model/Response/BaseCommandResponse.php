@@ -4,6 +4,9 @@ namespace App\Model\Response;
 
 class BaseCommandResponse
 {
+    /** @var int */
+    protected $commandId;
+
     /** @var string */
     protected $name = '';
 
@@ -18,6 +21,24 @@ class BaseCommandResponse
 
     /** @var CostResponse */
     protected $costs;
+
+    /**
+     * @return int
+     */
+    public function getCommandId(): int
+    {
+        return $this->commandId;
+    }
+
+    /**
+     * @param int $commandId
+     * @return BaseCommandResponse
+     */
+    public function setCommandId(int $commandId): BaseCommandResponse
+    {
+        $this->commandId = $commandId;
+        return $this;
+    }
 
     /**
      * @return string

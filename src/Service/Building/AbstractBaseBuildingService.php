@@ -11,6 +11,7 @@ use App\Model\Response\Unit\UnitRequirementResponse;
 use App\Repository\VillageBuildingRepository;
 use App\Service\BaseService;
 use App\Util\BuildingUtil;
+use App\Util\VillageUtil;
 use Doctrine\Common\Collections\ArrayCollection;
 
 abstract class AbstractBaseBuildingService extends BaseService
@@ -124,7 +125,7 @@ abstract class AbstractBaseBuildingService extends BaseService
             $currentOutput = $villageBuilding->getBuildingLevel() * $building->getOutputFactor();
             $nexManufactureCount = $hasMaxLevel ? 0 : $currentOutput + $building->getOutputFactor();
         } else {
-            $currentOutput = $this->costCalculator(
+            $currentOutput = VillageUtil::costCalculator(
                 $building->getBaseOutput(),
                 $building->getOutputFactor(),
                 in_array($building->getId(), [BuildingUtil::WAREHOUSE_ID, BuildingUtil::FARM_ID]) ?
@@ -138,10 +139,5 @@ abstract class AbstractBaseBuildingService extends BaseService
             ->setNextManufactureCount(ceil($nexManufactureCount))
             ->setResourceEffects([])
             ->setHasMaxLevel($hasMaxLevel);
-    }
-
-    protected function costCalculator(int $costPerItem, float $costFactor, int $itemLevel)
-    {
-        return ceil($costPerItem * pow($costFactor, $itemLevel));
     }
 }

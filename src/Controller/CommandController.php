@@ -50,7 +50,7 @@ class CommandController extends BaseController
         }
 
         return $this->successResponse(
-            $this->commandResponseManager->buildUnitCommandResponse($unitCommand)
+            $this->commandResponseManager->buildPostCommandResponse($unitCommand)
         );
     }
 
@@ -69,7 +69,14 @@ class CommandController extends BaseController
             return $this->validationErrorResponse($validationErrors);
         }
 
-        return $this->successResponse([]);
+        $buildingCommand = $this->commandService->buildingCommand($buildingCommandRequest);
+        if (!$buildingCommand) {
+            return $this->customErrorResponse('Komut Oluşturulamadı!', Response::HTTP_NOT_ACCEPTABLE);
+        }
+
+        return $this->successResponse(
+            $this->commandResponseManager->buildPostCommandResponse($buildingCommand)
+        );
     }
 
     public function cancelCommandAction()

@@ -91,16 +91,23 @@ class VillageBuildingRepository extends ServiceEntityRepository
 
     /**
      * @param int $villageId
-     * @return VillageBuilding[]|array
+     * @return VillageBuilding[]
      */
-    public function findBuildingDetailByVillageId(int $villageId): ?array
+    public function findBuildingDetailWithCommandByVillageId(int $villageId): array
     {
         return $this->createQueryBuilder('villageBuilding')
             ->addSelect('building')
             ->addSelect('village')
             ->addSelect('buildingIcons')
+            ->addSelect('buildingCommands')
             ->join('villageBuilding.village', 'village')
             ->join('villageBuilding.building', 'building')
+            ->leftJoin(
+                'building.commands',
+                'buildingCommands',
+                'with',
+                'buildingCommands.isFinished = false'
+            )
             ->join('building.icons', 'buildingIcons')
             ->where('village.id = :villageId')
             ->setParameter('villageId', $villageId)
