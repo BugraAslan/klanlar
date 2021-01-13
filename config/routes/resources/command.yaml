@@ -1,0 +1,14 @@
+unit_command:
+  methods: POST
+  path: /unit
+  controller: App\Controller\CommandController::unitCommandAction
+
+building_command:
+  methods: POST
+  path: /building
+  controller: App\Controller\CommandController::buildingCommandAction
+
+cancel_command:
+  methods: POST
+  path: /cancel
+  controller: App\Controller\CommandController::cancelCommandAction

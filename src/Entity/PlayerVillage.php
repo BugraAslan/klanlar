@@ -33,7 +33,7 @@ class PlayerVillage
     /**
      * @var int
      *
-     * @ORM\Column(name="score", type="smallint", options={"unsigned"=true})
+     * @ORM\Column(name="score", type="smallint", options={"unsigned"=true,"default"="0"})
      */
     private $score = '0';
 
@@ -146,7 +146,7 @@ class PlayerVillage
     /**
      * @var int
      *
-     * @ORM\Column(name="loyalty", type="smallint", options={"unsigned"=true})
+     * @ORM\Column(name="loyalty", type="smallint", options={"unsigned"=true,"default"="100"})
      */
     private $loyalty = 100;
 

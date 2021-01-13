@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  *     @ORM\Index(name="unit_command_unit_id_fk", columns={"unit_id"}),
  *     @ORM\Index(name="unit_command_village_id_fk", columns={"village_id"})
  * })
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\UnitCommandRepository")
  */
 class UnitCommand
 {
@@ -45,13 +45,6 @@ class UnitCommand
      * @ORM\Column(name="end_date", type="datetime")
      */
     private $endDate;
-
-    /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="remaining_time", type="time")
-     */
-    private $remainingTime;
 
     /**
      * @var int
@@ -100,7 +93,7 @@ class UnitCommand
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_finished", type="boolean")
+     * @ORM\Column(name="is_finished", type="boolean", options={"default"=false})
      */
     private $isFinished = false;
 
@@ -141,18 +134,6 @@ class UnitCommand
     public function setEndDate(\DateTimeInterface $endDate): self
     {
         $this->endDate = $endDate;
-
-        return $this;
-    }
-
-    public function getRemainingTime(): ?\DateTimeInterface
-    {
-        return $this->remainingTime;
-    }
-
-    public function setRemainingTime(\DateTimeInterface $remainingTime): self
-    {
-        $this->remainingTime = $remainingTime;
 
         return $this;
     }

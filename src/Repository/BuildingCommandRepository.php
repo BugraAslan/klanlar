@@ -30,12 +30,9 @@ class BuildingCommandRepository extends ServiceEntityRepository
             ->addSelect('buildingIcons')
             ->join('buildingCommand.building', 'building')
             ->join('building.icons', 'buildingIcons')
-            ->where('buildingCommand.endDate > :now') // TODO buildingCommand.isFinished = false
+            ->where('buildingCommand.isFinished = false')
             ->andWhere('buildingCommand.village = :villageId')
-            ->setParameters([
-                'villageId' => $villageId,
-                'now' => new \DateTime()
-            ])
+            ->setParameter('villageId', $villageId)
             ->getQuery()
             ->getResult();
     }

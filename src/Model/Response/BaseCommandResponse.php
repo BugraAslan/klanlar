@@ -5,10 +5,10 @@ namespace App\Model\Response;
 class BaseCommandResponse
 {
     /** @var string */
-    protected $name;
+    protected $name = '';
 
     /** @var string */
-    protected $iconUrl;
+    protected $iconUrl = '';
 
     /** @var string */
     protected $endDate;

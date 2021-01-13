@@ -54,23 +54,29 @@ class MainBuildingService extends AbstractBaseBuildingService implements Buildin
 
             $buildable = true;
             $buildableMessage = null;
-            $resourceCost = ['Wood' => $woodCost, 'Clay' => $clayCost, 'Iron' => $ironCost];
-            $maxResourceCost = array_search(max($resourceCost), $resourceCost);
-            $resourceGetter = 'get'.$maxResourceCost;
-
-            if ($village->getWarehouse() < max($resourceCost)) {
-                $buildableMessage = 'Yetersiz depo';
+            $hasMaxLevel = $currentBuildingLevel === $building->getMaxLevel();
+            if ($hasMaxLevel) {
+                $buildableMessage = 'Azami bina seviyesine ulaşıldı.';
                 $buildable = false;
-            }
+            } else {
+                $resourceCost = ['Wood' => $woodCost, 'Clay' => $clayCost, 'Iron' => $ironCost];
+                $maxResourceCost = array_search(max($resourceCost), $resourceCost);
+                $resourceGetter = 'get'.$maxResourceCost;
 
-            if ($buildable && $populationCost > $village->getPopulation()) {
-                $buildableMessage = 'Yetersiz işçi';
-                $buildable = false;
-            }
+                if ($village->getWarehouse() < max($resourceCost)) {
+                    $buildableMessage = 'Yetersiz depo.';
+                    $buildable = false;
+                }
 
-            if ($buildable && $village->$resourceGetter() < $resourceCost[$maxResourceCost]) {
-                $buildableMessage = 'Yetersiz kaynak';
-                $buildable = false;
+                if ($buildable && $populationCost > $village->getPopulation()) {
+                    $buildableMessage = 'Yetersiz işçi.';
+                    $buildable = false;
+                }
+
+                if ($buildable && $village->$resourceGetter() < $resourceCost[$maxResourceCost]) {
+                    $buildableMessage = 'Yetersiz kaynak.';
+                    $buildable = false;
+                }
             }
 
             // TODO change
@@ -85,7 +91,7 @@ class MainBuildingService extends AbstractBaseBuildingService implements Buildin
                 ->setIconUrl($building->getIcons()->getBaseIcon())
                 ->setBuildTime($buildTime)
                 ->setBuildableTime('') // TODO change
-                ->setHasMaxLevel($currentBuildingLevel === $building->getMaxLevel())
+                ->setHasMaxLevel($hasMaxLevel)
                 ->setIsBuildable($buildable)
                 ->setBuildableMessage($buildableMessage)
                 ->setCosts(

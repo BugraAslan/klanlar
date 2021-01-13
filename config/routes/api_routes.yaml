@@ -13,3 +13,7 @@ village:
 building:
   resource: "resources/building.yaml"
   prefix: /api/building
+
+command:
+  resource: "resources/command.yaml"
+  prefix: /api/command

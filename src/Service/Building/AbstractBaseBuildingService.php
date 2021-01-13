@@ -3,10 +3,10 @@
 namespace App\Service\Building;
 
 use App\Manager\Response\BuildingDetailResponseManager;
+use App\Manager\Response\CommandResponseManager;
 use App\Model\Request\Building\BuildingDetailRequest;
 use App\Model\Response\Building\ResourceManufacturerBuildingDetailResponse;
 use App\Model\Response\Building\UnitManufacturerBuildingDetailResponse;
-use App\Model\Response\Unit\UnitCommandResponse;
 use App\Model\Response\Unit\UnitRequirementResponse;
 use App\Repository\VillageBuildingRepository;
 use App\Service\BaseService;
@@ -21,17 +21,23 @@ abstract class AbstractBaseBuildingService extends BaseService
     /** @var BuildingDetailResponseManager */
     protected $buildingDetailResponseManager;
 
+    /** @var CommandResponseManager */
+    protected $commandResponseManager;
+
     /**
      * AbstractBaseBuildingService constructor.
      * @param VillageBuildingRepository $villageBuildingRepository
      * @param BuildingDetailResponseManager $buildingDetailResponseManager
+     * @param CommandResponseManager $commandResponseManager
      */
     public function __construct(
         VillageBuildingRepository $villageBuildingRepository,
-        BuildingDetailResponseManager $buildingDetailResponseManager
+        BuildingDetailResponseManager $buildingDetailResponseManager,
+        CommandResponseManager $commandResponseManager
     ) {
         $this->villageBuildingRepository = $villageBuildingRepository;
         $this->buildingDetailResponseManager = $buildingDetailResponseManager;
+        $this->commandResponseManager = $commandResponseManager;
     }
 
     /**
@@ -62,13 +68,7 @@ abstract class AbstractBaseBuildingService extends BaseService
             $unit = $unitManufacturer->getUnit();
             foreach ($unit->getCommands() as $unitCommand) {
                 $unitCommandResponseCollection->add(
-                    (new UnitCommandResponse())
-                        ->setName($unit->getName())
-                        ->setIconUrl('url')
-                        ->setRemainingTime(($unitCommand->getEndDate()->diff(new \DateTime()))->format('%h:%i:%s'))
-                        ->setEndDate($unitCommand->getEndDate()->format('Y-m-d H:i:s'))
-                        ->setCommandCount($unitCommand->getCommandCount())
-                        ->setCosts($this->buildingDetailResponseManager->buildCostResponse($unitCommand))
+                    $this->commandResponseManager->buildUnitCommandResponse($unitCommand, $unit)
                 );
             }
 
@@ -76,7 +76,7 @@ abstract class AbstractBaseBuildingService extends BaseService
                 ->setId($unit->getId())
                 ->setName($unit->getName())
                 ->setIconUrl($unit->getIcons()->getOverviewIcon())
-                ->setCosts($this->buildingDetailResponseManager->buildCostResponse($unit))
+                ->setCosts($this->buildingDetailResponseManager->buildUnitCostResponse($unit))
                 ->setBuildCount(
                     min([
                         ceil($village->getWood() / $unit->getCostPerWood()),

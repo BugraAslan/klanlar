@@ -41,13 +41,6 @@ class BuildingCommand
     private $endDate;
 
     /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="remaining_time", type="time")
-     */
-    private $remainingTime;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="cost_wood", type="smallint", options={"unsigned"=true})
@@ -130,18 +123,6 @@ class BuildingCommand
     public function setEndDate(\DateTimeInterface $endDate): self
     {
         $this->endDate = $endDate;
-
-        return $this;
-    }
-
-    public function getRemainingTime(): ?\DateTimeInterface
-    {
-        return $this->remainingTime;
-    }
-
-    public function setRemainingTime(\DateTimeInterface $remainingTime): self
-    {
-        $this->remainingTime = $remainingTime;
 
         return $this;
     }
