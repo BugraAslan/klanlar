@@ -6,7 +6,7 @@ use App\Entity\Building;
 use App\Entity\BuildingCommand;
 use App\Entity\Unit;
 use App\Entity\UnitCommand;
-use App\Model\Request\Command\PostCommandResponse;
+use App\Model\Response\PostCommandResponse;
 use App\Model\Response\Building\BuildingCommandResponse;
 use App\Model\Response\Unit\UnitCommandResponse;
 

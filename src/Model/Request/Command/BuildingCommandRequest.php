@@ -2,20 +2,13 @@
 
 namespace App\Model\Request\Command;
 
+use App\Model\Request\VillageIdRequestTrait;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class BuildingCommandRequest
 {
-    /**
-     * @var int
-     *
-     * @Assert\NotBlank(message="Köy id boş bırakılamaz")
-     * @Assert\Type("int")
-     *
-     * @Serializer\Type("integer")
-     */
-    private $villageId;
+    use VillageIdRequestTrait;
 
     /**
      * @var int
@@ -37,24 +30,6 @@ class BuildingCommandRequest
      * @Serializer\Type("integer")
      */
     private $buildLevel;
-
-    /**
-     * @return int
-     */
-    public function getVillageId(): int
-    {
-        return $this->villageId;
-    }
-
-    /**
-     * @param int $villageId
-     * @return BuildingCommandRequest
-     */
-    public function setVillageId(int $villageId): BuildingCommandRequest
-    {
-        $this->villageId = $villageId;
-        return $this;
-    }
 
     /**
      * @return int

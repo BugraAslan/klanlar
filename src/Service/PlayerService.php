@@ -6,7 +6,6 @@ use App\Entity\Player;
 use App\Entity\PlayerWorld;
 use App\Entity\World;
 use App\Repository\PlayerRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 
 class PlayerService extends BaseService
 {
@@ -37,22 +36,15 @@ class PlayerService extends BaseService
         return $this->playerRepository->findPlayerWorldByPlayerId($playerId);
     }
 
-    public function getPlayerWorld(int $playerId): ArrayCollection
+    public function getPlayerWorld(Player $player)
     {
-        $player = $this->getPlayerWorldByPlayerId($playerId);
         $excludeWorldIds = [];
-        foreach ($player->getWorlds()->toArray() as $world) {
-            $excludeWorldIds[] = $world->getId();
+        foreach ($this->getPlayerWorldByPlayerId($player->getId())->getWorlds() as $playerWorld) {
+            $excludeWorldIds[] = $playerWorld->getWorld()->getId();
         }
 
-        $worldLoginCollection = new ArrayCollection();
-        $worldLoginCollection->set('player', $player);
-        $worldLoginCollection->set(
-            'availableWorlds',
-            $this->entityManager->getRepository(World::class)->findActiveWorldByExcludeIds($excludeWorldIds)
-        );
-
-        return $worldLoginCollection;
+        return $this->entityManager->getRepository(World::class)
+            ->findActiveWorldByExcludeIds($excludeWorldIds);
     }
 
     public function hasPlayingInWorld(Player $player): bool

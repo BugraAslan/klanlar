@@ -61,12 +61,13 @@ class PlayerController extends BaseController
 
     public function playerWorld(): Response
     {
-        $worldLoginCollection = $this->playerService->getPlayerWorld($this->getUser()->getId());
+        /** @var Player $player */
+        $player = $this->getUser();
 
         return $this->successResponse(
             $this->worldResponseManager->buildPlayerWorldResponse(
-                $worldLoginCollection->get('player'),
-                $worldLoginCollection->get('availableWorlds')
+                $player,
+                $this->playerService->getPlayerWorld($player)
             )
         );
     }

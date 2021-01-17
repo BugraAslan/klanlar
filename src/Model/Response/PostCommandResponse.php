@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model\Request\Command;
+namespace App\Model\Response;
 
 class PostCommandResponse
 {

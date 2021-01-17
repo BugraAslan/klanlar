@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Manager\Response\CommandResponseManager;
 use App\Model\Request\Command\BuildingCommandRequest;
+use App\Model\Request\Command\CancelCommandRequest;
 use App\Model\Request\Command\UnitCommandRequest;
 use App\Service\CommandService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -79,8 +80,56 @@ class CommandController extends BaseController
         );
     }
 
-    public function cancelCommandAction()
-    {
 
+    /**
+     * @param CancelCommandRequest $cancelCommandRequest
+     * @param ConstraintViolationList $validationErrors
+     * @ParamConverter("cancelCommandRequest", converter="fos_rest.request_body")
+     * @return Response
+     */
+    public function cancelUnitCommandAction(
+        CancelCommandRequest $cancelCommandRequest,
+        ConstraintViolationList $validationErrors
+    ): Response
+    {
+        if ($validationErrors->count()) {
+            return $this->validationErrorResponse($validationErrors);
+        }
+
+        $cancelCommand = $this->commandService->cancelUnitCommand($cancelCommandRequest);
+        if (!$cancelCommand) {
+            return $this->customErrorResponse(
+                'Komut İptal Edilemedi!',
+                Response::HTTP_NOT_ACCEPTABLE
+            );
+        }
+
+        return $this->successResponse([]);
+    }
+
+    /**
+     * @param CancelCommandRequest $cancelCommandRequest
+     * @param ConstraintViolationList $validationErrors
+     * @ParamConverter("cancelCommandRequest", converter="fos_rest.request_body")
+     * @return Response
+     */
+    public function cancelBuildingCommandAction(
+        CancelCommandRequest $cancelCommandRequest,
+        ConstraintViolationList $validationErrors
+    ): Response
+    {
+        if ($validationErrors->count()) {
+            return $this->validationErrorResponse($validationErrors);
+        }
+
+        $cancelCommand = $this->commandService->cancelBuildingCommand($cancelCommandRequest);
+        if (!$cancelCommand) {
+            return $this->customErrorResponse(
+                'Komut İptal Edilemedi!',
+                Response::HTTP_NOT_ACCEPTABLE
+            );
+        }
+
+        return $this->successResponse([]);
     }
 }

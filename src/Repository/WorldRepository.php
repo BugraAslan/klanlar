@@ -21,9 +21,9 @@ class WorldRepository extends ServiceEntityRepository
 
     /**
      * @param array $excludeWorldIds
-     * @return World[]|string
+     * @return World[]
      */
-    public function findActiveWorldByExcludeIds(array $excludeWorldIds)
+    public function findActiveWorldByExcludeIds(array $excludeWorldIds): array
     {
         return $this->createQueryBuilder('world')
             ->where('world.id NOT IN (:excludeWorldIds)')

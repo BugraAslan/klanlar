@@ -8,7 +8,12 @@ building_command:
   path: /building
   controller: App\Controller\CommandController::buildingCommandAction
 
-cancel_command:
-  methods: POST
-  path: /cancel
-  controller: App\Controller\CommandController::cancelCommandAction
+cancel_unit_command:
+  methods: DELETE
+  path: /unit
+  controller: App\Controller\CommandController::cancelUnitCommandAction
+
+cancel_building_command:
+  methods: DELETE
+  path: /building
+  controller: App\Controller\CommandController::cancelBuildingCommandAction

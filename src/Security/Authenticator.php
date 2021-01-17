@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Entity\Player;
 use App\Entity\PlayerToken;
 use Doctrine\ORM\EntityManagerInterface;
 use Firebase\JWT\JWT;
@@ -74,6 +75,7 @@ class Authenticator extends AbstractAuthenticator
             throw new AuthenticationException('Kullanıcı bulunamadı, lütfen bilgilerinizi kontrol ediniz.');
         }
 
+        /** @var Player $player */
         $player = $playerToken->getPlayer();
         if (!in_array($request->attributes->get('_route'), $this->excludedWorldIdRoutes)) {
             if (!$playerToken->getWorldId()) {
@@ -82,7 +84,9 @@ class Authenticator extends AbstractAuthenticator
             $player->setWorldId($playerToken->getWorldId());
         }
 
-        return new SelfValidatingPassport($player);
+        return new SelfValidatingPassport(
+            $player->setApiToken($playerToken->getAccessToken())
+        );
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
