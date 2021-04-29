@@ -106,7 +106,6 @@ class LoginService extends BaseService
     {
         try {
             $this->entityManager->getConnection()->beginTransaction();
-
             $world = $this->entityManager->getRepository(World::class)->find(
                 $player->getWorldId()
             );
